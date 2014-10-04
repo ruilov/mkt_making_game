@@ -1,4 +1,5 @@
 import webapp2
+import datetime
 from django.utils import simplejson
 from google.appengine.ext import ndb
 
@@ -11,7 +12,13 @@ class Count(ndb.Model):
 class Quizzes(webapp2.RequestHandler):
   def get(self):
     jsonStr = simplejson.dumps({
-      "quizzes": ["week1","week2"]
+      "quizzes": [
+        {"name": "week1", "time": str(datetime.datetime.now())},
+        {"name": "week2", "time": str(datetime.datetime.now())},
+        {"name": "week3", "time": str(datetime.datetime.now())},
+        {"name": "week4", "time": str(datetime.datetime.now())},
+        {"name": "week5", "time": str(datetime.datetime.now())},
+      ]
     })
 
     self.response.out.write(jsonStr)

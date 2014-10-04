@@ -12,8 +12,33 @@
 
 <body ng-controller="quizzesController">
 
-  <button class="btn btn-warning" ng-click="create_quiz_window()">Create</button><br><br>
-  Quiz_Name = {{quiz_name}}
+  <br>
+  <div class="container">
+    <div class="btn-toolbar">
+      <button class="btn btn-warning" ng-click="create_quiz_window()">Create</button>
+      <button class="btn btn-danger" ng-click="delete_selected()">Delete</button>
+    </div>
+
+    <br><br>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Create</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="quizz in quizzes">
+          <td><input type="checkbox" ng-model="quizz.selected"></td>
+          <td>{{quizz.name}}</td>
+          <td>{{quizz.time}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
 
   <script src="js/controller_quizzes.js"></script>
 </body>
