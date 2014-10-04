@@ -32,7 +32,7 @@
       <tbody>
         <tr ng-repeat="quizz in quizzes">
           <td><input type="checkbox" ng-model="quizz.selected"></td>
-          <td>{{quizz.name}}</td>
+          <td><a href="/quiz_editor.html/#?id={{quizz.id}}">{{quizz.name}}</a></td>
           <td>{{quizz.time}}</td>
         </tr>
       </tbody>

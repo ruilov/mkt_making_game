@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html ng-app="QuizEditor">
+<head>
+  <title>Quiz Editor</title>
+  
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/ui-bootstrap-tpls-0.11.2.min.js"></script>
+</head>
+
+<body ng-controller="editorController">
+
+  <br>
+    <div class="row">
+      <div class="col-md-8">
+        <table class="table">
+          <tbody>
+            <tr ng-repeat="question in questions">
+              <td>
+                <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Question:</label>
+                    <div class="col-sm-10">
+                      <input class="form-control" value={{question.question}}>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Source:</label>
+                    <div class="col-sm-10">
+                      <input class="form-control" value={{question.source}}>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Answer:</label>
+                    <div class="col-sm-4">
+                      <input class="form-control" value={{question.answer}}>
+                    </div>
+
+                    <div class="col-md-1">
+                      <button class="btn btn-danger" ng-click="remove_question(question)">Delete</button>
+                    </div>             
+                  </div>
+
+                </form>
+              </td>
+            </tr>
+
+            <tr><td></td></tr>
+          </tbody>
+        </table>
+
+        <form role="form">
+          <div align="right">
+            <button class="btn btn-primary" ng-click="add_question()">Add</button>
+            <button class="btn btn-warning" ng-click="save()">Save</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+  <script src="../js/controller_quiz_editor.js"></script>
+</body>
+</html>

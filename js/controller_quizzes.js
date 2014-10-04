@@ -8,7 +8,7 @@ app.controller( "quizzesController", function userController($scope,$http,$modal
   // modal window for creation of a new quiz
   $scope.create_quiz_window = function(size) {
     var modalInstance = $modal.open({
-      templateUrl: 'create_quiz.html',
+      templateUrl: 'create_quiz_modal.html',
       controller: 'CreateQuizController',
       size: size,
     });

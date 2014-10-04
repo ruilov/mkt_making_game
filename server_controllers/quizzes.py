@@ -13,11 +13,11 @@ class Quizzes(webapp2.RequestHandler):
   def get(self):
     jsonStr = simplejson.dumps({
       "quizzes": [
-        {"name": "week1", "time": str(datetime.datetime.now())},
-        {"name": "week2", "time": str(datetime.datetime.now())},
-        {"name": "week3", "time": str(datetime.datetime.now())},
-        {"name": "week4", "time": str(datetime.datetime.now())},
-        {"name": "week5", "time": str(datetime.datetime.now())},
+        {"id": 1, "name": "week1", "time": str(datetime.datetime.now())},
+        {"id": 2, "name": "week2", "time": str(datetime.datetime.now())},
+        {"id": 3, "name": "week3", "time": str(datetime.datetime.now())},
+        {"id": 4, "name": "week4", "time": str(datetime.datetime.now())},
+        {"id": 5, "name": "week5", "time": str(datetime.datetime.now())},
       ]
     })
 
