@@ -34,7 +34,7 @@ app.controller( "editorController", function userController($scope,$http,$locati
         $scope.saveQuiz();
         return;
       }
-    }
+    };
   };
 
   $scope.saveQuiz = function() {

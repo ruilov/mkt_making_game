@@ -14,32 +14,19 @@
 
   <br>
   <div class="container">
-    <div class="btn-toolbar">
-      <button class="btn btn-warning" ng-click="create_quiz_window()">Create</button>
-      <button class="btn btn-danger" ng-click="delete_selected()">Delete</button>
-    </div>
-
-    <br><br>
-
+    <a href="{{nextURL}}" class="btn btn-primary">Create</a>
+    <br><br><br>
     <table class="table">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Name</th>
-          <th>Create</th>
-        </tr>
-      </thead>
       <tbody>
-        <tr ng-repeat="quizz in quizzes">
-          <td><input type="checkbox" ng-model="quizz.selected"></td>
-          <td><a href="/quiz_editor.html/#?id={{quizz.id}}">{{quizz.name}}</a></td>
-          <td>{{quizz.time}}</td>
+        <tr ng-repeat="quiz in quizzes">
+          <td><a href="{{quiz.url}}">Quiz {{quiz.id}}</a></td>
+          <td><button class="btn btn-danger" ng-click="delete(quiz)">Delete</button></td>
         </tr>
       </tbody>
     </table>
 
   </div>
 
-  <script src="js/controller_quizzes.js"></script>
+  <script src="js/quizzes.js"></script>
 </body>
 </html>

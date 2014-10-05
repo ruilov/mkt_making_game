@@ -1,19 +1,18 @@
 import webapp2
-import datetime
 from django.utils import simplejson
 from google.appengine.ext import ndb
-from server_controllers import main,models
+from server_controllers import models
 
 class QuizEditor(webapp2.RequestHandler):
   def get(self,idStr):    
     quiz_id = self.request.get("id")
-    quiz = self.getQuiz(quiz_id)
+    quiz = getQuiz(quiz_id)
     jsonStr = simplejson.dumps({"quiz": quiz.to_dict()})
     self.response.out.write(jsonStr)
 
   def post(self,idStr):
     quiz_id = self.request.get("id")
-    quiz = self.getQuiz(quiz_id)
+    quiz = getQuiz(quiz_id)
 
     # parse the json into a model quiz. There's probably an easier way to do this
     json = simplejson.loads(self.request.body)
@@ -28,15 +27,15 @@ class QuizEditor(webapp2.RequestHandler):
 
     quiz.put()
 
-  def getQuiz(self,quiz_id):
-    query = models.Quiz.query(ancestor=models.quiz_key(quiz_id))
-    response = query.fetch(1)
+def getQuiz(quiz_id):
+  query = models.Quiz.query(ancestor=models.quiz_key(quiz_id))
+  response = query.fetch(1)
 
-    if(len(response)==0):
-      quiz = models.Quiz(parent=models.quiz_key(quiz_id))
-    else:
-      quiz = response[0]
+  if(len(response)==0):
+    quiz = models.Quiz(parent=models.quiz_key(quiz_id))
+  else:
+    quiz = response[0]
 
-    return quiz
+  return quiz
 
     
