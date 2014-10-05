@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="MyApp">
+<html ng-app="Quizzes">
 <head>
   <title>Quizzes</title>
   
@@ -19,7 +19,8 @@
     <table class="table">
       <tbody>
         <tr ng-repeat="quiz in quizzes">
-          <td><a href="{{quiz.url}}">Quiz {{quiz.id}}</a></td>
+          <td><a href="{{quiz.editorUrl}}">Quiz {{quiz.id}}</a></td>
+          <td><a href="{{quiz.quizUrl}}">View</a></td>
           <td><button class="btn btn-danger" ng-click="delete(quiz)">Delete</button></td>
         </tr>
       </tbody>

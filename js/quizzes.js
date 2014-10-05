@@ -1,4 +1,4 @@
-var app = angular.module( "MyApp", ['ui.bootstrap'] );
+var app = angular.module( "Quizzes", ['ui.bootstrap'] );
 
 app.controller( "quizzesController", function userController($scope,$http,$location) {
   $scope.quizzes = [];
@@ -11,7 +11,8 @@ app.controller( "quizzesController", function userController($scope,$http,$locat
     $scope.quizzes = data.quizzes;
     for(var i in $scope.quizzes) {
       id = $scope.quizzes[i].id;
-      $scope.quizzes[i].url = "/quiz_editor.html/#?id="+id;
+      $scope.quizzes[i].editorUrl = "/quiz_editor.html/#?id="+id;
+      $scope.quizzes[i].quizUrl = "/quiz.html/#?id="+id;
       $scope.nextID = Math.max($scope.nextID,parseInt(id));
     };
 
