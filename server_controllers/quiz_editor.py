@@ -33,6 +33,7 @@ def getQuiz(quiz_id):
 
   if(len(response)==0):
     quiz = models.Quiz(parent=models.quiz_key(quiz_id))
+    quiz.questions = [models.Question()]
   else:
     quiz = response[0]
 
