@@ -13,56 +13,54 @@
 <body ng-controller="editorController">
 
   <br>
-    <div class="row">
-      <div class="col-md-8">
+  <div class="row">
+    <div class="col-md-8">
+      <form class="form-horizontal" role="form">
         <table class="table">
           <tbody>
-            <tr ng-repeat="question in questions">
-              <td>
-                <form class="form-horizontal" role="form">
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label">Question:</label>
-                    <div class="col-sm-10">
-                      <input class="form-control" value={{question.question}}>
-                    </div>
+            <tr ng-repeat="question in quiz.questions">
+              <td>                
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Question:</label>
+                  <div class="col-sm-10">
+                    <input class="form-control" ng-model="question.text">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Source:</label>
+                  <div class="col-sm-10">
+                    <input class="form-control" ng-model="question.source">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Answer:</label>
+                  <div class="col-sm-4">
+                    <input class="form-control" ng-model="question.answer">
                   </div>
 
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label">Source:</label>
-                    <div class="col-sm-10">
-                      <input class="form-control" value={{question.source}}>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label">Answer:</label>
-                    <div class="col-sm-4">
-                      <input class="form-control" value={{question.answer}}>
-                    </div>
-
-                    <div class="col-md-1">
-                      <button class="btn btn-danger" ng-click="remove_question(question)">Delete</button>
-                    </div>             
-                  </div>
-
-                </form>
+                  <div class="col-md-1">
+                    <button class="btn btn-danger" ng-click="remove_question(question)">Delete</button>
+                  </div>             
+                </div>
               </td>
             </tr>
-
             <tr><td></td></tr>
           </tbody>
         </table>
+      </form>
 
-        <form role="form">
-          <div align="right">
-            <button class="btn btn-primary" ng-click="add_question()">Add</button>
-            <button class="btn btn-warning" ng-click="save()">Save</button>
-          </div>
-        </form>
+      <form role="form">
+        <div align="right">
+          <button class="btn btn-primary" ng-click="add_question('','','',true)">Add</button>
+          <button class="btn btn-warning" ng-click="saveQuiz()">Save</button>
+        </div>
+      </form>
 
-      </div>
     </div>
+  </div>
 
-  <script src="../js/controller_quiz_editor.js"></script>
+  <script src="../js/quiz_editor.js"></script>
 </body>
 </html>
