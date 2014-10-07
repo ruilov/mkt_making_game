@@ -14,3 +14,16 @@ def quiz_key(quiz_id):
 class Quiz(ndb.Model):
   questions = ndb.StructuredProperty(Question,repeated=True)
 
+def user_key(user_id):
+  return ndb.key("User",str(user_id))
+
+class User(ndb.Model):
+  user_id = ndb.TextProperty()
+  email = ndb.TextProperty()
+  nickname = ndb.TextProperty()
+
+class Fillout(ndb.Model):
+  quiz_id = ndb.IntegerProperty()
+  user_id = ndb.TextProperty()
+  guesses_low = ndb.IntegerProperty(repeated=True)
+  guesses_high = ndb.IntegerProperty(repeated=True)

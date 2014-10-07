@@ -19,8 +19,14 @@ app.controller( "quizController", function userController($scope,$http,$location
         "text": text,
         "source": source,
         "answer": answer,
+        "guess_low": 0,
+        "guess_high": 0,
     }
 
     $scope.quiz.questions.push(question);
+  };
+
+  $scope.submit = function() {
+    $http.post("/quiz_fillout_api/?id="+quiz_id,$scope.quiz);
   };
 })
