@@ -1,4 +1,4 @@
-var app = angular.module( "QuizEditor", ['ui.bootstrap'] );
+var app = angular.module( "quizEditor", ['ui.bootstrap'] );
 
 app.controller( "editorController", function userController($scope,$http,$location) {
   var qs = $location.search();

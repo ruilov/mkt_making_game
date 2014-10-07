@@ -1,33 +1,23 @@
 <!DOCTYPE html>
-<html ng-app="Quizzes">
+<html ng-app="main">
 <head>
-  <title>Quizzes</title>
+  <title>Mkt Making Game</title>
   
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+  <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-route.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/ui-bootstrap-tpls-0.11.2.min.js"></script>
-</head>
-
-<body ng-controller="quizzesController">
-
-  <br>
-  <div class="container">
-    <a href="{{nextURL}}" class="btn btn-primary">Create</a>
-    <br><br><br>
-    <table class="table">
-      <tbody>
-        <tr ng-repeat="quiz in quizzes">
-          <td><a href="{{quiz.editorUrl}}">Quiz {{quiz.id}}</a></td>
-          <td><a href="{{quiz.quizUrl}}">View</a></td>
-          <td><button class="btn btn-danger" ng-click="delete(quiz)">Delete</button></td>
-        </tr>
-      </tbody>
-    </table>
-
-  </div>
 
   <script src="js/quizzes.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/quiz_editor.js"></script>
+  <script src="js/main.js"></script>
+</head>
+
+<body>
+  HELLO<br>The user is = ((user))
+  <div ng-view></div>
 </body>
 </html>

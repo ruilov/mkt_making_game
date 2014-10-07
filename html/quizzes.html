@@ -1,0 +1,15 @@
+<ng-include src="include_test.html"></ng-include>
+<br>
+<div class="container">
+  <a href="{{nextURL}}" class="btn btn-primary">Create</a>
+  <br><br><br>
+  <table class="table">
+    <tbody>
+      <tr ng-repeat="quiz in quizzes">
+        <td><a href="{{quiz.editorUrl}}">Quiz {{quiz.id}}</a></td>
+        <td><a href="{{quiz.quizUrl}}">View</a></td>
+        <td><button class="btn btn-danger" ng-click="delete(quiz)">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
