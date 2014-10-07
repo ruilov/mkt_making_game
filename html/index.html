@@ -17,7 +17,9 @@
 </head>
 
 <body>
-  HELLO<br>The user is = ((user))
+  {% if usernick %}Logged as ((usernick)) (<a href=((user_logout_url))>logout</a>)
+  {% else %}<a href=((user_login_url))>Login</a>
+  {% endif %}
   <div ng-view></div>
 </body>
 </html>
