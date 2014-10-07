@@ -3,6 +3,7 @@ import os
 import jinja2
 from google.appengine.api import users
 
+
 JINJA_ENVIRONMENT = jinja2.Environment(
   # loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
   loader=jinja2.FileSystemLoader("./"),
