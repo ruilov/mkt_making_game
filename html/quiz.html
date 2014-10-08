@@ -1,21 +1,41 @@
-<br>
-<div class="row">
-  <div class="col-md-8">
-    <form class="form-horizontal" role="form">
-      <table class="table">
-        <tbody>
-          <tr ng-repeat="question in quiz.questions">
-            <td>{{question.text}}<br>
-            source:<i>{{question.source}}</i></td>
-            <td><input class="form-control" ng-model="question.guess_low"></td>
-            <td><input class="form-control" ng-model="question.guess_high"></td>
-          </tr>
-          <tr><td></td><td></td><td></td></tr>
-        </tbody>
-      </table>
-      <div align="right">
-        <a href="/" class="btn btn-primary" ng-click="submit()">Submit</a>
-      </div>
-    </form>
+<link href="css/quiz_style.css" rel="stylesheet">
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-11 col-md-offset-2 site">      
+    
+        <div class="site-title">
+          <h2><b>Enter low / high bounds for each question</b></h2>
+        </div>
+
+        <div class="post" ng-repeat="question in quiz.questions">
+            <div class="form-inline">
+              <div class="row">
+                <div class="col-md-6">
+                  <h4>{{question.text}}</h4>
+                  <small>Source: {{question.source}}</small>
+                </div>
+
+                <div class="form-group col-md-2 col-md-offset-1">
+                  <p style="text-align: center"><b>&nbsp;&nbsp;&nbsp;&nbsp;Low</b></p>
+                  <input class="form-control" style="text-align: center" ng-model="question.guess_low">
+                </div>
+
+                <div class="form-group col-md-2">
+                  <p style="text-align: center"><b>&nbsp;&nbsp;&nbsp;&nbsp;High</b></p>
+                  <input class="form-control" style="text-align: center" ng-model="question.guess_high">
+                </div>
+                
+              </div>
+            </div>
+        </div>
+
+        <div align="right" class="post">
+          <div class="submit-container">
+          <a href="/" class="btn btn-primary" ng-click="submit()"><div class="submit">Submit</div></a>
+            </div>
+        </div>
+    </div>
   </div>
 </div>
+
