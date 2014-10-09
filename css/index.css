@@ -1,0 +1,25 @@
+body {
+  margin-top: 70px;
+  background-color: #ffffff;
+
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+}
+
+.navbar {
+  background-color: #333333;
+  border-color: #333333;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+    color: #9482B6;
+}
+
+#last-menu-item {
+    margin-right: 30px;
+}
