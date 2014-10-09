@@ -19,15 +19,15 @@
 }
 
 .post {
-  display: block;
   padding-top:15px;
   padding-bottom: 15px;
   margin-top: 15px;
   margin-bottom: 15px;
+  margin-left: 15px;
 }
 
-.post .pull-right {
-  margin-top: -15px;
+.question {
+  margin-right: 25px;
 }
 
 .submit {
