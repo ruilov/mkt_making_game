@@ -1,13 +1,15 @@
 import webapp2
+import datetime
 from django.utils import simplejson
 from google.appengine.ext import ndb
-from server_controllers import models
+from server_controllers import models,utils
 
 class QuizEditor(webapp2.RequestHandler):
   def get(self,idStr):    
     quiz_id = self.request.get("id")
     quiz = getQuiz(quiz_id)
-    jsonStr = simplejson.dumps({"quiz": quiz.to_dict()})
+    jsonStr = simplejson.dumps({"quiz": quiz.to_dict()}, cls = utils.MyEncoder)
+
     self.response.out.write(jsonStr)
 
   def post(self,idStr):
@@ -24,7 +26,8 @@ class QuizEditor(webapp2.RequestHandler):
       question.answer = questionJSON["answer"]
       questionArr.append(question)
     quiz.questions = questionArr
-
+    quiz.released = False
+    quiz.releaseDate = datetime.datetime.now()
     quiz.put()
 
 def getQuiz(quiz_id):

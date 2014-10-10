@@ -4,20 +4,22 @@ app.controller( "quizzesController", function userController($scope,$http,$locat
   $scope.quizzes = [];
 
   $scope.nextID = -1;
-  $scope.nextURL = "/#/quiz_editor?id="+$scope.nextID;
+  $scope.nextURL = quiz_editor_url($scope.nextID);
 
-  var responsePromise = $http.get("/quizzes_api/");
+  // get the unreleased quizzes
+  var responsePromise = $http.get("/quizzes_api/?unreleased=1");
   responsePromise.success(function(data, status, headers, config) {
     $scope.quizzes = data.quizzes;
     for(var i in $scope.quizzes) {
       id = $scope.quizzes[i].id;
-      $scope.quizzes[i].editorUrl = "/#/quiz_editor?id="+id;
-      $scope.quizzes[i].quizUrl = "/#/quiz?id="+id;
+      $scope.quizzes[i].editorUrl = quiz_editor_url(id);
+      $scope.quizzes[i].quizUrl = quiz_url(id);
+      $scope.quizzes[i].name = quiz_name(id);
       $scope.nextID = Math.max($scope.nextID,parseInt(id));
     };
 
     $scope.nextID += 1;
-    $scope.nextURL = "/#/quiz_editor?id="+$scope.nextID;
+    $scope.nextURL = quiz_editor_url($scope.nextID);
   });
 
   $scope.delete = function(quiz) {

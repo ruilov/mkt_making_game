@@ -14,7 +14,7 @@ def quiz_key(quiz_id):
 class Quiz(ndb.Model):
   questions = ndb.StructuredProperty(Question,repeated=True)
   released = ndb.BooleanProperty()
-  releaseDate = ndb.DateProperty()
+  releaseDate = ndb.DateTimeProperty()
 
 def user_key(user_id):
   return ndb.key("User",str(user_id))

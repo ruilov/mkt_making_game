@@ -24,3 +24,22 @@ body {
 #last-menu-item {
     margin-right: 30px;
 }
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+  background-color: #333333;
+  font-size: 15px;
+  font-weight: 1200;
+}
+
+.dropdown-menu > li > a {
+  color: #ffffff;
+}
+
+.dropdown-menu > li > a:hover {
+    color: #9482B6;
+    background-color: #333333;
+}

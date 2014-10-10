@@ -20,3 +20,18 @@ mainApp.config(['$routeProvider',
       });
   }
 ]);
+
+mainApp.controller( "mainController", function mainController($scope,$http) {
+  $scope.old_quizzes = [];
+
+  var responsePromise = $http.get("/quizzes_api/?released=1");
+  responsePromise.success(function(data, status, headers, config) {
+    $scope.old_quizzes = data.quizzes;
+    for(var i in $scope.old_quizzes) {
+      id = $scope.old_quizzes[i].id;
+      $scope.old_quizzes[i].url = quiz_url(id);
+      $scope.old_quizzes[i].name = quiz_name(id);
+      $scope.old_quizzes[i].date = new Date($scope.old_quizzes[i].releaseDate).toDateString();
+    };
+  });
+});
