@@ -1,6 +1,6 @@
 // this is the controler for the template of all the HTML pages
 
-var templateApp = angular.module( "template", ['ngRoute','quizzes','quiz','quizEditor'] );
+var templateApp = angular.module( "template", ['ngRoute','index','quizzes','quiz','quizEditor'] );
 
 templateApp.config(['$routeProvider',
   function($routeProvider) {
