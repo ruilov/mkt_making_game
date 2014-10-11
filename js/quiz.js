@@ -7,11 +7,11 @@ app.controller( "quizController", function userController($scope,$http,$location
   $scope.quiz = {"questions": [], "url": quiz_url(quiz_id)};
 
   quiz_api_cb = function(quiz, status, headers, config) {
-    $scope.quiz["questions"] = [];
+    $scope.quiz.questions = [];
     for(var i in quiz.questions) {
       question = quiz.questions[i];
       $scope.add_question(question);
-      $scope.has_fillout = quiz.has_fillout
+      $scope.state = quiz.state;
     };
   };
 

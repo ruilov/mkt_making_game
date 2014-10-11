@@ -22,6 +22,7 @@ class Quiz(webapp2.RequestHandler):
       return
 
     quiz_dict = quiz.to_dict()
+    quiz_dict["state"] = "display_only"
 
     # find a fillout for this quiz
     user = users.get_current_user()
@@ -35,8 +36,9 @@ class Quiz(webapp2.RequestHandler):
         if len(fillout_res)!=0:
           fillout_quiz(quiz_dict,fillout_res[0])
 
-    # remove the answers from active quizses if the user hasn't filled them out
-    if ( not "has_fillout" in quiz_dict ) or ( not quiz_dict["has_fillout"] ) and quiz_dict["status"]=="active":
+    # remove the answers from active quizzes if the user hasn't filled them out
+    if quiz_dict["state"] != "filled" and quiz_dict["status"]=="active":
+      quiz_dict["state"] = "to_fill"
       for question in quiz_dict["questions"]: del question["answer"]
 
     utils.write_back(self,quiz_dict)
@@ -94,4 +96,4 @@ def fillout_quiz(quiz_dict,fillout):
       quiz_dict["questions"][i]["status"] = "Lift offer"
     else:
       quiz_dict["questions"][i]["status"] = "No trade"
-  quiz_dict["has_fillout"]=True
+  quiz_dict["state"]="filled"

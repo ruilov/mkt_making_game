@@ -30,8 +30,7 @@ templateApp.config(['$routeProvider',
           message: function($http,$location,quizAllowedService) {
             var qs = $location.search();
             var req = $http.get("/quiz_api/?id="+qs.id);
-            req.success(quizAllowedService.isAllowed);
-            return req;
+            return req.success(quizAllowedService.isAllowed);
           }
         }
       }).

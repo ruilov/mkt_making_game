@@ -15,9 +15,9 @@
               <small>Source: {{question.source}}</small>
             </div>
 
-            <div ng-switch="has_fillout">
+            <div ng-switch="state">
               <!-- USER HAS ALLOWED FILLED OUT THE QUIZ -->
-              <div ng-switch-when="true">
+              <div ng-switch-when="filled">
                 <div class="form-group col-sm-1" align="center">
                   <p><b>Bid</b></p>
                   {{question.guess_low}}
@@ -39,6 +39,14 @@
                 </div>
               </div>
 
+              <!-- USER HASN'T FILLED BUT NOT ACTIVE -->
+              <div ng-switch-when="display_only">
+                <div class="form-group col-md-1 col-md-offset-2" align="center">
+                    <p><b>Answer</b></p>
+                    {{question.answer}}
+                </div>
+              </div>
+
               <!-- USE WILL FILL OUT THE QUIZ -->
               <div ng-switch-default>
                 <div class="form-group col-sm-2" align="center">
@@ -57,13 +65,13 @@
         </div>
       </div>
 
-      <div ng-switch="has_fillout">
-        <div ng-switch-when="true"></div>
-        <div ng-switch-default align="right" class="post">
+      <div ng-switch="state">
+        <div ng-switch-when="to_fill" align="right" class="post">
           <div class="submit-container">
             <a href={{quiz.url}} class="btn btn-primary" ng-click="submit()"><div class="submit">Submit</div></a>
           </div>
         </div>
+        <div ng-switch-default></div>
       </div>
     </div>
   </div>
