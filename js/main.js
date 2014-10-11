@@ -1,3 +1,5 @@
+// this is the controler for the template of all the HTML pages
+
 var mainApp = angular.module( "main", ['ngRoute','quizzes','quiz','quizEditor'] );
 
 mainApp.config(['$routeProvider',

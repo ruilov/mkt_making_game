@@ -4,6 +4,8 @@ from django.utils import simplejson
 from google.appengine.ext import ndb
 from server_controllers import models,utils
 
+# this API is for listing quizzes. The post function serves as the delete function
+
 class Quizzes(webapp2.RequestHandler):
   def get(self,qs):
     status = self.request.get("status")

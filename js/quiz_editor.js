@@ -14,6 +14,8 @@ app.controller( "editorController", function userController($scope,$http,$locati
     };
   });
 
+  // this is called with save=true from the HTML itself. Every time we add a question from there we save the quiz
+  // but when we add the question while constructing the quiz from the server data we don't need to save it
   $scope.add_question = function(text,source,answer,save) {
     if(save==undefined) save = false;
 

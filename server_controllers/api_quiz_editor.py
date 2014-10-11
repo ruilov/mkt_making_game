@@ -4,6 +4,8 @@ from django.utils import simplejson
 from google.appengine.ext import ndb
 from server_controllers import models,utils
 
+# this API is for admins of the site to create quizzes
+
 class QuizEditor(webapp2.RequestHandler):
   def get(self,idStr):    
     quiz_id = self.request.get("id")

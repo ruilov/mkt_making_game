@@ -4,6 +4,8 @@ import jinja2
 from google.appengine.api import users
 from server_controllers import models,utils
 
+# this is the controller for all HTML pages
+
 JINJA_ENVIRONMENT = jinja2.Environment(
   # loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
   loader=jinja2.FileSystemLoader("./"),
