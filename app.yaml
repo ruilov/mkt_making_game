@@ -5,7 +5,7 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /favicon\.ico
+- url: (/admin?)/favicon\.ico
   static_files: favicon.ico
   upload: favicon\.ico
 
@@ -17,6 +17,10 @@ handlers:
 
 - url: /fonts
   static_dir: fonts
+
+- url: /admin/.*
+  script: mktmaking.application
+  login: required
 
 - url: /scores_api/
   script: mktmaking.application

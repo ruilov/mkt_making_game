@@ -25,6 +25,7 @@ app.controller( "quizzesController", function userController($scope,$http,$locat
   $scope.delete = function(quiz) {
     for(var i in $scope.quizzes) {
       if($scope.quizzes[i]==quiz) {
+        if(!confirm("Do you really want to delete this quiz?")) return;
         var req = $http.post("/quizzes_api/",{"action": "delete", "id": quiz.id});
         req.success(function(data, status, headers, config) {
           $scope.quizzes.splice(i,1); 
@@ -37,6 +38,7 @@ app.controller( "quizzesController", function userController($scope,$http,$locat
   $scope.activate = function(quiz) {
     for(var i in $scope.quizzes) {
       if($scope.quizzes[i]==quiz) {
+        if(!confirm("Do you really want to activate this quiz?")) return;
         var req = $http.post("/quizzes_api/",{"action": "activate", "id": quiz.id});
         req.success(function(data, status, headers, config) {
           $scope.quizzes[i]["status"] = "active";
@@ -49,6 +51,7 @@ app.controller( "quizzesController", function userController($scope,$http,$locat
   $scope.deactivate = function(quiz) {
     for(var i in $scope.quizzes) {
       if($scope.quizzes[i]==quiz) {
+        if(!confirm("Do you really want to deactivate this quiz?")) return;
         var req = $http.post("/quizzes_api/",{"action": "deactivate", "id": quiz.id});
         req.success(function(data, status, headers, config) {
           $scope.quizzes.splice(i,1);

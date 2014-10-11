@@ -17,15 +17,18 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class TemplatePage(webapp2.RequestHandler):
   def get(self,path):
+    # print "rui: ",path
 
     template_path = "template.html"
     if(path!=""): template_path = path
 
     template_values = {
       "user_login_url": users.create_login_url('/'),
+      "is_admin": False,
     }
     user = users.get_current_user()
     if user:
+      template_values["is_admin"] = utils.is_admin(user)
       template_values["usernick"] = user.nickname()
       template_values["user_logout_url"] = users.create_logout_url('/')
       if template_path == "template.html":
