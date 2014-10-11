@@ -32,5 +32,4 @@ class Scores(webapp2.RequestHandler):
           "high": fillout.guesses_high[i],
         }
 
-    jsonStr = simplejson.dumps(answer, cls=utils.MyEncoder)
-    self.response.out.write(jsonStr)
+    utils_write_back(answer)

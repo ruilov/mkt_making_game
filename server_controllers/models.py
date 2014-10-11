@@ -1,6 +1,5 @@
 import webapp2
 import datetime
-from django.utils import simplejson
 from google.appengine.ext import ndb
 
 class Question(ndb.Model):

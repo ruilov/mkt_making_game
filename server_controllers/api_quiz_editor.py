@@ -1,5 +1,4 @@
 import webapp2
-import datetime
 from django.utils import simplejson
 from google.appengine.ext import ndb
 from server_controllers import models,utils

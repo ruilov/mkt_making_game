@@ -15,6 +15,12 @@ class Quiz(webapp2.RequestHandler):
     quiz, then find the Fillout entity and scope the quiz'''
     quiz_id = self.request.get("id")
     quiz = models.getQuiz(quiz_id)
+
+    # check if the user is allowed to see this quiz
+    if quiz.status=="editor" and not utils.is_admin():
+      utils.write_back(self,{"not_allowed": 1})
+      return
+
     quiz_dict = quiz.to_dict()
 
     # find a fillout for this quiz
@@ -29,9 +35,11 @@ class Quiz(webapp2.RequestHandler):
         if len(fillout_res)!=0:
           fillout_quiz(quiz_dict,fillout_res[0])
 
-    jsonStr = simplejson.dumps(quiz_dict, cls = utils.MyEncoder)
-    self.response.out.write(jsonStr)
+    # remove the answers from active quizses if the user hasn't filled them out
+    if ( not "has_fillout" in quiz_dict ) or ( not quiz_dict["has_fillout"] ) and quiz_dict["status"]=="active":
+      for question in quiz_dict["questions"]: del question["answer"]
 
+    utils.write_back(self,quiz_dict)
   
   def post(self,idStr):
     ''' this will be called when the user fills out a quiz. It will create a Fillout entity in the database
@@ -39,6 +47,14 @@ class Quiz(webapp2.RequestHandler):
 
     quiz_id = self.request.get("id")
     quiz = models.getQuiz(quiz_id)
+
+    # if this is not an active quiz then don't allow fill outs for it
+    if quiz.status!="active":
+      utils.write_back(self,{"not_active": 1})
+      return
+
+    # fixme: if the user already filled it out then don't allow it again
+
     json = simplejson.loads(self.request.body)
     user = users.get_current_user()
     user_id = user.user_id()
@@ -59,8 +75,7 @@ class Quiz(webapp2.RequestHandler):
     # construct the response to send back to display to the user
     quiz_dict = quiz.to_dict()
     fillout_quiz(quiz_dict,fillout)
-    jsonStr = simplejson.dumps(quiz_dict, cls = utils.MyEncoder)
-    self.response.out.write(jsonStr)
+    utils.write_back(self,quiz_dict)
 
 def fillout_quiz(quiz_dict,fillout):
   '''populates the quiz_dict with the guesses from the fillout and whether they were correct'''

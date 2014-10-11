@@ -20,8 +20,7 @@ class Quizzes(webapp2.RequestHandler):
       quiz_dict["id"] = quiz.key.parent().id()
       quizzes.append(quiz_dict)
 
-    jsonStr = simplejson.dumps({"quizzes": quizzes}, cls = utils.MyEncoder)
-    self.response.out.write(jsonStr)
+    utils.write_back(self,{"quizzes": quizzes})
 
   def post(self,qs):
     json = simplejson.loads(self.request.body)
