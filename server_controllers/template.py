@@ -7,7 +7,6 @@ from server_controllers import models,utils
 # this is the controller for all HTML pages
 
 JINJA_ENVIRONMENT = jinja2.Environment(
-  # loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
   loader=jinja2.FileSystemLoader("./"),
   extensions=['jinja2.ext.autoescape'],
   variable_start_string='((', 
@@ -17,18 +16,16 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class TemplatePage(webapp2.RequestHandler):
   def get(self,path):
-    # print "rui: ",path
-
     template_path = "template.html"
-    if(path!=""): template_path = path
-
     template_values = {
       "user_login_url": users.create_login_url('/'),
-      "is_admin": False,
+      "is_admin": utils.is_admin(),
     }
+
+    if(path!=""): template_path = path
+
     user = users.get_current_user()
     if user:
-      template_values["is_admin"] = utils.is_admin(user)
       template_values["usernick"] = user.nickname()
       template_values["user_logout_url"] = users.create_logout_url('/')
       if template_path == "template.html":

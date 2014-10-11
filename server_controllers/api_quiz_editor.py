@@ -7,7 +7,7 @@ from server_controllers import models,utils
 # this API is for admins of the site to create quizzes
 
 class QuizEditor(webapp2.RequestHandler):
-  def get(self,idStr):    
+  def get(self,idStr):
     quiz_id = self.request.get("id")
     quiz = models.getQuiz(quiz_id)
     jsonStr = simplejson.dumps(quiz.to_dict(), cls = utils.MyEncoder)
