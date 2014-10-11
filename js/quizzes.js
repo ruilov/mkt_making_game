@@ -7,7 +7,7 @@ app.controller( "quizzesController", function userController($scope,$http,$locat
   $scope.nextURL = quiz_editor_url($scope.nextID);
 
   // get the unreleased quizzes
-  var responsePromise = $http.get("/quizzes_api/?unreleased=1");
+  var responsePromise = $http.get("/quizzes_api/?status=editor");
   responsePromise.success(function(data, status, headers, config) {
     $scope.quizzes = data.quizzes;
     for(var i in $scope.quizzes) {

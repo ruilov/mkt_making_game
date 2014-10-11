@@ -24,7 +24,7 @@ mainApp.config(['$routeProvider',
 mainApp.controller( "mainController", function mainController($scope,$http) {
   $scope.old_quizzes = [];
 
-  var responsePromise = $http.get("/quizzes_api/?released=1");
+  var responsePromise = $http.get("/quizzes_api/?status=old");
   responsePromise.success(function(data, status, headers, config) {
     $scope.old_quizzes = data.quizzes;
     for(var i in $scope.old_quizzes) {

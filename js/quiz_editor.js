@@ -7,9 +7,9 @@ app.controller( "editorController", function userController($scope,$http,$locati
   $scope.quiz = {"questions": []};
 
   var req = $http.get("/quiz_editor_api/?id="+quiz_id);
-  req.success(function(data, status, headers, config) {
-    for(var i in data.quiz.questions) {
-      question = data.quiz.questions[i];
+  req.success(function(quiz, status, headers, config) {
+    for(var i in quiz.questions) {
+      question = quiz.questions[i];
       $scope.add_question(question.text,question.source,question.answer);
     };
   });

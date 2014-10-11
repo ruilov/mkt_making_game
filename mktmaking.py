@@ -1,9 +1,9 @@
 import webapp2
-from server_controllers import main,quizzes,quiz_editor,quiz_fillout
+from server_controllers import main,api_quizzes,api_quiz_editor,api_quiz
 
 application = webapp2.WSGIApplication([
-  (r'/quizzes_api/(.*)',quizzes.Quizzes),
-  (r'/quiz_fillout_api/(.*)',quiz_fillout.QuizFillout),
-  (r'/quiz_editor_api/(.*)',quiz_editor.QuizEditor),
+  (r'/quizzes_api/(.*)',api_quizzes.Quizzes),
+  (r'/quiz_api/(.*)',api_quiz.Quiz),
+  (r'/quiz_editor_api/(.*)',api_quiz_editor.QuizEditor),
   (r'/(.*)', main.MainPage),
 ], debug=True)

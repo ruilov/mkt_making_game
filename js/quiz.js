@@ -1,32 +1,31 @@
 var app = angular.module( "quiz", ['ui.bootstrap'] );
 
-app.controller( "quizController", function userController($scope,$http,$location) {
+app.controller( "quizController", function userController($scope,$http,$location,$route) {
   var qs = $location.search();
   var quiz_id = qs.id;
 
-  $scope.quiz = {"questions": []};
+  $scope.quiz = {"questions": [], "url": quiz_url(quiz_id)};
 
-  var req = $http.get("/quiz_editor_api/?id="+quiz_id);
-  req.success(function(data, status, headers, config) {
-    for(var i in data.quiz.questions) {
-      question = data.quiz.questions[i];
-      $scope.add_question(question.text,question.source,question.answer);
+  quiz_api_cb = function(quiz, status, headers, config) {
+    $scope.quiz["questions"] = [];
+    for(var i in quiz.questions) {
+      question = quiz.questions[i];
+      $scope.add_question(question);
+      $scope.has_fillout = quiz.has_fillout
     };
-  });
+  };
 
-  $scope.add_question = function(text,source,answer) {
-    var question = {
-        "text": text,
-        "source": source,
-        "answer": answer,
-        "guess_low": 0,
-        "guess_high": 0,
-    }
+  var req = $http.get("/quiz_api/?id="+quiz_id);
+  req.success(quiz_api_cb);
 
+  $scope.add_question = function(question) {
+    if(!question.guess_low) question.guess_low = 0;
+    if(!question.guess_high) question.guess_high = 0;
     $scope.quiz.questions.push(question);
   };
 
   $scope.submit = function() {
-    $http.post("/quiz_fillout_api/?id="+quiz_id,$scope.quiz);
+    var req = $http.post("/quiz_api/?id="+quiz_id,$scope.quiz);
+    req.success(quiz_api_cb);
   };
 })
