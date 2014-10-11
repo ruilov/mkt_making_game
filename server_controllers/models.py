@@ -30,6 +30,14 @@ class Fillout(ndb.Model):
   guesses_low = ndb.FloatProperty(repeated=True)
   guesses_high = ndb.FloatProperty(repeated=True)
 
+def quiz_ranking_key(quiz_id):
+  return ndb.Key("QuizRanking",str(quiz_id))
+
+class QuizRanking(ndb.Model):
+  quiz_id = ndb.TextProperty(indexed=True)
+  user_ids = ndb.TextProperty(repeated=True)
+  points = ndb.FloatProperty(repeated=True)
+
 def getQuiz(quiz_id):
   query = Quiz.query(ancestor=quiz_key(quiz_id))
   response = query.fetch(1)

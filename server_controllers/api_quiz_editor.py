@@ -28,7 +28,6 @@ class QuizEditor(webapp2.RequestHandler):
       questionArr.append(question)
     quiz.questions = questionArr
     quiz.status = "editor"
-    # quiz.releaseDate = datetime.datetime.now()
     quiz.put()
 
 

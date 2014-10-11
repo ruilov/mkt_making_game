@@ -51,7 +51,7 @@ app.controller( "quizzesController", function userController($scope,$http,$locat
       if($scope.quizzes[i]==quiz) {
         var req = $http.post("/quizzes_api/",{"action": "deactivate", "id": quiz.id});
         req.success(function(data, status, headers, config) {
-          $scope.quizzes[i]["status"] = "editor";
+          $scope.quizzes.splice(i,1);
         });
         return;
       }

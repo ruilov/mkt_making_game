@@ -18,6 +18,9 @@ handlers:
 - url: /fonts
   static_dir: fonts
 
+- url: /scores_api/
+  script: mktmaking.application
+
 - url: .*
   script: mktmaking.application
   login: required
