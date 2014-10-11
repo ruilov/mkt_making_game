@@ -27,8 +27,9 @@ templateApp.config(['$routeProvider',
         templateUrl: 'quiz.html',
         controller: 'quizController',
         resolve: {
-          message: function($http,quizAllowedService) {
-            var req = $http.get("/quiz_api/?id=8");
+          message: function($http,$location,quizAllowedService) {
+            var qs = $location.search();
+            var req = $http.get("/quiz_api/?id="+qs.id);
             req.success(quizAllowedService.isAllowed);
             return req;
           }
