@@ -1,10 +1,14 @@
 // this is the controler for the template of all the HTML pages
 
-var mainApp = angular.module( "main", ['ngRoute','quizzes','quiz','quizEditor'] );
+var templateApp = angular.module( "template", ['ngRoute','quizzes','quiz','quizEditor'] );
 
-mainApp.config(['$routeProvider',
+templateApp.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
+      when('/', {
+        templateUrl: 'index.html',
+        controller: 'indexController'
+      }).
       when('/quizzes', {
         templateUrl: 'quizzes.html',
         controller: 'quizzesController'
@@ -18,12 +22,12 @@ mainApp.config(['$routeProvider',
         controller: 'editorController'
       }).
       otherwise({
-        redirectTo: '/quizzes'
+        redirectTo: '/'
       });
   }
 ]);
 
-mainApp.controller( "mainController", function mainController($scope,$http) {
+templateApp.controller( "templateController", function mainController($scope,$http) {
   $scope.old_quizzes = [];
 
   var responsePromise = $http.get("/quizzes_api/?status=old");

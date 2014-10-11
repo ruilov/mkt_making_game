@@ -20,6 +20,7 @@ handlers:
 
 - url: .*
   script: mktmaking.application
+  login: required
 
 libraries:
 - name: webapp2

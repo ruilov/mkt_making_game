@@ -7,6 +7,11 @@
       <tr ng-repeat="quiz in quizzes">
         <td><a href="{{quiz.editorUrl}}">{{quiz.name}}</a></td>
         <td><a href="{{quiz.quizUrl}}">View</a></td>
+        <td>{{quiz.status}}</td>
+        <td ng-switch on="quiz.status">
+          <button ng-switch-when="editor" class="btn btn-warning" ng-click="activate(quiz)">Activate</button>
+          <button ng-switch-when="active" class="btn btn-primary" ng-click="deactivate(quiz)">Deactivate</button>
+        </td>
         <td><button class="btn btn-danger" ng-click="delete(quiz)">Delete</button></td>
       </tr>
     </tbody>

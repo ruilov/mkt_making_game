@@ -4,7 +4,8 @@ from django.utils import simplejson
 from google.appengine.ext import ndb
 from server_controllers import models,utils
 
-# this API is for listing quizzes. The post function serves as the delete function
+# this API is for listing quizzes. 
+# The post function can delete quizzes, activate them, or deactivate them
 
 class Quizzes(webapp2.RequestHandler):
   def get(self,qs):
@@ -14,16 +15,24 @@ class Quizzes(webapp2.RequestHandler):
     response = query.fetch()
     quizzes = []
     for quiz in response:
-      if quiz.status != status: continue;
-      id = quiz.key.parent().id()
-      elem = {"id": id}
-      if quiz.releaseDate: elem["releaseDate"] = quiz.releaseDate
-      quizzes.append(elem)
+      if quiz.status not in status: continue;
+      quiz_dict = quiz.to_dict();
+      quiz_dict["id"] = quiz.key.parent().id()
+      quizzes.append(quiz_dict)
 
     jsonStr = simplejson.dumps({"quizzes": quizzes}, cls = utils.MyEncoder)
     self.response.out.write(jsonStr)
 
   def post(self,qs):
-    id = self.request.body
-    key = models.getQuiz(id).key
-    key.delete()
+    json = simplejson.loads(self.request.body)
+    if json["action"] == "delete":
+      key = models.getQuiz(json["id"]).key
+      key.delete()
+    elif json["action"] == "activate":
+      quiz = models.getQuiz(json["id"])
+      quiz.status = "active"
+      quiz.put()
+    elif json["action"] == "deactivate":
+      quiz = models.getQuiz(json["id"])
+      quiz.status = "editor"
+      quiz.put()

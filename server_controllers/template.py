@@ -15,10 +15,10 @@ JINJA_ENVIRONMENT = jinja2.Environment(
   autoescape=True
 )
 
-class MainPage(webapp2.RequestHandler):
+class TemplatePage(webapp2.RequestHandler):
   def get(self,path):
 
-    template_path = "index.html"
+    template_path = "template.html"
     if(path!=""): template_path = path
 
     template_values = {
@@ -28,7 +28,7 @@ class MainPage(webapp2.RequestHandler):
     if user:
       template_values["usernick"] = user.nickname()
       template_values["user_logout_url"] = users.create_logout_url('/')
-      if template_path == "index.html":
+      if template_path == "template.html":
         check_user_in_db(user)
 
     template = JINJA_ENVIRONMENT.get_template("html/"+template_path)
