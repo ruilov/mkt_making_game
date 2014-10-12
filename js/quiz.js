@@ -6,18 +6,6 @@ app.controller( "quizController", function userController($scope,$http,$location
 
   $scope.quiz = {"questions": [], "url": quiz_url(quiz_id)};
 
-  quiz_api_cb = function(quiz, status, headers, config) {
-    $scope.quiz.questions = [];
-    for(var i in quiz.questions) {
-      question = quiz.questions[i];
-      $scope.add_question(question);
-      $scope.state = quiz.state;
-    };
-  };
-
-  var req = $http.get("/quiz_api/?id="+quiz_id);
-  req.success(quiz_api_cb);
-
   $scope.add_question = function(question) {
     if(!question.guess_low) question.guess_low = 0;
     if(!question.guess_high) question.guess_high = 0;
@@ -28,6 +16,17 @@ app.controller( "quizController", function userController($scope,$http,$location
 
     $scope.quiz.questions.push(question);
   };
+
+  quiz_api_cb = function(quiz, status, headers, config) {
+    $scope.quiz.questions = [];
+    for(var i in quiz.questions) {
+      question = quiz.questions[i];
+      $scope.add_question(question);
+      $scope.state = quiz.state;
+    };
+  };
+
+  quiz_api_cb($scope.quiz_data);
 
   $scope.submit = function() {
     var req = $http.post("/quiz_api/?id="+quiz_id,$scope.quiz);

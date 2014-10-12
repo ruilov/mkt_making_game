@@ -14,6 +14,10 @@ class Quiz(webapp2.RequestHandler):
     '''returns the questions of a quiz to be shown to the user. If the user has already filled out this
     quiz, then find the Fillout entity and scope the quiz'''
     quiz_id = self.request.get("id")
+    if len(quiz_id)==0:
+      utils.write_back(self,{"no_quiz_id": 1})
+      return
+
     quiz = models.getQuiz(quiz_id)
 
     # check if the user is allowed to see this quiz
