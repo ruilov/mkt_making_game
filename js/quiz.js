@@ -1,6 +1,6 @@
 var app = angular.module( "quiz", ['ui.bootstrap'] );
 
-app.controller( "quizController", function userController($scope,$http,$location,$route) {
+app.controller( "quizController", function userController($scope,$http,$location,$route,$filter) {
   var qs = $location.search();
   var quiz_id = qs.id;
 
@@ -21,6 +21,11 @@ app.controller( "quizController", function userController($scope,$http,$location
   $scope.add_question = function(question) {
     if(!question.guess_low) question.guess_low = 0;
     if(!question.guess_high) question.guess_high = 0;
+
+    question.guess_low = format_num(question.guess_low,$filter);
+    question.guess_high = format_num(question.guess_high,$filter);
+    if(question.answer) question.answer = format_num(question.answer,$filter);
+
     $scope.quiz.questions.push(question);
   };
 
@@ -57,26 +62,30 @@ app.directive('format', function ($filter) {
           var idx2 = postfix.indexOf(".");
           if(idx2!=-1) {
             elem.val("");
-            return 0;
+            return "";
           }
-
-          if(postfix.length>0) {
-            postfix = $filter('number')(postfix);
-            if(postfix.length==0) {
-              elem.val("");
-              return 0;
-            }
+          if(postfix.length>0 && (isNaN(parseFloat(postfix)) || !isFinite(postfix))) {
+            elem.val("");
+            return "";
           }
-          postfix = postfix.replace(/[\,]/g, '');
           viewValue = viewValue.substr(0,idx);
         }
 
         var plainNumber = viewValue.replace(/[\,]/g, '');
         var elemVal = $filter('number')(plainNumber);
-        if(hasPost) elemVal += "." + postfix;
+        if(elemVal.length==0) {
+          elem.val("");
+          return "";  // this makes sure we see a validation error on the user screen
+        }
+
+        if(hasPost) {
+          elemVal += "." + postfix;
+          plainNumber = parseFloat(plainNumber) + parseFloat("0."+postfix);
+          plainNumber = plainNumber + "";
+        }
         elem.val(elemVal);
 
-        // console.log(viewValue + " , " + plainNumber + " , " + b);
+        // console.log(viewValue + " , " + plainNumber + " , " + elemVal);
         return plainNumber;
       });
     }
