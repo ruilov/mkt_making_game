@@ -32,6 +32,10 @@ class Quizzes(webapp2.RequestHandler):
       quiz.status = "active"
       quiz.releaseDate = datetime.datetime.now()
       quiz.put()
+    elif json["action"] == "unold":
+      quiz = models.getQuiz(json["id"])
+      quiz.status = "editor"
+      quiz.put()
     elif json["action"] == "deactivate":
       quiz_id = json["id"]
       quiz = models.getQuiz(quiz_id)
