@@ -19,6 +19,10 @@ templateApp.config(['$routeProvider',
         templateUrl: 'index.html',
         controller: 'indexController',
       }).
+      when('/login', {
+        templateUrl: 'login.html',
+        // controller: 'indexController',
+      }).
       when('/quizzes', {
         templateUrl: 'quizzes.html',
         controller: 'quizzesController'

@@ -21,6 +21,12 @@ handlers:
 - url: /scores_api/
   script: mktmaking.application
 
+- url: /
+  script: mktmaking.application
+
+- url: /login\.html
+  script: mktmaking.application
+
 - url: .*
   script: mktmaking.application
   login: required
