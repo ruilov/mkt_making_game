@@ -43,6 +43,7 @@ def getQuiz(quiz_id):
 
   if(len(response)==0):
     quiz = Quiz(parent=quiz_key(quiz_id))
+    quiz.status = "editor"
     quiz.questions = [Question()]
   else:
     quiz = response[0]

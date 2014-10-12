@@ -37,3 +37,8 @@
 .submit-container {
   margin-right: 50px;
 }
+
+input.ng-invalid {
+  border: 1px solid red;
+  border-width: 3px;
+}

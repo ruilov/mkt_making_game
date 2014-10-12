@@ -26,7 +26,6 @@ class QuizEditor(webapp2.RequestHandler):
       question.answer = questionJSON["answer"]
       questionArr.append(question)
     quiz.questions = questionArr
-    quiz.status = "editor"
     quiz.put()
 
 
