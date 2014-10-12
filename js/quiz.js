@@ -1,10 +1,10 @@
 var app = angular.module( "quiz", ['ui.bootstrap'] );
 
-app.controller( "quizController", function userController($scope,$http,$location,$route,$filter) {
+app.controller( "quizController", function userController($scope,$http,$location,$filter) {
   var qs = $location.search();
   var quiz_id = qs.id;
 
-  $scope.quiz = {"questions": [], "url": quiz_url(quiz_id)};
+  $scope.quiz = {"questions": [], "url": quiz_url(quiz_id), "title": "Make some markets"};
 
   $scope.add_question = function(question) {
     if(!question.guess_low) question.guess_low = 0;
@@ -18,6 +18,9 @@ app.controller( "quizController", function userController($scope,$http,$location
   };
 
   quiz_api_cb = function(quiz, status, headers, config) {
+    if(quiz.status=="old")
+      $scope.quiz.title = new Date(quiz.releaseDate).toDateString();
+
     $scope.quiz.questions = [];
     for(var i in quiz.questions) {
       question = quiz.questions[i];
@@ -28,13 +31,14 @@ app.controller( "quizController", function userController($scope,$http,$location
 
   quiz_api_cb($scope.quiz_data);
 
+  // the command where the user submits answers to a quiz
   $scope.submit = function() {
     var req = $http.post("/quiz_api/?id="+quiz_id,$scope.quiz);
     req.success(quiz_api_cb);
   };
 });
 
-
+// Directive for formatting numbers while the user is inputting them
 app.directive('format', function ($filter) {
   'use strict';
 

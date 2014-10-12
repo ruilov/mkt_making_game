@@ -49,3 +49,14 @@ def getQuiz(quiz_id):
     quiz = response[0]
 
   return quiz
+
+def check_user_in_db(user):
+  user_id = user.user_id()
+  query = User.query(ancestor=user_key(user_id))
+  response = query.fetch(1)
+  if(len(response)==0):
+    ndb_user = models.User(parent=user_key(user_id))
+    ndb_user.user_id = user_id
+    ndb_user.email = user.email()
+    ndb_user.nickname = user.nickname()
+    ndb_user.put()

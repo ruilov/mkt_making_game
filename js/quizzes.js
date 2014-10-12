@@ -1,6 +1,6 @@
 var app = angular.module( "quizzes", ['ui.bootstrap'] );
 
-app.controller( "quizzesController", function userController($scope,$http,$location) {
+app.controller( "quizzesController", function userController($scope,$http) {
   $scope.quizzes = [];
 
   $scope.nextID = -1;

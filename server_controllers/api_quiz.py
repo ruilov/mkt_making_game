@@ -31,14 +31,13 @@ class Quiz(webapp2.RequestHandler):
     # find a fillout for this quiz
     user = users.get_current_user()
     if user:
+      models.check_user_in_db(user)
       user_id = user.user_id()
-      query = models.User.query(ancestor=models.user_key(user_id))
-      response = query.fetch(1)
-      if len(response)!=0:
-        fillout_query = models.Fillout.query(models.Fillout.user_id == user_id, models.Fillout.quiz_id == quiz_id)
-        fillout_res = fillout_query.fetch(1)
-        if len(fillout_res)!=0:
-          fillout_quiz(quiz_dict,fillout_res[0])
+
+      fillout_query = models.Fillout.query(models.Fillout.user_id == user_id, models.Fillout.quiz_id == quiz_id)
+      fillout_res = fillout_query.fetch(1)
+      if len(fillout_res)!=0:
+        fillout_quiz(quiz_dict,fillout_res[0])
 
     # remove the answers from active quizzes if the user hasn't filled them out
     if quiz_dict["state"] != "filled" and quiz_dict["status"]=="active":

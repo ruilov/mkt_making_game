@@ -1,0 +1,8 @@
+body {
+    padding: 10px !important;
+}
+
+.ng-table {
+    border: none;
+    /*border: 1px solid #000;*/
+}

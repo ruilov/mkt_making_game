@@ -29,18 +29,8 @@ class TemplatePage(webapp2.RequestHandler):
       template_values["usernick"] = user.nickname()
       template_values["user_logout_url"] = users.create_logout_url('/')
       if template_path == "template.html":
-        check_user_in_db(user)
+        models.check_user_in_db(user)
 
     template = JINJA_ENVIRONMENT.get_template("html/"+template_path)
     self.response.write(template.render(template_values))
 
-def check_user_in_db(user):
-  user_id = user.user_id()
-  query = models.User.query(ancestor=models.user_key(user_id))
-  response = query.fetch(1)
-  if(len(response)==0):
-    ndb_user = models.User(parent=models.user_key(user_id))
-    ndb_user.user_id = user_id
-    ndb_user.email = user.email()
-    ndb_user.nickname = user.nickname()
-    ndb_user.put()
