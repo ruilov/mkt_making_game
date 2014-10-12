@@ -16,7 +16,10 @@ app.controller( "indexController", function userController($scope,$http,$locatio
         url = quiz_url(quiz.id,true);
 
         $location.path("/quiz").search("id",quiz.id);
+        return;
       };
+
+      $location.path("/rankings/");
     });
 
   });
