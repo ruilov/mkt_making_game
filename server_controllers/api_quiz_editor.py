@@ -9,8 +9,7 @@ class QuizEditor(webapp2.RequestHandler):
   def get(self,idStr):
     quiz_id = self.request.get("id")
     quiz = models.getQuiz(quiz_id)
-    jsonStr = simplejson.dumps(quiz.to_dict(), cls = utils.MyEncoder)
-    self.response.out.write(jsonStr)
+    utils.write_back(self,quiz.to_dict())
 
   def post(self,idStr):
     quiz_id = self.request.get("id")

@@ -27,6 +27,12 @@ handlers:
 - url: /login\.html
   script: mktmaking.application
 
+- url: /index\.html
+  script: mktmaking.application
+
+- url: /is_logged_api
+  script: mktmaking.application
+
 - url: .*
   script: mktmaking.application
   login: required
