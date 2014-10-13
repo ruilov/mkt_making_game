@@ -65,7 +65,7 @@ templateApp.controller( "templateController", function ($scope,$http) {
       id = $scope.old_quizzes[i].id;
       $scope.old_quizzes[i].url = quiz_url(id);
       $scope.old_quizzes[i].name = quiz_name(id);
-      $scope.old_quizzes[i].date = new Date($scope.old_quizzes[i].releaseDate).toDateString();
+      $scope.old_quizzes[i].date = new Date($scope.old_quizzes[i].releaseDate).toLocaleDateString("en-US");
     };
   });
 });

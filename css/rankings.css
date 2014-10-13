@@ -24,15 +24,11 @@ body {
 }
 
 .ng-table tr {
-  border: 1px solid #95b3d7;
-}
-
-.ng-table tbody tr td {
-  margin-right: 200px;
+  border: 1px solid #aaaaaa;
 }
 
 .ng-table tbody tr:nth-child(odd) {
-  background: #d4c2f6;
+  background: #eeeeee;
 }
 
 .ng-table tr *:nth-child(1) {

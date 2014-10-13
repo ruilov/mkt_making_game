@@ -12,7 +12,7 @@ app.controller( "rankingsController", function ($scope,$http,$filter,ngTablePara
     // get the quiz dates which correspond to the columns
     for(var i in data.quiz_dates) {
       id = data.quiz_dates[i].quiz_id;
-      title = new Date(data.quiz_dates[i].releaseDate).toDateString(); 
+      title = new Date(data.quiz_dates[i].releaseDate).toLocaleDateString("en-US"); 
       $scope.columns.push({title: title, field: id, visible: true});
     };
 
