@@ -4,5 +4,11 @@ body {
 
 .ng-table {
     border: none;
-    /*border: 1px solid #000;*/
+}
+
+.ng-table th.sortable.sort-desc,
+.ng-table th.sortable.sort-asc {
+  background: #443266;
+  font-weight: 800;
+  color: white;
 }

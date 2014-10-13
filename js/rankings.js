@@ -43,8 +43,8 @@ app.controller( "rankingsController", function ($scope,$http,$filter,ngTablePara
     $scope.tableParams = new ngTableParams({
       page: 1,                                  // show first page
       count: $scope.table_data.length,          // count per page
-      filter: {
-        name: 'player'                          // initial filter
+      sorting: {
+        total: 'desc'                          // initial filter
       }
     }, {
       counts: [], // hide page counts control
