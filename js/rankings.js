@@ -9,7 +9,6 @@ app.controller( "rankingsController", function ($scope,$http,$filter,ngTablePara
 
   var responsePromise = $http.get("/rankings_api/");
   responsePromise.success(function(data, status, headers, config) {
-    console.log(data);
     // get the quiz dates which correspond to the columns
     for(var i in data.quiz_dates) {
       id = data.quiz_dates[i].quiz_id;
@@ -51,9 +50,32 @@ app.controller( "rankingsController", function ($scope,$http,$filter,ngTablePara
       total: 0,  // value less than count hide pagination
       getData: function($defer, params) {
         // use build-in angular filter
-        var orderedData = params.sorting() ?
-          $filter('orderBy')($scope.table_data, params.orderBy()) :
-          $scope.table_data;
+        var orderedData = $scope.table_data;
+        if(params.sorting()) {
+          // couldn't figure out the api to extract stuff from the sortCol so just converting to string
+          sortCol = params.orderBy()+"";
+          asc = true;
+          if(sortCol.charAt(0)=="-") {
+            asc = false;
+            sortCol = sortCol.substr(1);
+          };
+          if(sortCol.charAt(0)=="+") {
+            asc = true;
+            sortCol = sortCol.substr(1);
+          };
+
+          orderedData.sort(function(v1,v2) {
+            // sort assuming it's ascending then multiply at the end if desc
+            a = v1[sortCol];
+            b = v2[sortCol];
+            var res = 0;
+            if(typeof(a)==typeof(b)) res = a < b ? -1 : a > b;
+            else if(a==undefined) res = -1;
+            else res = 1;
+            if(!asc) res *= -1;
+            return res;
+          });
+        };
 
         $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
       }
