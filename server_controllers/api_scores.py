@@ -5,6 +5,8 @@ from google.appengine.api import users
 
 from server_controllers import models,utils
 
+# REST api for retrieving scores so that we can play with the methodology
+
 class Scores(webapp2.RequestHandler):
   def get(self,idStr):
     quiz_id = self.request.get("id")

@@ -8,7 +8,7 @@
             'sort-asc': tableParams.isSortBy(column.field, 'asc'),
             'sort-desc': tableParams.isSortBy(column.field, 'desc')
           }"
-          ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+          ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'desc') ? 'asc' : 'desc')">
 
         {{column.title}}
 
