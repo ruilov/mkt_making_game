@@ -36,7 +36,7 @@ class SendMail(webapp2.RequestHandler):
         <body>
           There's a new quiz available at <a href="http://mktmakinggame.com">mktmakinggame.com</a>. Have fun!
           <br><br>
-          And remember: <b>no cheating allowed</b>, please don't do any internet searchs while answering the quiz.
+          And remember: <b>no cheating allowed</b>, please don't do any internet searches while answering the quiz.
         </body>
       </html>
       """
