@@ -10,11 +10,13 @@ class MyEncoder(json.JSONEncoder):
       return obj.isoformat()
     return json.JSONEncoder.default(self, obj)
 
+def admins():
+  return [ "test2@example.com", "ruilov@gmail.com", "carrben12@gmail.com" ];
+
 def is_admin():
     user = users.get_current_user()
     if user:
-      email = user.email()
-      return email=="test2@example.com" or email=="ruilov@gmail.com" or email == "carrben12@gmail.com"
+      return (user.email() in admins())
     else: return False
 
 def write_back(req,dicti):

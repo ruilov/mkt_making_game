@@ -73,4 +73,16 @@ app.controller( "quizzesController", function userController($scope,$http) {
       }
     };
   };
+
+  $scope.sendmail = function(quiz) {
+    if(!confirm("Do you really want to send the emails?")) return;
+    var req = $http.post("/send_mail_api/",{"test": true});
+    req.success(function(data, status, headers, config) {
+      for(var k in data) {
+        $scope.email_answer = k;
+        return;
+      };
+    });
+  };
+
 })
