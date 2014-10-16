@@ -58,11 +58,23 @@ class Quiz(webapp2.RequestHandler):
       utils.write_back(self,{"not_active": 1})
       return
 
-    # fixme: if the user already filled it out then don't allow it again
-
     json = simplejson.loads(self.request.body)
-    user = users.get_current_user()
-    user_id = user.user_id()
+
+    # fixme: if the user already filled it out then don't allow it again
+    
+    ################## FOR TESTING ONLY ####################
+    if 'user_id' in json:
+      user_id = json['user_id']
+      response = models.User.query(ancestor=models.user_key(user_id)).fetch(1)
+      if(len(response)==0):
+        ndb_user = models.User(parent=models.user_key(user_id))
+        ndb_user.user_id = user_id
+        ndb_user.email = json['user_email']
+        ndb_user.nickname = json['user_nickname']
+        ndb_user.put()
+    else:
+      user = users.get_current_user()
+      user_id = user.user_id()
 
     fillout = models.Fillout(user_id=user_id,quiz_id=quiz_id)
     lows = []
