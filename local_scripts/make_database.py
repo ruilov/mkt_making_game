@@ -7,8 +7,6 @@ save_quiz_url = server + '/quiz_editor_api/'
 fillout_url = server + '/quiz_api/'
 quizzes_url = server + '/quizzes_api/'
 http_headers = {
-  # 'Cookie': 'dev_appserver_login="test2@example.com:False:167176955777861719774"',
-  'Cookie': 'ACSID=AJKiYcEuSnhDPUrKDQSs93m6K_SMjNBGF-yzo-XYW6uvby3e56G95SK4P7udOAeyXWuaARJ1t1G0GK49b5EGPDVbiToZ58gaRQr-009mPyWFCSCvS5bKPK2RXkT41TYyBbkUIH_FHhcOP6Oe_2LCUpzM-sXkM1-I_Bexsz-J89Z6lD1c7GBBB_Ls7TcGofByigJEuTyggpXWRib85BqQg3eMAdljIin39Ac_uUwpMC8PRmJbZWA_h_m79ZUxhhEWanQ7neLvRTm7TROAJK169uK7qBUJxYNfRYTTfNkD-JTWjZ9wnYXcQ-T9MCHuXa_xhH7UHCmmvRNunMtjntixRLi8jC-TyTLYnKuD-2v5riqXEoVxzXPgmK4szGUnA24vFmemvwiRFfyX6SFK7Qtw4N4o9-8gDgTVzkFSpYXst1E2hg7H4aYR5Ksja0bxHI1hKgti_b5m6yPVnog9PObGq_L_TKRFGU_hfuRDVTSy_0_5RrAGiWI2H8quzOuv-7CbGDYqMccwZcZVgnjbxbGqbPtkO_otgQF08uFckwLwHZvIf4VuKuNTq-Yy-It6pPnP7tmZwwlmNlyQJLSdV0DeDxfULuGc2VSeiUVhtiGf2FZEpAo7v8XBSSuzYrNQnA0bxS1KOYkAMspDr1WJmg1htnA8iy9egdCdCQlE_UF2A5yYwXn7oNtSKuTNdLy6e1C6asyRMnqys7ib',
   'content-type': 'application/json',
 }
 database = json.load(open('database.json'))
