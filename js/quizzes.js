@@ -22,6 +22,19 @@ app.controller( "quizzesController", function userController($scope,$http) {
     $scope.nextURL = quiz_editor_url($scope.nextID);
   });
 
+  $scope.quiz_action = function(quiz,action,new_state) {
+    for(var i in $scope.quizzes) {
+      if($scope.quizzes[i]==quiz) {
+        if(!confirm("Do you really want to " + action + " this quiz?")) return;
+        var req = $http.post("/quizzes_api/",{"action": action, "id": quiz.id});
+        req.success(function(data, status, headers, config) {
+          $scope.quizzes[i]["status"] = new_state;
+        });
+        return;
+      }
+    };
+  }
+
   $scope.delete = function(quiz) {
     for(var i in $scope.quizzes) {
       if($scope.quizzes[i]==quiz) {
@@ -36,42 +49,15 @@ app.controller( "quizzesController", function userController($scope,$http) {
   };
 
   $scope.activate = function(quiz) {
-    for(var i in $scope.quizzes) {
-      if($scope.quizzes[i]==quiz) {
-        if(!confirm("Do you really want to activate this quiz?")) return;
-        var req = $http.post("/quizzes_api/",{"action": "activate", "id": quiz.id});
-        req.success(function(data, status, headers, config) {
-          $scope.quizzes[i]["status"] = "active";
-        });
-        return;
-      }
-    };
+    $scope.quiz_action(quiz,"activate","active");
   };
 
   $scope.deactivate = function(quiz) {
-    for(var i in $scope.quizzes) {
-      if($scope.quizzes[i]==quiz) {
-        if(!confirm("Do you really want to deactivate this quiz?")) return;
-        var req = $http.post("/quizzes_api/",{"action": "deactivate", "id": quiz.id});
-        req.success(function(data, status, headers, config) {
-          $scope.quizzes.splice(i,1);
-        });
-        return;
-      }
-    };
+    $scope.quiz_action(quiz,"deactivate","old");
   };
   
   $scope.unold = function(quiz) {
-    for(var i in $scope.quizzes) {
-      if($scope.quizzes[i]==quiz) {
-        if(!confirm("Do you really want to unold this quiz?")) return;
-        var req = $http.post("/quizzes_api/",{"action": "unold", "id": quiz.id});
-        req.success(function(data, status, headers, config) {
-          $scope.quizzes.splice(i,1);
-        });
-        return;
-      }
-    };
+    $scope.quiz_action(quiz,"unold","editor");
   };
 
   $scope.sendmail = function(quiz) {
