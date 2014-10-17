@@ -52,18 +52,12 @@ class Quizzes(webapp2.RequestHandler):
 
 
 def score_quiz(quiz,quiz_id):
-  user_ids = []
+  points_by_uid = {}
   points = []
 
-  user_query = models.User.query()
-  user_results = user_query.fetch()
-  for user in user_results:
-    fillout_query = models.Fillout.query(models.Fillout.user_id == user.user_id, models.Fillout.quiz_id == quiz_id)
-    fillout_res = fillout_query.fetch(1)
-    if len(fillout_res)==0: continue
-    
+  fillout_query = models.Fillout.query(models.Fillout.quiz_id == quiz_id).fetch()
+  for fillout in fillout_query:
     point = 0
-    fillout = fillout_res[0]
     for i in range(0,len(quiz.questions)):
       ans = float(quiz.questions[i].answer)
       low = float(fillout.guesses_low[i])
@@ -71,8 +65,7 @@ def score_quiz(quiz,quiz_id):
       if low <= ans and ans <= high:
         point+=1
 
-    user_ids.append(user.user_id)
-    points.append(point)
+    points_by_uid[fillout.user_id]=point
 
   # now that we calculated the rankings, save them to the DB
   rank_query = models.QuizRanking.query(ancestor=models.quiz_ranking_key(quiz_id))
@@ -81,6 +74,6 @@ def score_quiz(quiz,quiz_id):
     ranking = models.QuizRanking(parent=models.quiz_ranking_key(quiz_id),quiz_id=quiz_id)
   else: 
     ranking = rank_res[0]
-  ranking.user_ids = user_ids
-  ranking.points = points
+  ranking.user_ids = points_by_uid.keys()
+  ranking.points = points_by_uid.values()
   ranking.put()
