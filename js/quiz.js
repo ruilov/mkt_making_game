@@ -21,11 +21,12 @@ app.controller( "quizController", function userController($scope,$http,$location
     if(quiz.status=="old")
       $scope.quiz.title = new Date(quiz.releaseDate).toDateString();
 
+    $scope.state = quiz.state;
     $scope.quiz.questions = [];
     for(var i in quiz.questions) {
       question = quiz.questions[i];
       $scope.add_question(question);
-      $scope.state = quiz.state;
+      
     };
   };
 
