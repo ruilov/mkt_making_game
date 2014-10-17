@@ -1,0 +1,14 @@
+The admin console is accessed through the link in the top navigation bar
+
+It will list every quiz ever made.
+
+Each quiz has a state which can be:
+  - Editor: visible to admins only
+  - Active: the quiz will be available for users at the landing page (mktmaking.com). Only one quiz should be active at a time.
+  - Old: the quiz cannot be filed anymore and users can see the answers by accessing the quiz through the Old Quiz menu
+
+Actions
+  - Acitvate a quiz in editor state. Side effect: it will set the release date of the quiz, or reset if previously released
+  - Deactivate a quiz in active state. Side effect: it will score the quiz for all users, and make the ranking available
+  - Un-old a quiz in old state. No other side effects 
+  - Send email: it will email all users announcing a new quiz.
