@@ -18,6 +18,9 @@ handlers:
 - url: /fonts
   static_dir: fonts
 
+- url: /imgs
+  static_dir: imgs
+
 - url: /scores_api/
   script: mktmaking.application
 
