@@ -11,10 +11,13 @@ class Quizzes(webapp2.RequestHandler):
   def get(self,qs):
     status = self.request.get("status")
 
-    query = models.Quiz.query()
-    response = query.fetch()
+    if "editor" in status and not utils.is_admin():
+      utils.write_back(self,{"not_allowed": 1})
+      return
+
+    query = models.Quiz.query().fetch()
     quizzes = []
-    for quiz in response:
+    for quiz in query:
       if quiz.status not in status: continue;
       quiz_dict = quiz.to_dict();
       quiz_dict["id"] = quiz.key.parent().id()
@@ -23,6 +26,10 @@ class Quizzes(webapp2.RequestHandler):
     utils.write_back(self,{"quizzes": quizzes})
 
   def post(self,qs):
+    if not utils.is_admin():
+      utils.write_back(self,{"not_allowed": 1})
+      return
+
     json = simplejson.loads(self.request.body)
     if json["action"] == "delete":
       key = models.getQuiz(json["id"]).key

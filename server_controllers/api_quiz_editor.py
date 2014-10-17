@@ -8,11 +8,27 @@ from server_controllers import models,utils
 class QuizEditor(webapp2.RequestHandler):
   def get(self,idStr):
     quiz_id = self.request.get("id")
+    if len(quiz_id)==0:
+      utils.write_back(self,{"no_quiz_id": 1})
+      return
+
+    if not utils.is_admin():
+      utils.write_back(self,{"not_allowed": 1})
+      return
+
     quiz = models.getQuiz(quiz_id)
     utils.write_back(self,quiz.to_dict())
 
   def post(self,idStr):
     quiz_id = self.request.get("id")
+    if len(quiz_id)==0:
+      utils.write_back(self,{"no_quiz_id": 1})
+      return
+
+    if not utils.is_admin():
+      utils.write_back(self,{"not_allowed": 1})
+      return
+
     quiz = models.getQuiz(quiz_id)
 
     # parse the json into a model quiz. There's probably an easier way to do this

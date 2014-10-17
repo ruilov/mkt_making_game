@@ -9,8 +9,7 @@ from server_controllers import models,utils
 
 class Rankings(webapp2.RequestHandler):
   def get(self,qs):
-    rank_query = models.QuizRanking.query()
-    rank_res = rank_query.fetch()
+    rank_res = models.QuizRanking.query().fetch()
 
     rank_by_user = {}
     quiz_dates = []

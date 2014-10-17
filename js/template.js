@@ -1,18 +1,6 @@
 // this is the controler for the template of all the HTML pages
 var templateApp = angular.module( "template", ['ngRoute','index','quizzes','quiz','quizEditor','rankings'] );
 
-templateApp.factory("quizAllowedService", function ($rootScope, $location) {
-  return {
-    isAllowed: function(quiz, status, headers, config) {
-      $rootScope.quiz_data = quiz;
-      if(typeof(quiz)=="string" || ("not_allowed" in quiz)) {
-        $location.path("/not_allowed");
-      }
-      return;
-    }
-  };
-});
-
 templateApp.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -54,6 +42,18 @@ templateApp.config(['$routeProvider',
       });
   }
 ]);
+
+templateApp.factory("quizAllowedService", function ($rootScope, $location) {
+  return {
+    isAllowed: function(quiz, status, headers, config) {
+      $rootScope.quiz_data = quiz;
+      if(typeof(quiz)=="string" || ("not_allowed" in quiz)) {
+        $location.path("/not_allowed");
+      }
+      return;
+    }
+  };
+});
 
 templateApp.controller( "templateController", function ($scope,$http) {
   $scope.old_quizzes = [];
