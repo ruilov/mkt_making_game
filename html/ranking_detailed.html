@@ -1,4 +1,17 @@
 <link href="/css/rankings.css" rel="stylesheet">
+
+<div class="btn-group" role="toolbar">
+  <span ng-repeat="link in qlinks">
+    <a href={{link.link}}><button type="button" class={{link.clas}}>
+        {{link.title}}
+    </button></a>
+  </span>
+</div>
+
+<br><br>
+<h4><b>Q{{qnum}}</b>: {{question.text}}</h4>
+<h4><b>Answer:</b> {{question.answer}}</h4>
+<br>
   
 <table ng-table="tableParams" show-filter="true" class="table">
   <thead>
@@ -11,7 +24,6 @@
           ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'desc') ? 'asc' : 'desc')">
 
         {{column.title}}
-
         <span class="dropup">
           <span class="caret" ng-show="tableParams.isSortBy(column.field, 'asc')"></span>
         </span>
@@ -19,16 +31,6 @@
         <span ng-show="!tableParams.isSortBy(column.field, 'desc') && !tableParams.isSortBy(column.field, 'asc')">
           &nbsp;&nbsp;
         </span>
-      </th>
-    </tr>
-
-    <tr>
-      <th ng-repeat="column in columns" class="subheader">
-        <div ng-switch="column.link">
-          <div ng-switch-when="true">
-            <a href="/#/ranking_detailed?id={{column.field}}&q=1">details</a>
-          </div>
-        </div>
       </th>
     </tr>
   </thead>
@@ -41,5 +43,3 @@
     </tr>
   </tbody>
 </table>
-
-

@@ -8,31 +8,71 @@ from server_controllers import models,utils
 
 class Rankings(webapp2.RequestHandler):
   def get(self,qs):
-    user_id_map = {}
-    rank_by_user = {}
-    users_query = models.User.query().fetch()
-    for user in users_query:
-      user_id_map[user.user_id] = user.nickname
-      rank_by_user[user.nickname] = {}
+    quiz_id = self.request.get("id")
+    
+    if len(quiz_id)==0:
+      # this is used for the main ranking page where all the quizzes are retrieve
+      user_id_map = {}
+      rank_by_user = {}
+      users_query = models.User.query().fetch()
+      for user in users_query:
+        user_id_map[user.user_id] = user.nickname
+        rank_by_user[user.nickname] = {}
 
-    quiz_dates = []
-    quizzes_query = models.Quiz.query().fetch()
-    for quiz in quizzes_query:
-      if quiz.status != "old": continue
-      quiz_id = quiz.key.parent().id()
-      quiz_dates.append({"quiz_id": quiz_id, "releaseDate": quiz.releaseDate})
-      points_by_uid = score_quiz(quiz,quiz_id)
+      quiz_dates = []
+      quizzes_query = models.Quiz.query().fetch()
+      for quiz in quizzes_query:
+        if quiz.status != "old": continue
+        quiz_id = quiz.key.parent().id()
+        quiz_dates.append({"quiz_id": quiz_id, "releaseDate": quiz.releaseDate})
+        points_by_uid = score_quiz(quiz,quiz_id)
+        for uid,score in points_by_uid.items():
+          rank_by_user[user_id_map[uid]][quiz_id] = score
+
+      for user in users_query:
+        if len(rank_by_user[user.nickname])==0: del rank_by_user[user.nickname]
+
+      # sort the quizzes by date
+      quiz_dates.sort(key=lambda elem: elem["releaseDate"])
+      utils.write_back(self,{"rank_by_user": rank_by_user, "quiz_dates": quiz_dates})
+    else:
+      # this is for when the user wants to know about a particular quiz id
+      quiz = models.getQuiz(quiz_id)
+      if quiz.status != "old": 
+        utils.write_back(self,{"quiz_not_old": 1})
+        return
+
+      print self.request
+      q = self.request.get("q")
+      if len(q)==0: 
+        utils.write_back(self,{"no_q_specified": 1})
+        return
+      try:
+        q = int(q)
+      except ValueError:
+        utils.write_back(self,{"q_is_not_int": 1})
+        return
+
+      if q > len(quiz.questions) or q < 1:
+        utils.write_back(self,{"invalid q": 1})
+        return
+
+      user_id_map = {}
+      users_query = models.User.query().fetch()
+      for user in users_query:
+        user_id_map[user.user_id] = user.nickname
+
+      points_by_uid = score_quiz(quiz,quiz_id,question=q)
+      data_by_user = {}
       for uid,score in points_by_uid.items():
-        rank_by_user[user_id_map[uid]][quiz_id] = score
+        data_by_user[user_id_map[uid]] = score
 
-    for user in users_query:
-      if len(rank_by_user[user.nickname])==0: del rank_by_user[user.nickname]
+      # sort the quizzes by date
+      utils.write_back(self,data_by_user)
 
-    # sort the quizzes by date
-    quiz_dates.sort(key=lambda elem: elem["releaseDate"])
-    utils.write_back(self,{"rank_by_user": rank_by_user, "quiz_dates": quiz_dates})
+def score_quiz(quiz,quiz_id,question=None):
+  '''question=None returns scores for all questions. Note: the first question is question=1'''
 
-def score_quiz(quiz,quiz_id):
   fillout_query = models.Fillout.query(models.Fillout.quiz_id == quiz_id).fetch()
   points_by_uid = {}
 
@@ -41,7 +81,9 @@ def score_quiz(quiz,quiz_id):
   for i in range(0,len(quiz.questions)): guesses_by_q.append([])
   
   for fillout in fillout_query:
-    points_by_uid[fillout.user_id] = 0
+    if question!=None: points_by_uid[fillout.user_id] = {}
+    else: points_by_uid[fillout.user_id] = 0
+
     for i in range(0,len(quiz.questions)):
       try:
         low = float(fillout.guesses_low[i])
@@ -53,7 +95,6 @@ def score_quiz(quiz,quiz_id):
 
   # score each question
   for i in range(0,len(quiz.questions)):
-    # print quiz.questions[i].text,"|",quiz.questions[i].answer
     answer = float(quiz.questions[i].answer)
     guesses_correct = []
     guesses_incorrect = []
@@ -69,23 +110,18 @@ def score_quiz(quiz,quiz_id):
     max_losers = 9 + max(11-len(guesses_correct),0)
     assign_points(guesses_incorrect,incorrect_sorter,max_points=max_losers)
 
-    for guess in guesses_correct:
-      points_by_uid[guess['user_id']] += guess['score']
-      # print guess['user_id'], "|", guess['low'], "|", guess['high'], "|", guess['score']
-    for guess in guesses_incorrect:
-      points_by_uid[guess['user_id']] += guess['score']
-      # print guess['user_id'], "|", guess['low'], "|", guess['high'], "|", guess['score']
+    all_guesses = [guesses_correct,guesses_incorrect]
+    for guesses_array in all_guesses:
+      for guess in guesses_array:
+        uid = guess['user_id']
+        if question!=None:
+          if i==question-1:
+            del guess['user_id']
+            del guess['answer']
+            points_by_uid[uid] = guess
+        else: points_by_uid[uid] += guess['score']
 
   return points_by_uid
-  # # save scores to the DB
-  # rank_query = models.QuizRanking.query(ancestor=models.quiz_ranking_key(quiz_id)).fetch(1)
-  # if(len(rank_query)==0):
-  #   ranking = models.QuizRanking(parent=models.quiz_ranking_key(quiz_id),quiz_id=quiz_id)
-  # else: 
-  #   ranking = rank_query[0]
-  # ranking.user_ids = points_by_uid.keys()
-  # ranking.points = points_by_uid.values()
-  # ranking.put()
 
 def correct_sorter(x,y):
   xwidth = x['high'] - x['low']

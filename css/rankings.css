@@ -17,10 +17,11 @@ body {
   text-shadow: none;
 }
 
-.ng-table thead th {
+.ng-table thead tr th {
   background: #443266;
   font-size: 15px;
   color: #fff;
+  border-bottom: 0px;
 }
 
 .ng-table tr {
@@ -37,4 +38,31 @@ body {
 
 .ng-table tbody th *:nth-child(1) {
   text-align: left;
+}
+
+/* the subheader */
+.ng-table thead th.subheader {
+  /*background: #7c6f93;*/
+  background: #695a84;
+  line-height: 0.5;
+  font-size: 13px;
+}
+
+/* the link at the subheader */
+.ng-table thead th.subheader a {
+  color: #fff;
+}
+
+.ng-table thead th.subheader div {
+  text-align: center;
+}
+
+.btn-primary { 
+  border-color: #043266; 
+  background-color: #443266;
+  color: #fff;
+}
+
+.btn-default { 
+  /*color: #fff;*/
 }

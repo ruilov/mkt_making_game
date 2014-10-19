@@ -13,7 +13,7 @@ app.controller( "rankingsController", function ($scope,$http,$filter,ngTablePara
     for(var i in data.quiz_dates) {
       id = data.quiz_dates[i].quiz_id;
       title = new Date(data.quiz_dates[i].releaseDate).toLocaleDateString("en-US"); 
-      $scope.columns.push({title: title, field: id, visible: true});
+      $scope.columns.push({title: title, link: true, field: id, visible: true});
     };
 
     // get the data for each user

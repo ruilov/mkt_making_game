@@ -1,5 +1,5 @@
 // this is the controler for the template of all the HTML pages
-var templateApp = angular.module( "template", ['ngRoute','index','quizzes','quiz','quizEditor','rankings'] );
+var templateApp = angular.module( "template", ['ngRoute','index','quizzes','quiz','quizEditor','rankings','rankingDetailed'] );
 
 templateApp.config(['$routeProvider',
   function($routeProvider) {
@@ -14,6 +14,17 @@ templateApp.config(['$routeProvider',
       when('/rankings', {
         templateUrl: 'rankings.html',
         controller: 'rankingsController',
+      }).
+      when('/ranking_detailed', {
+        templateUrl: 'ranking_detailed.html',
+        controller: 'rankingDetailedController',
+        resolve: {
+          message: function($http,$location,quizAllowedService) {
+            var qs = $location.search();
+            var req = $http.get("/quiz_api/?id="+qs.id);
+            return req.success(quizAllowedService.isAllowed);
+          }
+        }
       }).
       when('/quizzes', {
         templateUrl: 'quizzes.html',
