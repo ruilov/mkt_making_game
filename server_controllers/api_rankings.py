@@ -42,7 +42,6 @@ class Rankings(webapp2.RequestHandler):
         utils.write_back(self,{"quiz_not_old": 1})
         return
 
-      print self.request
       q = self.request.get("q")
       if len(q)==0: 
         utils.write_back(self,{"no_q_specified": 1})
