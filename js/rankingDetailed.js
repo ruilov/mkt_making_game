@@ -66,10 +66,16 @@ app.controller( "rankingDetailedController", function ($scope,$http,$filter,$loc
             // sort assuming it's ascending then multiply at the end if desc
             a = v1[sortCol];
             b = v2[sortCol];
+            if(sortCol=="low" || sortCol=="high") {
+              if(a!=undefined && a.length!=0) a = parseFloat(a.replace(/,/g,""));
+              if(b!=undefined && a.length!=0) b = parseFloat(b.replace(/,/g,""));
+            };
             var res = 0;
             if(typeof(a)==typeof(b)) res = a < b ? -1 : a > b;
-            else if(a==undefined) res = -1;
-            else res = 1;
+            else {
+              if(a==undefined) res = -1;
+              else res = 1;
+            };
             if(!asc) res *= -1;
             return res;
           });

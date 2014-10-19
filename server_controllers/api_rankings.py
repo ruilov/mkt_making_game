@@ -100,6 +100,7 @@ def score_quiz(quiz,quiz_id,question=None):
     guesses_problem = []
     for guess in guesses_by_q[i]:
       guess['answer'] = answer
+      guess['score'] = 0
       if guess['low']==None or guess['low']>guess['high']: guesses_problem.append(guess)
       elif guess['low']<=answer and answer<=guess['high']: guesses_correct.append(guess)
       else: guesses_incorrect.append(guess)
@@ -109,7 +110,7 @@ def score_quiz(quiz,quiz_id,question=None):
     max_losers = 9 + max(11-len(guesses_correct),0)
     assign_points(guesses_incorrect,incorrect_sorter,max_points=max_losers)
 
-    all_guesses = [guesses_correct,guesses_incorrect]
+    all_guesses = [guesses_correct,guesses_incorrect,guesses_problem]
     for guesses_array in all_guesses:
       for guess in guesses_array:
         uid = guess['user_id']
