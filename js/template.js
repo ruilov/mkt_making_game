@@ -19,10 +19,10 @@ templateApp.config(['$routeProvider',
         templateUrl: 'ranking_detailed.html',
         controller: 'rankingDetailedController',
         resolve: {
-          message: function($http,$location,quizAllowedService) {
+          message: function($http,$location,quizOldService) {
             var qs = $location.search();
             var req = $http.get("/quiz_api/?id="+qs.id);
-            return req.success(quizAllowedService.isAllowed);
+            return req.success(quizOldService.isAllowed);
           }
         }
       }).
@@ -59,6 +59,18 @@ templateApp.factory("quizAllowedService", function ($rootScope, $location) {
     isAllowed: function(quiz, status, headers, config) {
       $rootScope.quiz_data = quiz;
       if(typeof(quiz)=="string" || ("not_allowed" in quiz)) {
+        $location.path("/not_allowed");
+      }
+      return;
+    }
+  };
+});
+
+templateApp.factory("quizOldService", function ($rootScope, $location) {
+  return {
+    isAllowed: function(quiz, status, headers, config) {
+      $rootScope.quiz_data = quiz;
+      if(typeof(quiz)=="string" || (quiz.status!="old")) {
         $location.path("/not_allowed");
       }
       return;
