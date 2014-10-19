@@ -25,6 +25,9 @@ class Rankings(webapp2.RequestHandler):
       for uid,score in points_by_uid.items():
         rank_by_user[user_id_map[uid]][quiz_id] = score
 
+    for user in users_query:
+      if len(rank_by_user[user.nickname])==0: del rank_by_user[user.nickname]
+
     # sort the quizzes by date
     quiz_dates.sort(key=lambda elem: elem["releaseDate"])
     utils.write_back(self,{"rank_by_user": rank_by_user, "quiz_dates": quiz_dates})
