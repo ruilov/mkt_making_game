@@ -11,35 +11,27 @@ app.controller( "rankingDetailedController", function ($scope,$http,$filter,$loc
     {title: "Score", field: "score", visible: true},
   ];
 
-  // for(var i in $scope.quiz_data.questions) 
-    // $scope.quiz_data.questions[i].table_data = [];
-  
-  $scope.qnum = qs.q+"";
-  $scope.question = $scope.quiz_data.questions[parseInt(qs.q)-1];
-  $scope.question.answer = format_num($scope.question.answer,$filter);
-  $scope.qlinks = [];
-  for(var i in $scope.quiz_data.questions) {
-    q = (parseInt(i)+1);
-    cla = "btn btn-default"
-    if(q+""==$scope.qnum) cla = "btn btn-primary";
-    $scope.qlinks.push({link: "/#/ranking_detailed?id="+qs.id+"&q="+q, title: q+"", clas: cla});
-  }
-  
-  var req = $http.get("/rankings_api/?id="+qs.id+"&q="+qs.q);
-  req.success(function(data, status, headers, config) {
-    $scope.reply = data;
-    $scope.table_data = [];
-    for(var user in data) {   
-      user_data = data[user];
-      user_data["player"] = user;
-      user_data["high"] = format_num(user_data["high"],$filter);
-      user_data["low"] = format_num(user_data["low"],$filter);
-      $scope.table_data.push(user_data);
+  $scope.changeQ = function(qn) {
+    $scope.qnum = qn;
+    $scope.question = $scope.quiz_data.questions[$scope.qnum-1];
+    $scope.question.answerStr = format_num($scope.question.answer,$filter);    
+
+    $scope.qlinks = [];
+    for(var i in $scope.quiz_data.questions) {
+      q = (parseInt(i)+1);
+      cla = "btn btn-default"
+      if(q==$scope.qnum) cla = "btn btn-primary";
+      $scope.qlinks.push({qnum: q, clas: cla});
     };
+
+    // it's a mystery to me why this is needed. Otherwise the data table doesn't updste. Weird.
+    // tried tablePArams.reloadData(), $scope.apply(), no cigar...
+    if($scope.tableParams)
+      $scope.tableParams.sorting("score", 'asc');
 
     $scope.tableParams = new ngTableParams({
       page: 1,                                                  // show first page
-      count: $scope.table_data.length,   // count per page
+      count: $scope.user_data[$scope.qnum-1].length,   // count per page
       sorting: {
         score: 'desc'                                           // initial filter
       }
@@ -48,7 +40,7 @@ app.controller( "rankingDetailedController", function ($scope,$http,$filter,$loc
       total: 10,  // value less than count hide pagination
       getData: function($defer, params) {
         // use build-in angular filter
-        var orderedData = $scope.table_data;
+        var orderedData = $scope.user_data[$scope.qnum-1];
         if(params.sorting()) {
           // couldn't figure out the api to extract stuff from the sortCol so just converting to string
           sortCol = params.orderBy()+"";
@@ -84,5 +76,25 @@ app.controller( "rankingDetailedController", function ($scope,$http,$filter,$loc
         $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
       }
     });
+  };
+
+  $scope.qnum = 1;
+  var req = $http.get("/rankings_api/?id="+qs.id);
+  req.success(function(data, status, headers, config) {
+    // $scope.table_data = [];
+    $scope.user_data = [];
+    for(var i in $scope.quiz_data.questions)
+      $scope.user_data.push([]);
+
+    for(var user in data) {
+      for(var qi in data[user]) {
+        user_data = data[user][qi];
+        user_data["player"] = user;
+        user_data["high"] = format_num(user_data["high"],$filter);
+        user_data["low"] = format_num(user_data["low"],$filter);
+        $scope.user_data[qi].push(user_data);
+      };
+    };
+    $scope.changeQ(1);
   });
 });

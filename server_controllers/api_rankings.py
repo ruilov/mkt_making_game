@@ -42,26 +42,12 @@ class Rankings(webapp2.RequestHandler):
         utils.write_back(self,{"quiz_not_old": 1})
         return
 
-      q = self.request.get("q")
-      if len(q)==0: 
-        utils.write_back(self,{"no_q_specified": 1})
-        return
-      try:
-        q = int(q)
-      except ValueError:
-        utils.write_back(self,{"q_is_not_int": 1})
-        return
-
-      if q > len(quiz.questions) or q < 1:
-        utils.write_back(self,{"invalid q": 1})
-        return
-
       user_id_map = {}
       users_query = models.User.query().fetch()
       for user in users_query:
         user_id_map[user.user_id] = user.nickname
 
-      points_by_uid = score_quiz(quiz,quiz_id,question=q)
+      points_by_uid = score_quiz(quiz,quiz_id,detailed=True)
       data_by_user = {}
       for uid,score in points_by_uid.items():
         data_by_user[user_id_map[uid]] = score
@@ -69,8 +55,8 @@ class Rankings(webapp2.RequestHandler):
       # sort the quizzes by date
       utils.write_back(self,data_by_user)
 
-def score_quiz(quiz,quiz_id,question=None):
-  '''question=None returns scores for all questions. Note: the first question is question=1'''
+def score_quiz(quiz,quiz_id,detailed=False):
+  '''if detailed is true, get the scores per question'''
 
   fillout_query = models.Fillout.query(models.Fillout.quiz_id == quiz_id).fetch()
   points_by_uid = {}
@@ -80,7 +66,7 @@ def score_quiz(quiz,quiz_id,question=None):
   for i in range(0,len(quiz.questions)): guesses_by_q.append([])
   
   for fillout in fillout_query:
-    if question!=None: points_by_uid[fillout.user_id] = {}
+    if detailed: points_by_uid[fillout.user_id] = []
     else: points_by_uid[fillout.user_id] = 0
 
     for i in range(0,len(quiz.questions)):
@@ -114,11 +100,10 @@ def score_quiz(quiz,quiz_id,question=None):
     for guesses_array in all_guesses:
       for guess in guesses_array:
         uid = guess['user_id']
-        if question!=None:
-          if i==question-1:
-            del guess['user_id']
-            del guess['answer']
-            points_by_uid[uid] = guess
+        if detailed:
+          del guess['user_id']
+          del guess['answer']
+          points_by_uid[uid].append(guess)
         else: points_by_uid[uid] += guess['score']
 
   return points_by_uid

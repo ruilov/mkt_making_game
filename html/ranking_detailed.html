@@ -2,15 +2,15 @@
 
 <div class="btn-group" role="toolbar">
   <span ng-repeat="link in qlinks">
-    <a href={{link.link}}><button type="button" class={{link.clas}}>
-        {{link.title}}
-    </button></a>
+    <button type="button" ng-click="changeQ(link.qnum)" class={{link.clas}}>
+        {{link.qnum}}
+    </button>
   </span>
 </div>
 
 <br><br>
 <h4><b>Q{{qnum}}</b>: {{question.text}}</h4>
-<h4><b>Answer:</b> {{question.answer}}</h4>
+<h4><b>Answer:</b> {{question.answerStr}}</h4>
 <br>
   
 <table ng-table="tableParams" show-filter="true" class="table">
