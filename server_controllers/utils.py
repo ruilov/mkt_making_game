@@ -1,5 +1,4 @@
-import json
-import datetime
+import json, datetime, hashlib
 from time import mktime
 from google.appengine.api import users
 from django.utils import simplejson
@@ -22,3 +21,6 @@ def is_admin():
 def write_back(req,dicti):
   jsonStr = simplejson.dumps(dicti, cls = MyEncoder)
   req.response.out.write(jsonStr)
+
+def unsubscribeHash(username):
+  return hashlib.sha224("fsadfdsafdasd" + username).hexdigest()

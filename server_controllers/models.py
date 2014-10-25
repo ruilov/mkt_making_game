@@ -32,6 +32,7 @@ class User(ndb.Model):
   user_id = ndb.TextProperty()
   email = ndb.TextProperty()
   nickname = ndb.TextProperty()
+  subscribed = ndb.BooleanProperty()
 
 class Fillout(ndb.Model):
   quiz_id = ndb.TextProperty(indexed=True)
@@ -61,4 +62,5 @@ def check_user_in_db(user):
     ndb_user.user_id = user_id
     ndb_user.email = user.email()
     ndb_user.nickname = user.nickname()
+    ndb_user.subscribed = True
     ndb_user.put()
