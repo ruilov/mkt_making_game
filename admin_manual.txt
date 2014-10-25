@@ -9,6 +9,6 @@ Each quiz has a state which can be:
 
 Actions
   - Acitvate a quiz in editor state. Side effect: it will set the release date of the quiz, or reset if previously released, and make it visible to user (State=active)
-  - Deactivate a quiz in active state. Side effect: it will score the quiz for all users, and make the ranking available. Users won't be able to fill the quiz anymore.
+  - Deactivate a quiz in active state. Side effect: Users won't be able to fill the quiz anymore.
   - Un-old a quiz in old state. No other side effects 
   - Send email: it will email all users announcing a new quiz.

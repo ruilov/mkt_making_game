@@ -70,7 +70,7 @@ templateApp.factory("quizOldService", function ($rootScope, $location) {
   return {
     isAllowed: function(quiz, status, headers, config) {
       $rootScope.quiz_data = quiz;
-      if(typeof(quiz)=="string" || (quiz.status!="old")) {
+      if(typeof(quiz)=="string" || ("quiz_not_old" in quiz)) {
         $location.path("/not_allowed");
       }
       return;
@@ -88,7 +88,14 @@ templateApp.controller( "templateController", function ($scope,$http) {
       id = $scope.old_quizzes[i].id;
       $scope.old_quizzes[i].url = quiz_url(id);
       $scope.old_quizzes[i].name = quiz_name(id);
-      $scope.old_quizzes[i].date = new Date($scope.old_quizzes[i].releaseDate).toLocaleDateString("en-US");
+      $scope.old_quizzes[i].date = new Date($scope.old_quizzes[i].releaseDate);
     };
+    $scope.old_quizzes.sort(function(a,b) {
+      if(a.date<b.date) return -1;
+      else if(a.date>b.date) return 1;
+      return 0;
+    });
+    for(var i in $scope.old_quizzes) 
+      $scope.old_quizzes[i].date = $scope.old_quizzes[i].date.toLocaleDateString("en-US");
   });
 });

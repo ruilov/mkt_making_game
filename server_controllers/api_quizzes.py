@@ -17,7 +17,8 @@ class Quizzes(webapp2.RequestHandler):
     query = models.Quiz.query().fetch()
     quizzes = []
     for quiz in query:
-      if quiz.status not in status: continue;
+      if not( quiz.status in status or (quiz.status=="active" and ("old" in status) and quiz.hasFilled())):
+        continue
       quiz_dict = quiz.to_dict();
       quiz_dict["id"] = quiz.key.parent().id()
       quizzes.append(quiz_dict)

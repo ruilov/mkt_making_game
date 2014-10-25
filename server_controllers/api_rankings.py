@@ -11,7 +11,7 @@ class Rankings(webapp2.RequestHandler):
     quiz_id = self.request.get("id")
     
     if len(quiz_id)==0:
-      # this is used for the main ranking page where all the quizzes are retrieve
+      # this is used for the main ranking page where all the quizzes are retrieved
       user_id_map = {}
       rank_by_user = {}
       users_query = models.User.query().fetch()
@@ -22,8 +22,10 @@ class Rankings(webapp2.RequestHandler):
       quiz_dates = []
       quizzes_query = models.Quiz.query().fetch()
       for quiz in quizzes_query:
-        if quiz.status != "old": continue
-        quiz_id = quiz.key.parent().id()
+        if not( quiz.status == "old" or (quiz.status == "active" and quiz.hasFilled())):
+          continue
+
+        quiz_id = quiz.getID()
         quiz_dates.append({"quiz_id": quiz_id, "releaseDate": quiz.releaseDate})
         points_by_uid = score_quiz(quiz,quiz_id)
         for uid,score in points_by_uid.items():
@@ -38,7 +40,7 @@ class Rankings(webapp2.RequestHandler):
     else:
       # this is for when the user wants to know about a particular quiz id
       quiz = models.getQuiz(quiz_id)
-      if quiz.status != "old": 
+      if not( quiz.status == "old" or (quiz.status == "active" and quiz.hasFilled())):
         utils.write_back(self,{"quiz_not_old": 1})
         return
 

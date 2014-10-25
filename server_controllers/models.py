@@ -1,6 +1,7 @@
 import webapp2
 import datetime
 from google.appengine.ext import ndb
+from google.appengine.api import users
 
 class Question(ndb.Model):
   text = ndb.TextProperty()
@@ -14,6 +15,15 @@ class Quiz(ndb.Model):
   questions = ndb.StructuredProperty(Question,repeated=True)
   status = ndb.TextProperty()
   releaseDate = ndb.DateTimeProperty()
+
+  def getID(self):
+    return self.key.parent().id()
+
+  def hasFilled(self):
+    user = users.get_current_user()
+    if not user: return False
+    fillout_query = Fillout.query(Fillout.user_id == user.user_id(), Fillout.quiz_id == self.getID())
+    return len(fillout_query.fetch()) > 0
 
 def user_key(user_id):
   return ndb.Key("User",str(user_id))
