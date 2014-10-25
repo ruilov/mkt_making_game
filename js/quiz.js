@@ -22,6 +22,9 @@ app.controller( "quizController", function userController($scope,$http,$location
       $scope.quiz.title = new Date(quiz.releaseDate).toDateString();
 
     $scope.state = quiz.state;
+    if($scope.state=="filled") {
+      $scope.quiz.title = "Click for live ranking";
+    }
     $scope.quiz.questions = [];
     for(var i in quiz.questions) {
       question = quiz.questions[i];

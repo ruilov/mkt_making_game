@@ -4,7 +4,14 @@
   <div class="row">
     <div class="col-md-12 site">
       <div class="site-title">
-        <h2><b>{{quiz.title}}</b></h2>
+        <div ng-switch="state">
+          <div ng-switch-when="filled">
+            <a href="/#/rankings"><h2><b><u>{{quiz.title}}</u></b></h2></a>
+          </div>
+          <div ng-switch-default>
+            <h2><b>{{quiz.title}}</b></h2>
+          </div>
+        </div>
       </div>
 
       <form name="quiz_form" class="form-inline">
