@@ -1,0 +1,44 @@
+<link href="css/quiz.css" rel="stylesheet">
+
+<div class="container">
+  <div class="row col-md-12 site">
+      <div class="site-title">
+        <h2><b>Welcome to the Market Making Game!</b></h2>
+      </div>
+
+      <div class="body-text">
+        <br>
+        <div ng-switch="quiz_url">
+          <div align="center" ng-switch-when="false">
+            <h3><b>The next quiz will be available on Friday. See old <a href="/#/rankings">scores</a> in the meantime.</b></h3>
+          </div>
+          <div align="center" ng-switch-default>
+            <h2><b>There's a quiz available <a href="{{quiz_url}}">here</a></b></h2>
+          </div>
+        </div>
+        <br>
+
+        <h3>What is this?</h3>
+        <ul>
+        <li>It's a test of your estimation powers.</li><br>
+        <li>It's a trivia competition for questions with numerical answers known as <a href="http://en.wikipedia.org/wiki/Fermi_problem">Fermi problems</a>.</li><br>
+        <li>It is not expected that you will know the exact right answers. For each question you will need to estimate a lower bound (the 'bid') and an upper bound (the 'offer').</li><br>
+        <li>By rule, no cheating is allowed. This means, no internet searches while you're answering questions, not even 'unrelated' searches. No copying from your friends either!</li>
+        </ul>
+
+        <h3>How does the scoring work?</h3>
+        <ul>
+        <li>Each question is scored individually, and the total score for the quiz is the sum of the questions.</li><br>
+        <li>Players who get the right answer (the answer is between their bid and offer) score between 10 and 20 points. The exact number of points is determined by how wide their bid-offer range is, tighter scores give more points.</li><br>
+        <li>Players who do not get the right answer score between 0 and 9 points. The closer they are to the right answer, the more they will score.</li><br>
+        <li>Player scores are be distributed uniformly within each of these two ranges.</li><br>
+        <li>The exception to these general rules is that the worst correct player will always score 1 more point than the best incorrect player. If less than 11 players get the right answer, then the incorrect players will score between 0 and 1 less point than the correct player with widest bid-offer range.</li>
+        </ul>
+
+        <h3>Here's a picture from xkcd for more details</h3><br>
+        <a href="https://what-if.xkcd.com/84/"><img src="imgs/xkcd.png"></a>
+        <br><br><br>
+      </div>
+  </div>
+</div>
+

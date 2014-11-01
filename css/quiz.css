@@ -60,6 +60,11 @@ input.ng-invalid {
   color: #c00000;
 }
 
+.body-text {
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
 /* stuff below is for the star ratings */
 ul.rating{
   margin: 0;

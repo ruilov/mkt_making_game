@@ -1,5 +1,5 @@
 // this is the controler for the template of all the HTML pages
-var templateApp = angular.module( "template", ['ngRoute','index','quizzes','quiz','quizEditor','rankings','rankingDetailed'] );
+var templateApp = angular.module( "template", ['ngRoute','index','quizzes','quiz','quizEditor','rankings','rankingDetailed','home'] );
 
 templateApp.config(['$routeProvider',
   function($routeProvider) {
@@ -10,6 +10,10 @@ templateApp.config(['$routeProvider',
       }).
       when('/login', {
         templateUrl: 'login.html',
+      }).
+      when('/home', {
+        templateUrl: 'home.html',
+        controller: 'homeController',
       }).
       when('/rankings', {
         templateUrl: 'rankings.html',
