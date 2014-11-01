@@ -5,7 +5,6 @@ app.controller( "homeController", function userController($scope,$http,$location
 
   var responsePromise = $http.get("/quizzes_api/?status=active");
   responsePromise.success(function(data, status, headers, config) {
-    console.log(data);
     quizzes = data.quizzes;
     if(quizzes.length>0) {
       $scope.has_quiz = "true";
