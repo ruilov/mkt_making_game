@@ -28,6 +28,8 @@
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <ul class="nav navbar-nav">
+
+        {% if usernick %}
         <li class="dropdown">
           <a data-toggle="dropdown" class="dropdown-toggle" href="#">Old Quizzes <b class="caret"></b></a>
           <ul class="dropdown-menu">
@@ -38,6 +40,8 @@
         </li>
 
         <li><a href="/#/rankings">Scores</a></li>
+        {% endif %}
+
         {% if is_admin %}
           <li><a href="/#/quizzes">Admin</a></li>
         {% endif %}
@@ -46,7 +50,6 @@
       <ul class="nav navbar-nav navbar-right">
         <li id="last-menu-item">
           {% if usernick %}<a href=((user_logout_url))>Logout</a>
-          {% else %}<a href=((user_login_url))>Login</a>
           {% endif %}
         </li>
       </ul>
