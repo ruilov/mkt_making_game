@@ -34,10 +34,14 @@ class Quiz(webapp2.RequestHandler):
       models.check_user_in_db(user)
       user_id = user.user_id()
 
-      fillout_query = models.Fillout.query(models.Fillout.user_id == user_id, models.Fillout.quiz_id == quiz_id)
-      fillout_res = fillout_query.fetch(1)
-      if len(fillout_res)!=0:
-        fillout_quiz(quiz_dict,fillout_res[0])
+      query = models.Fillout.query(models.Fillout.user_id == user_id, models.Fillout.quiz_id == quiz_id).fetch()
+      if len(query)!=0:
+        fillout_quiz(quiz_dict,query[0])
+        # if the user has filled, then check for question ratings too
+        query2 = models.QuestionRatings.query(models.QuestionRatings.user_id == user_id, models.QuestionRatings.quiz_id == quiz_id).fetch()
+        if len(query2)!=0:
+          for i in range(0,len(quiz_dict["questions"])):
+            quiz_dict["questions"][i]["rating"] = query2[0].ratings[i]
 
     # remove the answers from active quizzes if the user hasn't filled them out
     if quiz_dict["state"] != "filled" and quiz_dict["status"]=="active":
@@ -63,7 +67,7 @@ class Quiz(webapp2.RequestHandler):
     # fixme: if the user already filled it out then don't allow it again
     
     ################## FOR TESTING ONLY ####################
-    if 'user_id' in json:
+    if 'user_id' in json: # user_id is not normally in the json, this is only to be able to add users for testing
       user_id = json['user_id']
       response = models.User.query(ancestor=models.user_key(user_id)).fetch(1)
       if(len(response)==0):

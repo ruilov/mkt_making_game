@@ -25,6 +25,19 @@ class Quiz(ndb.Model):
     fillout_query = Fillout.query(Fillout.user_id == user.user_id(), Fillout.quiz_id == self.getID())
     return len(fillout_query.fetch()) > 0
 
+def getQuiz(quiz_id):
+  query = Quiz.query(ancestor=quiz_key(quiz_id))
+  response = query.fetch(1)
+
+  if(len(response)==0):
+    quiz = Quiz(parent=quiz_key(quiz_id))
+    quiz.status = "editor"
+    quiz.questions = [Question()]
+  else:
+    quiz = response[0]
+
+  return quiz
+
 def user_key(user_id):
   return ndb.Key("User",str(user_id))
 
@@ -40,18 +53,10 @@ class Fillout(ndb.Model):
   guesses_low = ndb.FloatProperty(repeated=True)
   guesses_high = ndb.FloatProperty(repeated=True)
 
-def getQuiz(quiz_id):
-  query = Quiz.query(ancestor=quiz_key(quiz_id))
-  response = query.fetch(1)
-
-  if(len(response)==0):
-    quiz = Quiz(parent=quiz_key(quiz_id))
-    quiz.status = "editor"
-    quiz.questions = [Question()]
-  else:
-    quiz = response[0]
-
-  return quiz
+class QuestionRatings(ndb.Model):
+  quiz_id = ndb.TextProperty(indexed=True)
+  user_id = ndb.TextProperty(indexed=True)
+  ratings = ndb.IntegerProperty(repeated=True)
 
 def check_user_in_db(user):
   user_id = user.user_id()

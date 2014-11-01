@@ -1,4 +1,5 @@
 <link href="/css/quiz.css" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
 <div class="container">
   <div class="row">
@@ -24,37 +25,29 @@
             </div>
 
             <div ng-switch="state">
-              <!-- USER HAS ALLOWED FILLED OUT THE QUIZ -->
+              <!-- USER HAS ALREADY FILLED OUT THE QUIZ -->
               <div ng-switch-when="filled">
-                <div class="form-group col-sm-1" align="center">
+                <div class="bid form-group col-sm-1" align="center">
                   <p><b>Bid</b></p>
                   {{question.guess_low}}
                 </div>
 
-                <div class="form-group col-md-1" align="center">
+                <div class="form-group col-sm-1" align="center">
                     <p><b>Offer</b></p>
                     {{question.guess_high}}
                 </div>
 
-                <div class="form-group col-md-1" align="center">
-                    <p><b>Answer</b></p>
-                    {{question.answer}}
+                <div class="form-group col-sm-1" align="center">
+                  <p><b>Answer</b></p>
+                  <div ng-switch="question.status">
+                    <div class="right-answer" ng-switch-when="No trade">{{question.answer}}</div>
+                    <div class="wrong-answer" ng-switch-default>{{question.answer}}</div>
+                  </div>
                 </div>
 
-                <div class="form-group col-md-1" align="center">
-                  <div ng-switch="question.status">
-                    <div ng-switch-when="Hit bid">
-                      <img src="imgs/down.png" width="40">
-                    </div>
-                    <div ng-switch-when="Lift offer">
-                      <br>
-                      <img src="imgs/up.png" width="40">
-                    </div>
-                    <div ng-switch-default>
-                      <br>
-                      <img src="imgs/right.png" width="40">
-                    </div>
-                  </div>
+                <div class="rating" class="form-group col-md-1" align="center">
+                  <p><b>Rate question</b></p>
+                  <div star-rating question-num="$index" rating-value="question.rating" max="5" on-rating-selected="rateQuestion($index,rating)"></div>
                 </div>
               </div>
 
@@ -70,14 +63,12 @@
               <div ng-switch-default>
                 <div class="form-group col-sm-2" align="center">
                   <p><b>Bid</b></p>
-                  <input type="text" class="form-control input-sm" style="text-align: center" ng-model="question.guess_low" 
-                    required format>
+                  <input type="text" class="form-control input-sm" style="text-align: center" ng-model="question.guess_low" required format>
                 </div>
 
                 <div class="form-group col-md-2" align="center">
                   <p><b>Offer</b></p>
-                  <input type="text" class="form-control input-sm" style="text-align: center" ng-model="question.guess_high" 
-                    required format>
+                  <input type="text" class="form-control input-sm" style="text-align: center" ng-model="question.guess_high" required format>
                 </div>
               </div>
 

@@ -4,7 +4,11 @@ app.controller( "quizController", function userController($scope,$http,$location
   var qs = $location.search();
   var quiz_id = qs.id;
 
-  $scope.quiz = {"questions": [], "url": quiz_url(quiz_id), "title": "Make some markets"};
+  $scope.quiz = {
+      "questions": [], 
+      "url": quiz_url(quiz_id), 
+      "title": "Make some markets"
+  };
 
   $scope.add_question = function(question) {
     if(!question.guess_low) question.guess_low = 0;
@@ -13,24 +17,15 @@ app.controller( "quizController", function userController($scope,$http,$location
     question.guess_low = format_num(question.guess_low,$filter);
     question.guess_high = format_num(question.guess_high,$filter);
     if(question.answer) question.answer = format_num(question.answer,$filter);
-
     $scope.quiz.questions.push(question);
   };
 
   quiz_api_cb = function(quiz, status, headers, config) {
-    if(quiz.status=="old")
-      $scope.quiz.title = new Date(quiz.releaseDate).toDateString();
-
+    if(quiz.status=="old") $scope.quiz.title = new Date(quiz.releaseDate).toDateString();
     $scope.state = quiz.state;
-    if($scope.state=="filled") {
-      $scope.quiz.title = "Click for live ranking";
-    }
+    if($scope.state=="filled") $scope.quiz.title = "Click for scores";
     $scope.quiz.questions = [];
-    for(var i in quiz.questions) {
-      question = quiz.questions[i];
-      $scope.add_question(question);
-      
-    };
+    for(var i in quiz.questions) $scope.add_question(quiz.questions[i]);
   };
 
   quiz_api_cb($scope.quiz_data);
@@ -39,6 +34,65 @@ app.controller( "quizController", function userController($scope,$http,$location
   $scope.submit = function() {
     var req = $http.post("/quiz_api/?id="+quiz_id,$scope.quiz);
     req.success(quiz_api_cb);
+  };
+
+  // deal with the star rating for the quiz
+  $scope.rateQuestion = function(questionNum,rating) {
+    $scope.quiz.questions[questionNum].rating = rating;
+    var req = $http.post("/rate_question_api/?id="+quiz_id,
+      {"question": questionNum, "rating": rating}
+    );
+  };
+});
+
+// directive for the star ratings
+app.directive("starRating", function() {
+  return {
+    restrict : "A",
+    template : "<ul class='rating'>" +
+               "  <li ng-repeat='star in stars' ng-class='star' ng-click='toggle($index)' ng-mouseover='hover($index)' ng-mouseleave='stopHover()''>" +
+               "    <i class='fa fa-star'></i>" +
+               "  </li>" +
+               "</ul>",
+    scope : {
+      ratingValue : "=",
+      max : "=",
+      onRatingSelected : "&",
+      questionNum : "=",
+    },
+    link : function(scope, elem, attrs) {
+      scope.hoverIdx = -1;
+      scope.stars = [];
+      for(var i=0; i<scope.max; i++) scope.stars.push({});
+
+      var updateStars = function() {
+        for(var i=0; i<scope.max; i++) {
+          scope.stars[i].filled = (i < scope.ratingValue) && scope.hoverIdx==-1;
+          scope.stars[i].selecting = i < scope.hoverIdx;
+        };
+      };
+
+      scope.toggle = function(index) {
+        scope.hoverIdx = -1;
+        scope.ratingValue = index + 1;
+        updateStars();
+        scope.onRatingSelected({rating: index + 1});
+      };
+
+      scope.hover = function(idx) {
+        scope.hoverIdx = idx + 1;
+        updateStars();
+      };
+
+      scope.stopHover = function() {
+        scope.hoverIdx = -1;
+        updateStars();
+      };
+
+      scope.$watch("ratingValue", function(oldVal, newVal) {
+        if (newVal) { updateStars(); }
+      });
+    }
   };
 });
 
