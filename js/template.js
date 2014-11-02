@@ -87,6 +87,9 @@ templateApp.controller( "templateController", function ($scope,$http) {
 
   var responsePromise = $http.get("/quizzes_api/?status=old");
   responsePromise.success(function(data, status, headers, config) {
+    if(typeof(data)=="string") {
+      return; // this can happen if the user is not logged in, then the data will be the login html
+    }
     $scope.old_quizzes = data.quizzes;
     for(var i in $scope.old_quizzes) {
       id = $scope.old_quizzes[i].id;
