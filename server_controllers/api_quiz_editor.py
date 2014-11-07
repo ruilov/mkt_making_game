@@ -1,6 +1,5 @@
 import webapp2
 from django.utils import simplejson
-from google.appengine.ext import ndb
 from server_controllers import models,utils
 
 # this API is for admins of the site to create quizzes
@@ -12,7 +11,7 @@ class QuizEditor(webapp2.RequestHandler):
       utils.write_back(self,{"no_quiz_id": 1})
       return
 
-    if not utils.is_admin():
+    if not utils.is_admin(self):
       utils.write_back(self,{"not_allowed": 1})
       return
 
@@ -25,7 +24,7 @@ class QuizEditor(webapp2.RequestHandler):
       utils.write_back(self,{"no_quiz_id": 1})
       return
 
-    if not utils.is_admin():
+    if not utils.is_admin(self):
       utils.write_back(self,{"not_allowed": 1})
       return
 

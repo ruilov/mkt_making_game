@@ -1,6 +1,6 @@
 import webapp2
 from server_controllers import template,api_quizzes,api_quiz_editor,api_quiz,api_scores,api_is_logged
-from server_controllers import api_rankings,api_sendmail,api_unsubscribe,api_question_rating
+from server_controllers import api_rankings,api_sendmail,api_unsubscribe,api_question_rating,login,logout
 
 application = webapp2.WSGIApplication([
   ('/send_mail_api/',api_sendmail.SendMail),
@@ -12,5 +12,7 @@ application = webapp2.WSGIApplication([
   (r'/quizzes_api/(.*)',api_quizzes.Quizzes),
   (r'/quiz_api/(.*)',api_quiz.Quiz),
   (r'/quiz_editor_api/(.*)',api_quiz_editor.QuizEditor),
+  webapp2.Route(r'/login/<:.*>', login.Login, handler_method='any'),
+  ('/logout/',logout.Logout),
   (r'/(.*)', template.TemplatePage),
 ], debug=True)

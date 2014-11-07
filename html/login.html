@@ -8,14 +8,39 @@
 
       <div align="center">
         <br>
-        <h4><i>You will need to approve access to your <b>Gmail</b> email address on the next page.<br>
-        We'll use this address for notifications of new competitions.</i></h4>
-        <br>
         <div class="submit-container">
-          <a href=((user_login_url)) class="btn btn-primary"><div class="submit">Login With Gmail</div></a>
+          <div class="btn-group-vertical">
+          <a href=((gmail_login_url)) class="btn btn-lg btn-info"><b>Gmail Login</b></a>
+              <a href=((facebook_login_url)) class="btn btn-lg btn-primary"><b>Facebook Login</b></a>
+          </div>
         </div>
+        <br>
+        <h4><i>Logging in will give us access to your name and email address but no other private data<br><br></i></h4>
+      </div>
+
+      <div class="body-text">
+        <h3>What's this?</h3>
+        <ul>
+          <li>It's a test of your estimation powers.</li><br>
+          <li>It's a trivia competition with questions with numerical answers known as <a href="http://en.wikipedia.org/wiki/Fermi_problem">Fermi problems</a>.</li><br>
+          <li>Don't expect to know the exact right answers. For each question you will need to estimate a lower bound (the 'bid') and an upper bound (the 'offer').</li><br>
+          <li>By rule, no cheating is allowed. This means no internet searches while you're answering questions, not even for stuff you 'already know'.</li>
+        </ul>
+
+        <a href="https://what-if.xkcd.com/84/"><img src="imgs/xkcd.png"></a>
+
+        <h3>Scoring Rules</h3>
+        <ul>
+          <li>Players who get the right answer (the answer is between their bid and offer) score between 10 and 20 points. The exact number of points is determined by how wide their bid-offer range is, tighter ranges score more points.</li><br>
+          <li>Players who do not get the right answer score between 0 and 9 points. The closer they are to the right answer, the more they will score.</li><br>
+          <li>Player scores are distributed uniformly within each of these ranges.</li><br>
+          <li>The exception to these general rules is that if less than 11 players get the right answer incorrect players can score more than 10 points.</li><br>
+          <li>Correct players will always score more than incorrect players, and the worst correct player will always score 1 more point than the best incorrect player.</li><br>
+          <li>Each question is scored individually, and the total score for the quiz is the sum of the questions.</li>
+        </ul>
         <br><br>
       </div>
   </div>
 </div>
+
 

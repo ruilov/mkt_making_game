@@ -8,16 +8,20 @@ from server_controllers import models,utils
 
 class Quizzes(webapp2.RequestHandler):
   def get(self,qs):
+    if not utils.is_logged(self):
+      utils.write_back(self,{"not_allowed": 1})
+      return
+      
     status = self.request.get("status")
 
-    if "editor" in status and not utils.is_admin():
+    if "editor" in status and not utils.is_admin(self):
       utils.write_back(self,{"not_allowed": 1})
       return
 
     query = models.Quiz.query().fetch()
     quizzes = []
     for quiz in query:
-      if not( quiz.status in status or (quiz.status=="active" and ("old" in status) and quiz.hasFilled())):
+      if not( quiz.status in status or (quiz.status=="active" and ("old" in status) and quiz.hasFilled(self))):
         continue
       quiz_dict = quiz.to_dict();
       quiz_dict["id"] = quiz.key.parent().id()
@@ -26,7 +30,7 @@ class Quizzes(webapp2.RequestHandler):
     utils.write_back(self,{"quizzes": quizzes})
 
   def post(self,qs):
-    if not utils.is_admin():
+    if not utils.is_admin(self):
       utils.write_back(self,{"not_allowed": 1})
       return
 

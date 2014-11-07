@@ -1,8 +1,7 @@
-import webapp2
+import webapp2,urllib
 from string import Template
 from django.utils import simplejson
 from google.appengine.ext import ndb
-from google.appengine.api import users
 
 from server_controllers import utils
 # import smtplib
@@ -12,7 +11,7 @@ from google.appengine.api import mail
 
 class SendMail(webapp2.RequestHandler):  
   def post(self):
-    if not utils.is_admin(): 
+    if not utils.is_admin(self): 
       utils.write_back(self,{"not_allowed": 1})
       return
 
@@ -26,9 +25,8 @@ class SendMail(webapp2.RequestHandler):
     is_test = json["test"]
     is_test = True  # only testing version allowed for now
     if is_test:
-      user = users.get_current_user()
-      user_emails = [user.email()]
-      user_names = [user.user_id()]
+      user_emails = [utils.get_user_email(self)]
+      user_names = [urllib.quote(utils.get_user_email(self))]
 
     message = mail.EmailMessage()
     message.sender = "mktmakinggame.com <mktmakinggame@gmail.com>"

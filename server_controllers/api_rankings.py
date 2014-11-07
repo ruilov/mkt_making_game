@@ -8,31 +8,35 @@ from server_controllers import models,utils
 
 class Rankings(webapp2.RequestHandler):
   def get(self,qs):
+    if not utils.is_logged(self):
+      utils.write_back(self,{"not_allowed": 1})
+      return
+      
     quiz_id = self.request.get("id")
     
     if len(quiz_id)==0:
       # this is used for the main ranking page where all the quizzes are retrieved
-      user_id_map = {}
+      user_email_map = {}
       rank_by_user = {}
       users_query = models.User.query().fetch()
       for user in users_query:
-        user_id_map[user.user_id] = user.nickname
-        rank_by_user[user.nickname] = {}
+        user_email_map[user.email] = user.name
+        rank_by_user[user.name] = {}
 
       quiz_dates = []
       quizzes_query = models.Quiz.query().fetch()
       for quiz in quizzes_query:
-        if not( quiz.status == "old" or (quiz.status == "active" and quiz.hasFilled())):
+        if not( quiz.status == "old" or (quiz.status == "active" and quiz.hasFilled(self))):
           continue
 
         quiz_id = quiz.getID()
         quiz_dates.append({"quiz_id": quiz_id, "releaseDate": quiz.releaseDate})
-        points_by_uid = score_quiz(quiz,quiz_id)
-        for uid,score in points_by_uid.items():
-          rank_by_user[user_id_map[uid]][quiz_id] = score
+        points_by_ue = score_quiz(quiz,quiz_id)
+        for ue,score in points_by_ue.items():
+          rank_by_user[user_email_map[ue]][quiz_id] = score
 
       for user in users_query:
-        if len(rank_by_user[user.nickname])==0: del rank_by_user[user.nickname]
+        if len(rank_by_user[user.name])==0: del rank_by_user[user.name]
 
       # sort the quizzes by date
       quiz_dates.sort(key=lambda elem: elem["releaseDate"])
@@ -40,19 +44,19 @@ class Rankings(webapp2.RequestHandler):
     else:
       # this is for when the user wants to know about a particular quiz id
       quiz = models.getQuiz(quiz_id)
-      if not( quiz.status == "old" or (quiz.status == "active" and quiz.hasFilled())):
+      if not( quiz.status == "old" or (quiz.status == "active" and quiz.hasFilled(self))):
         utils.write_back(self,{"quiz_not_old": 1})
         return
 
-      user_id_map = {}
+      user_email_map = {}
       users_query = models.User.query().fetch()
       for user in users_query:
-        user_id_map[user.user_id] = user.nickname
+        user_email_map[user.email] = user.name
 
-      points_by_uid = score_quiz(quiz,quiz_id,detailed=True)
+      points_by_ue = score_quiz(quiz,quiz_id,detailed=True)
       data_by_user = {}
-      for uid,score in points_by_uid.items():
-        data_by_user[user_id_map[uid]] = score
+      for ue,score in points_by_ue.items():
+        data_by_user[user_email_map[ue]] = score
 
       # sort the quizzes by date
       utils.write_back(self,data_by_user)
@@ -61,15 +65,17 @@ def score_quiz(quiz,quiz_id,detailed=False):
   '''if detailed is true, get the scores per question'''
 
   fillout_query = models.Fillout.query(models.Fillout.quiz_id == quiz_id).fetch()
-  points_by_uid = {}
+  points_by_ue = {}
 
   # collect all answers for each question in one place
   guesses_by_q = []
   for i in range(0,len(quiz.questions)): guesses_by_q.append([])
   
   for fillout in fillout_query:
-    if detailed: points_by_uid[fillout.user_id] = []
-    else: points_by_uid[fillout.user_id] = 0
+    if fillout.user_email in points_by_ue: continue
+    
+    if detailed: points_by_ue[fillout.user_email] = []
+    else: points_by_ue[fillout.user_email] = 0
 
     for i in range(0,len(quiz.questions)):
       try:
@@ -78,7 +84,7 @@ def score_quiz(quiz,quiz_id,detailed=False):
       except ValueError:
         low = None
         high = None
-      guesses_by_q[i].append({'user_id': fillout.user_id, 'low': low, 'high': high})
+      guesses_by_q[i].append({'user_email': fillout.user_email, 'low': low, 'high': high})
 
   # score each question
   for i in range(0,len(quiz.questions)):
@@ -101,14 +107,14 @@ def score_quiz(quiz,quiz_id,detailed=False):
     all_guesses = [guesses_correct,guesses_incorrect,guesses_problem]
     for guesses_array in all_guesses:
       for guess in guesses_array:
-        uid = guess['user_id']
+        ue = guess['user_email']
         if detailed:
-          del guess['user_id']
+          del guess['user_email']
           del guess['answer']
-          points_by_uid[uid].append(guess)
-        else: points_by_uid[uid] += guess['score']
+          points_by_ue[ue].append(guess)
+        else: points_by_ue[ue] += guess['score']
 
-  return points_by_uid
+  return points_by_ue
 
 def correct_sorter(x,y):
   xwidth = x['high'] - x['low']

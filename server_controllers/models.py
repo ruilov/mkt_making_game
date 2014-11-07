@@ -1,7 +1,6 @@
-import webapp2
-import datetime
+import webapp2,datetime
 from google.appengine.ext import ndb
-from google.appengine.api import users
+from server_controllers import utils
 
 class Question(ndb.Model):
   text = ndb.TextProperty()
@@ -19,53 +18,51 @@ class Quiz(ndb.Model):
   def getID(self):
     return self.key.parent().id()
 
-  def hasFilled(self):
-    user = users.get_current_user()
-    if not user: return False
-    fillout_query = Fillout.query(Fillout.user_id == user.user_id(), Fillout.quiz_id == self.getID())
+  def hasFilled(self,request):
+    user_email = utils.get_user_email(request)
+    if not user_email: return False
+    fillout_query = Fillout.query(Fillout.user_email == user_email, Fillout.quiz_id == self.getID())
     return len(fillout_query.fetch()) > 0
 
 def getQuiz(quiz_id):
   query = Quiz.query(ancestor=quiz_key(quiz_id))
   response = query.fetch(1)
-
   if(len(response)==0):
     quiz = Quiz(parent=quiz_key(quiz_id))
     quiz.status = "editor"
     quiz.questions = [Question()]
   else:
     quiz = response[0]
-
   return quiz
 
-def user_key(user_id):
-  return ndb.Key("User",str(user_id))
-
 class User(ndb.Model):
-  user_id = ndb.TextProperty()
-  email = ndb.TextProperty()
-  nickname = ndb.TextProperty()
+  email = ndb.TextProperty(indexed=True)
+  name = ndb.TextProperty()
   subscribed = ndb.BooleanProperty()
 
 class Fillout(ndb.Model):
   quiz_id = ndb.TextProperty(indexed=True)
-  user_id = ndb.TextProperty(indexed=True)
+  user_email = ndb.TextProperty(indexed=True)
   guesses_low = ndb.FloatProperty(repeated=True)
   guesses_high = ndb.FloatProperty(repeated=True)
 
 class QuestionRatings(ndb.Model):
   quiz_id = ndb.TextProperty(indexed=True)
-  user_id = ndb.TextProperty(indexed=True)
+  user_email = ndb.TextProperty(indexed=True)
   ratings = ndb.IntegerProperty(repeated=True)
 
-def check_user_in_db(user):
-  user_id = user.user_id()
-  query = User.query(ancestor=user_key(user_id))
-  response = query.fetch(1)
-  if(len(response)==0):
-    ndb_user = User(parent=user_key(user_id))
-    ndb_user.user_id = user_id
-    ndb_user.email = user.email()
-    ndb_user.nickname = user.nickname()
-    ndb_user.subscribed = True
+def check_user_in_db(request):
+  user_name = utils.get_user_name(request)
+  user_email = utils.get_user_email(request)
+  if not user_name or not user_email:
+    raise Exception("creating empty user!")
+
+  query = User.query(User.email==user_email).fetch()
+  if(len(query)==0):
+    ndb_user = User(email=user_email,name=user_name,subscribed=True)
     ndb_user.put()
+  elif utils.get_user_provider(request)=="facebook":
+    old_user = query[0]
+    if old_user.name != utils.get_user_name(request):
+      old_user.name = utils.get_user_name(request)
+      old_user.put()

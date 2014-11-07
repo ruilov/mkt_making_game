@@ -1,7 +1,4 @@
-import webapp2
-import os
-import jinja2
-from google.appengine.api import users
+import webapp2,os,jinja2
 from server_controllers import models,utils
 
 # this is the controller for all HTML pages
@@ -18,18 +15,20 @@ class TemplatePage(webapp2.RequestHandler):
   def get(self,path):
     template_path = "template.html"
     template_values = {
-      "user_login_url": users.create_login_url('/'),
-      "is_admin": utils.is_admin(),
+      "gmail_login_url": utils.get_login_url("gmail"),
+      "facebook_login_url": utils.get_login_url("facebook"),
+      "is_admin": utils.is_admin(self),
     }
 
     if(path!=""): template_path = path
 
-    user = users.get_current_user()
-    if user:
-      template_values["usernick"] = user.nickname()
-      template_values["user_logout_url"] = users.create_logout_url('/')
-      if template_path == "template.html":
-        models.check_user_in_db(user)
+    if template_path!="template.html" and template_path!="index.html" and template_path!="login.html" and template_path!="not_allowed.html" and not utils.is_logged(self):
+      template_path="login.html"
+
+    user_name = utils.get_user_name(self)
+    if user_name:
+      template_values["user_name"] = user_name
+      template_values["logout_url"] = utils.get_logout_url()
 
     template = JINJA_ENVIRONMENT.get_template("html/"+template_path)
     self.response.write(template.render(template_values))

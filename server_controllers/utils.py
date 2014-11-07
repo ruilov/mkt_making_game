@@ -1,4 +1,4 @@
-import json, datetime, hashlib
+import json, datetime, hashlib, urllib
 from time import mktime
 from google.appengine.api import users
 from django.utils import simplejson
@@ -12,11 +12,11 @@ class MyEncoder(json.JSONEncoder):
 def admins():
   return [ "test2@example.com", "ruilov@gmail.com", "carrben12@gmail.com" ];
 
-def is_admin():
-    user = users.get_current_user()
-    if user:
-      return (user.email() in admins())
-    else: return False
+def is_admin(request):
+  return True
+  # user_email = get_user_email(request)
+  # if user_email: return (user_email in admins())
+  # else: return False
 
 def write_back(req,dicti):
   jsonStr = simplejson.dumps(dicti, cls = MyEncoder)
@@ -24,3 +24,61 @@ def write_back(req,dicti):
 
 def unsubscribeHash(username):
   return hashlib.sha224("fsadfdsafdasd" + username).hexdigest()
+
+def userHash(email):
+  return hashlib.sha224(email+"dsfasdfa").hexdigest()
+
+def checkUserHash(email,hash):
+  return hash == userHash(email)
+
+def get_user_name(request):
+    user = users.get_current_user()
+    if user: 
+      return user.nickname()
+      
+    user_name = urllib.unquote(request.request.cookies.get('user_name', ''))
+    user_email = urllib.unquote(request.request.cookies.get('user_email', ''))
+    user_hash = urllib.unquote(request.request.cookies.get('user_hash', ''))
+    if user_name and user_email and user_hash and checkUserHash(user_email,user_hash):
+        return user_name
+
+    return None
+
+def get_user_email(request):
+  user = users.get_current_user()
+  if user: 
+    return user.email()
+    
+  user_name = urllib.unquote(request.request.cookies.get('user_name', ''))
+  user_email = urllib.unquote(request.request.cookies.get('user_email', ''))
+  user_hash = urllib.unquote(request.request.cookies.get('user_hash', ''))
+  if user_name and user_email and user_hash and checkUserHash(user_email,user_hash):
+      return user_email
+
+  return None
+
+def is_logged(request):
+  return True
+  # return get_user_email(request)!=None
+
+def get_login_url(provider):
+  if provider == "gmail":
+    return users.create_login_url('/login/gmail')
+  if provider == "facebook":
+    return "/login/fb"
+
+def get_logout_url():
+  user = users.get_current_user()
+  if user: 
+    return users.create_logout_url('/')
+
+  return "/logout/"
+
+def get_user_provider(request):
+  user = users.get_current_user();
+  if user: return "gmail"
+
+  user_email = get_user_email(request)
+  if user_email: return "facebook"
+
+  return None

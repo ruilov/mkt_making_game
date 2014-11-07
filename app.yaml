@@ -21,24 +21,8 @@ handlers:
 - url: /imgs
   static_dir: imgs
 
-- url: /scores_api/
-  script: mktmaking.application
-
-- url: /
-  script: mktmaking.application
-
-- url: /login\.html
-  script: mktmaking.application
-
-- url: /index\.html
-  script: mktmaking.application
-
-- url: /is_logged_api
-  script: mktmaking.application
-
 - url: .*
   script: mktmaking.application
-  login: required
 
 libraries:
 - name: webapp2

@@ -1,22 +1,23 @@
-import webapp2
+import webapp2,urllib
 from string import Template
 from server_controllers import models,utils
 
 class Unsubscribe(webapp2.RequestHandler):
   def get(self,qs):
-    user_id = self.request.get("user")
+    user_email = urllib.quote(self.request.get("user"))
     hashtag = self.request.get("hashtag")
-    check_hash = utils.unsubscribeHash(user_id)
+    check_hash = utils.unsubscribeHash(user_email)
 
     template = Template("<html><body><br><h2>$msg</h2></body></html>")
 
     if hashtag == check_hash:
-      query = models.User.query(ancestor=models.user_key(user_id)).fetch()
+      user_email = urllib.unquote(user_email)
+      query = models.User.query(models.User.email==user_email).fetch()
       if len(query)>0:
         user = query[0]
         user.subscribed = False
         user.put()
-        self.response.write(template.substitute(msg="User " + user.nickname + " was unsubscribed!"))
+        self.response.write(template.substitute(msg="User " + user.name + " was unsubscribed!"))
       else:
         self.response.write(template.substitute(msg="User not found!"))
     else:

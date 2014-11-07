@@ -1,7 +1,6 @@
 import webapp2
 from django.utils import simplejson
 from google.appengine.ext import ndb
-from google.appengine.api import users
 
 from server_controllers import models,utils
 
@@ -13,6 +12,10 @@ class Quiz(webapp2.RequestHandler):
   def get(self,idStr):
     '''returns the questions of a quiz to be shown to the user. If the user has already filled out this
     quiz, then find the Fillout entity and scope the quiz'''
+    if not utils.is_logged(self):
+      utils.write_back(self,{"not_allowed": 1})
+      return
+
     quiz_id = self.request.get("id")
     if len(quiz_id)==0:
       utils.write_back(self,{"no_quiz_id": 1})
@@ -21,7 +24,7 @@ class Quiz(webapp2.RequestHandler):
     quiz = models.getQuiz(quiz_id)
 
     # check if the user is allowed to see this quiz
-    if quiz.status=="editor" and not utils.is_admin():
+    if quiz.status=="editor" and not utils.is_admin(self):
       utils.write_back(self,{"not_allowed": 1})
       return
 
@@ -29,16 +32,13 @@ class Quiz(webapp2.RequestHandler):
     quiz_dict["state"] = "display_only"
 
     # find a fillout for this quiz
-    user = users.get_current_user()
-    if user:
-      models.check_user_in_db(user)
-      user_id = user.user_id()
-
-      query = models.Fillout.query(models.Fillout.user_id == user_id, models.Fillout.quiz_id == quiz_id).fetch()
+    user_email = utils.get_user_email(self)
+    if user_email:
+      query = models.Fillout.query(models.Fillout.user_email == user_email, models.Fillout.quiz_id == quiz_id).fetch()
       if len(query)!=0:
         fillout_quiz(quiz_dict,query[0])
         # if the user has filled, then check for question ratings too
-        query2 = models.QuestionRatings.query(models.QuestionRatings.user_id == user_id, models.QuestionRatings.quiz_id == quiz_id).fetch()
+        query2 = models.QuestionRatings.query(models.QuestionRatings.user_email == user_email, models.QuestionRatings.quiz_id == quiz_id).fetch()
         if len(query2)!=0:
           for i in range(0,len(quiz_dict["questions"])):
             quiz_dict["questions"][i]["rating"] = query2[0].ratings[i]
@@ -53,6 +53,10 @@ class Quiz(webapp2.RequestHandler):
   def post(self,idStr):
     ''' this will be called when the user fills out a quiz. It will create a Fillout entity in the database
     and then write back the quiz, with the fillout data, so that the new html page can be rendered to the user'''
+    
+    if not utils.is_logged(self):
+      utils.write_back(self,{"not_allowed": 1})
+      return
 
     quiz_id = self.request.get("id")
     quiz = models.getQuiz(quiz_id)
@@ -67,20 +71,17 @@ class Quiz(webapp2.RequestHandler):
     # fixme: if the user already filled it out then don't allow it again
     
     ################## FOR TESTING ONLY ####################
-    if 'user_id' in json: # user_id is not normally in the json, this is only to be able to add users for testing
-      user_id = json['user_id']
-      response = models.User.query(ancestor=models.user_key(user_id)).fetch(1)
+    if 'user_email' in json: # this is for testing. The user_email should normally come from the cookie, not from the json
+      user_email = json['user_email']
+      user_name = json['user_name']
+      response = models.User.query(models.User.email==user_email).fetch(1)
       if(len(response)==0):
-        ndb_user = models.User(parent=models.user_key(user_id))
-        ndb_user.user_id = user_id
-        ndb_user.email = json['user_email']
-        ndb_user.nickname = json['user_nickname']
+        ndb_user = models.User(email=user_email,name=user_name,subscribed=True)
         ndb_user.put()
     else:
-      user = users.get_current_user()
-      user_id = user.user_id()
+      user_email = utils.get_user_email(self)
 
-    fillout = models.Fillout(user_id=user_id,quiz_id=quiz_id)
+    fillout = models.Fillout(user_email=user_email,quiz_id=quiz_id)
     lows = []
     highs = []
     for i in range(0,len(quiz.questions)):

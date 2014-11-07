@@ -30,7 +30,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <ul class="nav navbar-nav">
 
-        {% if usernick %}
+        {% if user_name %}
         <li><a href="/">Home</a></li>
 
         <li class="dropdown">
@@ -52,7 +52,7 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li id="last-menu-item">
-          {% if usernick %}<a href=((user_logout_url))>Logout</a>{% endif %}
+          {% if user_name %}<a href=((logout_url))>Logout</a>{% endif %}
         </li>
       </ul>
     </nav>
