@@ -1,7 +1,7 @@
 import urllib2,json,requests
 
-server = 'http://localhost:8080'
-# server = 'http://mktmakinggame.com'
+# server = 'http://localhost:8080'
+server = 'http://mktmakinggame.com'
 
 save_quiz_url = server + '/quiz_editor_api/'
 fillout_url = server + '/quiz_api/'
