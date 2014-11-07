@@ -29,7 +29,7 @@ class Quiz(webapp2.RequestHandler):
       return
 
     quiz_dict = quiz.to_dict()
-    quiz_dict["state"] = "display_only"
+    quiz_dict["state"] = "to_fill"
 
     # find a fillout for this quiz
     user_email = utils.get_user_email(self)
@@ -43,9 +43,8 @@ class Quiz(webapp2.RequestHandler):
           for i in range(0,len(quiz_dict["questions"])):
             quiz_dict["questions"][i]["rating"] = query2[0].ratings[i]
 
-    # remove the answers from active quizzes if the user hasn't filled them out
-    if quiz_dict["state"] != "filled" and quiz_dict["status"]=="active":
-      quiz_dict["state"] = "to_fill"
+    # remove the answers from quizzes that the user hasn't filled out
+    if quiz_dict["state"] != "filled":
       for question in quiz_dict["questions"]: del question["answer"]
 
     utils.write_back(self,quiz_dict)
@@ -60,11 +59,6 @@ class Quiz(webapp2.RequestHandler):
 
     quiz_id = self.request.get("id")
     quiz = models.getQuiz(quiz_id)
-
-    # if this is not an active quiz then don't allow fill outs for it
-    if quiz.status!="active":
-      utils.write_back(self,{"not_active": 1})
-      return
 
     json = simplejson.loads(self.request.body)
 
@@ -92,6 +86,7 @@ class Quiz(webapp2.RequestHandler):
 
     fillout.guesses_low = lows
     fillout.guesses_high = highs 
+    fillout.ranked = (quiz.status == "active")
     fillout.put()
 
     # construct the response to send back to display to the user

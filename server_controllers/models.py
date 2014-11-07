@@ -45,6 +45,7 @@ class Fillout(ndb.Model):
   user_email = ndb.TextProperty(indexed=True)
   guesses_low = ndb.FloatProperty(repeated=True)
   guesses_high = ndb.FloatProperty(repeated=True)
+  ranked = ndb.BooleanProperty()
 
 class QuestionRatings(ndb.Model):
   quiz_id = ndb.TextProperty(indexed=True)

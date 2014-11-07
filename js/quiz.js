@@ -21,7 +21,11 @@ app.controller( "quizController", function userController($scope,$http,$location
   };
 
   quiz_api_cb = function(quiz, status, headers, config) {
-    if(quiz.status=="old") $scope.quiz.title = new Date(quiz.releaseDate).toDateString();
+    if(quiz.status=="old") {
+      $scope.quiz.title = new Date(quiz.releaseDate).toLocaleDateString();
+      if(quiz.state=="to_fill") 
+          $scope.quiz.title = "Practice quiz from " + $scope.quiz.title + ". Score will not count.";
+    };
     $scope.state = quiz.state;
     if($scope.state=="filled") $scope.quiz.title = "Click for scores";
     $scope.quiz.questions = [];

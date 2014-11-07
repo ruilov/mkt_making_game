@@ -72,6 +72,7 @@ def score_quiz(quiz,quiz_id,detailed=False):
   for i in range(0,len(quiz.questions)): guesses_by_q.append([])
   
   for fillout in fillout_query:
+    if fillout.ranked != None and not fillout.ranked: continue
     if fillout.user_email in points_by_ue: continue
     
     if detailed: points_by_ue[fillout.user_email] = []
