@@ -13,10 +13,9 @@ def admins():
   return [ "test2@example.com", "ruilov@gmail.com", "carrben12@gmail.com" ];
 
 def is_admin(request):
-  return True
-  # user_email = get_user_email(request)
-  # if user_email: return (user_email in admins())
-  # else: return False
+  user_email = get_user_email(request)
+  if user_email: return (user_email in admins())
+  else: return False
 
 def write_back(req,dicti):
   jsonStr = simplejson.dumps(dicti, cls = MyEncoder)
@@ -58,8 +57,7 @@ def get_user_email(request):
   return None
 
 def is_logged(request):
-  return True
-  # return get_user_email(request)!=None
+  return get_user_email(request)!=None
 
 def get_login_url(provider):
   if provider == "gmail":
