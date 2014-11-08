@@ -1,10 +1,10 @@
-# Simple mkt making app
+# Market making game
 
 ## General design
 
 The backend uses the [Google App Engine](https://appengine.google.com/) for hosting and its datastore for database. The backend code is in python, uses webapp2 as the framework for serving pages (Web Server Gateway Interface) and jinja2 for server side templating, although used sparingly.
 
-The frontend is in javascript using Google's AngularJS framework which is Single Page Application framework, meaning much of the business logic is moved to the client side. The frontend also uses Bootstrap for CSS components.
+The frontend is in javascript using Google's AngularJS framework which is a Single Page Application framework, meaning much of the business logic is moved to the client side. The frontend also uses Bootstrap for CSS components.
 
 The backend servers HTML pages and also provides a number of APIs which are used for reading/writing to the database.
 
@@ -24,9 +24,9 @@ The backend servers HTML pages and also provides a number of APIs which are used
 
 Gmail and facebook logins are provided.
 
-On the server side most functions that deal with login are in utils.py and are written to handle all login providers, minimizing the if-elses needed throughout the code
+On the server side most functions that deal with login are in utils.py and are written to handle all login providers, minimizing if-elses needed throughout the code.
 
-Login process for gmail is easy as Google App Engine does most of the work
+The login process for gmail is easy as Google App Engine does most of the work
 - template.py provides the login url, which is really provided by Google App Engine
 - after login the user is forwarded to /login/gmail
 - mktmaking.py routes this request to login.py, which simply makes sure that the user is saved to the datastore, then redirects to '/'
