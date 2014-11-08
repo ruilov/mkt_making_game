@@ -45,7 +45,9 @@ class Quiz(webapp2.RequestHandler):
 
     # remove the answers from quizzes that the user hasn't filled out
     if quiz_dict["state"] != "filled":
-      for question in quiz_dict["questions"]: del question["answer"]
+      for question in quiz_dict["questions"]: 
+        del question["answer"]
+        del question["source"]
 
     utils.write_back(self,quiz_dict)
   

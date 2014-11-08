@@ -18,7 +18,11 @@
           <div class="row">
             <div class="col-md-7 question">
               <h4>{{question.text}}</h4>
-              <small>Source: {{question.source}}</small>
+              <div ng-switch="state">
+                <div ng-switch-when="filled">
+                  <small>Source: {{question.source}}</small>
+                </div>
+              </div>
             </div>
 
             <div ng-switch="state">
