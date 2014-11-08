@@ -3,7 +3,7 @@ var app = angular.module( "home", ['ui.bootstrap'] );
 app.controller( "homeController", function userController($scope,$http,$location) {
   $scope.has_quiz = "unknown";
 
-  var responsePromise = $http.get("/quizzes_api/?status=active");
+  var responsePromise = $http.get("/api/quizzes/?status=active");
   responsePromise.success(function(data, status, headers, config) {
     quizzes = data.quizzes;
     if(quizzes.length>0) {

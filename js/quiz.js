@@ -36,14 +36,14 @@ app.controller( "quizController", function userController($scope,$http,$location
 
   // the command where the user submits answers to a quiz
   $scope.submit = function() {
-    var req = $http.post("/quiz_api/?id="+quiz_id,$scope.quiz);
+    var req = $http.post("/api/quiz/?id="+quiz_id,$scope.quiz);
     req.success(quiz_api_cb);
   };
 
   // deal with the star rating for the quiz
   $scope.rateQuestion = function(questionNum,rating) {
     $scope.quiz.questions[questionNum].rating = rating;
-    var req = $http.post("/rate_question_api/?id="+quiz_id,
+    var req = $http.post("/api/rate_question/?id="+quiz_id,
       {"question": questionNum, "rating": rating}
     );
   };

@@ -25,7 +25,7 @@ templateApp.config(['$routeProvider',
         resolve: {
           message: function($http,$location,quizOldService) {
             var qs = $location.search();
-            var req = $http.get("/quiz_api/?id="+qs.id);
+            var req = $http.get("/api/quiz/?id="+qs.id);
             return req.success(quizOldService.isAllowed);
           }
         }
@@ -40,7 +40,7 @@ templateApp.config(['$routeProvider',
         resolve: {
           message: function($http,$location,quizAllowedService) {
             var qs = $location.search();
-            var req = $http.get("/quiz_api/?id="+qs.id);
+            var req = $http.get("/api/quiz/?id="+qs.id);
             return req.success(quizAllowedService.isAllowed);
           }
         }
@@ -85,7 +85,7 @@ templateApp.factory("quizOldService", function ($rootScope, $location) {
 templateApp.controller( "templateController", function ($scope,$http) {
   $scope.old_quizzes = [];
 
-  var responsePromise = $http.get("/quizzes_api/?status=old");
+  var responsePromise = $http.get("/api/quizzes/?status=old");
   responsePromise.success(function(data, status, headers, config) {
     if(typeof(data)=="string" || "not_allowed" in data) {
       return; // this can happen if the user is not logged in, then the data will be the login html

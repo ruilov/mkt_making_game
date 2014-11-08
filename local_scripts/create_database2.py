@@ -3,9 +3,9 @@ import urllib2,json,requests
 # server = 'http://localhost:8080'
 server = 'http://mktmakinggame.com'
 
-save_quiz_url = server + '/quiz_editor_api/'
-fillout_url = server + '/quiz_api/'
-quizzes_url = server + '/quizzes_api/'
+save_quiz_url = server + '/api/quiz_editor/'
+fillout_url = server + '/api/quiz/'
+quizzes_url = server + '/api/quizzes/'
 http_headers = {
   'content-type': 'application/json',
 }

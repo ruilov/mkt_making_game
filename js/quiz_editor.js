@@ -6,7 +6,7 @@ app.controller( "editorController", function userController($scope,$http,$locati
 
   $scope.quiz = {"questions": []};
 
-  var req = $http.get("/quiz_editor_api/?id="+quiz_id);
+  var req = $http.get("/api/quiz_editor/?id="+quiz_id);
   req.success(function(quiz, status, headers, config) {
     for(var i in quiz.questions) {
       question = quiz.questions[i];
@@ -40,6 +40,6 @@ app.controller( "editorController", function userController($scope,$http,$locati
   };
 
   $scope.saveQuiz = function() {
-    $http.post("/quiz_editor_api/?id="+quiz_id,$scope.quiz);
+    $http.post("/api/quiz_editor/?id="+quiz_id,$scope.quiz);
   };
 })

@@ -7,7 +7,7 @@ app.controller( "rankingsController", function ($scope,$http,$filter,ngTablePara
   ];
   $scope.table_data = [];
 
-  var responsePromise = $http.get("/rankings_api/");
+  var responsePromise = $http.get("/api/rankings/");
   responsePromise.success(function(data, status, headers, config) {
     // get the quiz dates which correspond to the columns
     for(var i in data.quiz_dates) {

@@ -79,7 +79,7 @@ app.controller( "rankingDetailedController", function ($scope,$http,$filter,$loc
   };
 
   $scope.qnum = 1;
-  var req = $http.get("/rankings_api/?id="+qs.id);
+  var req = $http.get("/api/rankings/?id="+qs.id);
   req.success(function(data, status, headers, config) {
     $scope.user_data = [];
     for(var i in $scope.quiz_data.questions)
