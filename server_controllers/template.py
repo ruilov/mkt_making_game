@@ -22,7 +22,8 @@ class TemplatePage(webapp2.RequestHandler):
 
     if(path!=""): template_path = path
 
-    if template_path!="template.html" and template_path!="index.html" and template_path!="login.html" and template_path!="not_allowed.html" and not utils.is_logged(self):
+    allowed_not_logged = ["template.html","index.html","login.html","not_allowed.html"]
+    if not utils.is_logged(self) and template_path not in allowed_not_logged:
       template_path="login.html"
 
     user_name = utils.get_user_name(self)
