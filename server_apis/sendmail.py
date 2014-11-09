@@ -54,7 +54,6 @@ class SendMail(webapp2.RequestHandler):
       template_values = {
         "user": user_names[i],
         "user_hash": utils.unsubscribeHash(user_names[i]),
-        "domain": "mktmakinggame.com",
         "quiz_url": the_quiz.url()
       }
       message.html = template.render(template_values)
