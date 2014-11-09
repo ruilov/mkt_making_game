@@ -2,12 +2,17 @@ import webapp2,urllib
 from string import Template
 from django.utils import simplejson
 from google.appengine.ext import ndb
-
+import webapp2,os,jinja2
 from server_controllers import utils
-# import smtplib
-# from email.mime.multipart import MIMEMultipart
-# from email.mime.text import MIMEText
 from google.appengine.api import mail
+
+JINJA_ENVIRONMENT = jinja2.Environment(
+  loader=jinja2.FileSystemLoader("./"),
+  extensions=['jinja2.ext.autoescape'],
+  variable_start_string='((', 
+  variable_end_string='))',
+  autoescape=True
+)
 
 class SendMail(webapp2.RequestHandler):  
   def post(self):
@@ -28,26 +33,19 @@ class SendMail(webapp2.RequestHandler):
       user_emails = [utils.get_user_email(self)]
       user_names = [urllib.quote(utils.get_user_email(self))]
 
+    template = JINJA_ENVIRONMENT.get_template("html/email.html")
     message = mail.EmailMessage()
     message.sender = "mktmakinggame.com <mktmakinggame@gmail.com>"
-    message.subject = "New quiz available at mktmakinggame.com"
-    html_template = Template("""\
-        <html>
-          <head></head>
-          <body>
-            There's a new quiz available at <a href="http://mktmakinggame.com">mktmakinggame.com</a>. Have fun!
-            <br><br>
-            And remember: <b>no cheating allowed</b>, please don't do any internet searches while answering the quiz.
-            <br><br>
-            Unsubscribe <a href="http://mktmakinggame.com/unsubscribe/?user=$user&hashtag=$hashtag">here</a>
-          </body>
-        </html>
-        """)
+    message.subject = "New Quiz at The Market Making Game"
 
     for i in range(0,len(user_emails)):
-      message.html = html_template.substitute(user=user_names[i], hashtag=utils.unsubscribeHash(user_names[i]))
+      template_values = {
+        "user": user_names[i],
+        "user_hash": utils.unsubscribeHash(user_names[i]),
+        "domain": "mktmakinggame.com"
+      }
+      message.html = template.render(template_values)
       message.to = user_emails[i]
-      # print message.html
       message.send()
 
     utils.write_back(self,{"successful": 1})

@@ -1,0 +1,183 @@
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        font-family: 'Helvetica Neue';
+        margin-top: 3%;
+        background-color: #ffffff;
+        margin-left: 6%;
+        margin-right: 6%;
+
+        -webkit-font-smoothing: antialiased;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .site {
+        background: #eeeeee;
+        margin-bottom: 20px;
+        box-shadow: 5px 5px 5px #000000;
+      }
+
+      .site-title {
+        background: #443266;
+        padding: 1px;
+      }
+
+      .site-title a {
+        text-decoration: none;
+      }
+
+      .site-title h2 {
+        font-weight: 400;
+        color: white;
+        text-align: center;
+      }
+
+      .site-body {
+        padding: 4%;
+        padding-top: 1%;
+        color: #333333;
+      }
+
+      .site-body a {
+        color: #428bca;
+        text-decoration: none;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th {
+        color: #ffffff;
+        border-collapse: collapse;
+        background-color: #323a66;
+        padding: 1%;
+        padding-left: 1%;
+        padding-right: 1%;
+      }
+
+      tr {
+        text-align: center;
+        padding: 1%;
+      }
+
+      td {
+        padding: 1%; 
+        padding-left: 0%;
+        padding-right: 0%;
+      }
+
+      tr.odd {
+        background-color: #cccccc;
+      }
+
+      tr.even {
+        background-color: #ffffff;
+      }
+
+      @media only screen and (min-device-width: 480px) {
+        .site-title {
+          font-size: 20px;
+        }
+
+        .site-body {
+          font-size: 16px;
+        }
+
+        .site-body h2 {
+          font-size: 30px;
+        }
+
+        .unsubscribe {
+          font-size: 18px;
+        }
+
+        table {
+          width: 100%;
+          font-size: 14px;
+        }
+      }
+
+      /* iphone */
+      @media only screen and (max-device-width: 480px) {
+        body { 
+          -webkit-text-size-adjust:none; 
+        }
+
+        .site {
+          font-size: 4px;
+        }
+
+        .site-title {
+          font-size: 12px;
+        }
+
+        .site-body {
+          font-size: 12px;
+        }
+
+        .site-body h2 {
+          font-size: 18px;
+        }
+
+        .unsubscribe {
+          font-size: 18px;
+        }
+
+        table {
+          font-size: 4px;
+        }
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="site">
+      <div class="site-title">
+        <a href="http://mktmakinggame.com"><h2><b>The Market Making Game</b></h2></a>
+      </div>
+
+      <div class="site-body">
+        <div align="center">
+          <h2><b>TAKE THE <a href="{{quiz_url}}">QUIZ</a></b></h2>
+        </div>
+        Remember: <b>no cheating allowed</b>, please don't do any internet searches while answering the quiz.
+        <br><br>
+        Last week you were the x best ranked player, scoring y total points.<br><br><br>
+        <div align="center">
+          <table>
+            <thead>
+              <th>Question</th>
+              <th>Your Score</th>
+              <th>Your Rank</th>
+              <th>Answer</th>
+              <th>Your Bid</th>
+              <th>Your Offer</th>
+              <th>Avg Bid</th>
+              <th>Avg Offer</th>
+            </thead>
+            <tbody>
+              <tr class="odd"><td>Q1 - Bobbs</td><td>34</td><td>2</td><td>1,000,000,000</td><td>500,000,000</td><td>10,000,000,000</td><td>10,000,000,000</td><td>10,000,000,000</td></tr>
+              <tr class="even"><td>Q2 - Bobbs</td><td>34</td><td>2</td><td>1,000,000,000</td><td>500,000,000</td><td>10,000,000,000</td><td>10,000,000,000</td><td>10,000,000,000</td></tr>
+              <tr class="odd"><td>Q3 - Bobbs</td><td>34</td><td>2</td><td>1,000,000,000</td><td>500,000,000</td><td>10,000,000,000</td><td>10,000,000,000</td><td>10,000,000,000</td></tr>
+              <tr class="even"><td>Q4 - Bobbs</td><td>34</td><td>2</td><td>1,000,000,000</td><td>500,000,000</td><td>10,000,000,000</td><td>10,000,000,000</td><td>10,000,000,000</td></tr>
+              <tr class="odd"><td>Q5 - Bobbs</td><td>34</td><td>2</td><td>1,000,000,000</td><td>500,000,000</td><td>10,000,000,000</td><td>10,000,000,000</td><td>10,000,000,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <div align="center">
+      <div class="unsubscribe">
+        <i><a href="http://mktmakinggame.com/unsubscribe/?user=((user))&hashtag=((user_hash))">Unsubscribe from this email</a></i>
+      </div>
+    </div>
+    <br>
+  </body>
+</html>
