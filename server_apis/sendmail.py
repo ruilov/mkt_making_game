@@ -1,10 +1,8 @@
-import webapp2,urllib
-from string import Template
+import webapp2,urllib,os,jinja2
 from django.utils import simplejson
 from google.appengine.ext import ndb
-import webapp2,os,jinja2
-from server_controllers import utils
 from google.appengine.api import mail
+from server_controllers import utils,models
 
 JINJA_ENVIRONMENT = jinja2.Environment(
   loader=jinja2.FileSystemLoader("./"),
@@ -17,14 +15,28 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 class SendMail(webapp2.RequestHandler):  
   def post(self):
     if not utils.is_admin(self): 
-      utils.write_back(self,{"not_allowed": 1})
+      utils.write_back(self,{"not allowed": 1})
       return
 
     user_emails = []
     user_names = []
     if(len(user_emails)>400):
-        utils.write_back(self,{"too_many_users": 1})
+        utils.write_back(self,{"too many users": 1})
         return
+
+    # get the active quiz
+    query = models.Quiz.query().fetch()
+    the_quiz = None
+    for quiz in query:
+      if quiz.status != "active": continue
+      if the_quiz != None: 
+        utils.write_back(self,{"too many active quizzes": 1})
+        return
+      the_quiz = quiz
+    
+    if the_quiz == None:
+      utils.write_back(self,{"no active quiz": 1})
+      return
 
     json = simplejson.loads(self.request.body)
     is_test = json["test"]
@@ -42,7 +54,8 @@ class SendMail(webapp2.RequestHandler):
       template_values = {
         "user": user_names[i],
         "user_hash": utils.unsubscribeHash(user_names[i]),
-        "domain": "mktmakinggame.com"
+        "domain": "mktmakinggame.com",
+        "quiz_url": the_quiz.url()
       }
       message.html = template.render(template_values)
       message.to = user_emails[i]

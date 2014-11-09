@@ -18,6 +18,11 @@ class Quiz(ndb.Model):
   def getID(self):
     return self.key.parent().id()
 
+  def url(self,full=True):
+    url = "/#/quiz?id="+self.getID();
+    if full: url = "http://mktmakinggame.com" + url
+    return url
+
   def hasFilled(self,request):
     user_email = utils.get_user_email(request)
     if not user_email: return False
