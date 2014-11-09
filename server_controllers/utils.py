@@ -24,11 +24,11 @@ def write_back(req,dicti):
 def unsubscribeHash(username):
   return hashlib.sha224("fsadfdsafdasd" + username).hexdigest()
 
-def userHash(email):
-  return hashlib.sha224(email+"dsfasdfa").hexdigest()
+def userHash(email,name):
+  return hashlib.sha224(email+name+"dasdfsfa1sdfa").hexdigest()
 
-def checkUserHash(email,hash):
-  return hash == userHash(email)
+def checkUserHash(email,name,hash):
+  return hash == userHash(email,name)
 
 def get_user_name(request):
     user = users.get_current_user()
@@ -38,7 +38,7 @@ def get_user_name(request):
     user_name = urllib.unquote(request.request.cookies.get('user_name', ''))
     user_email = urllib.unquote(request.request.cookies.get('user_email', ''))
     user_hash = urllib.unquote(request.request.cookies.get('user_hash', ''))
-    if user_name and user_email and user_hash and checkUserHash(user_email,user_hash):
+    if user_name and user_email and user_hash and checkUserHash(user_email,user_name,user_hash):
         return user_name
 
     return None
@@ -51,7 +51,7 @@ def get_user_email(request):
   user_name = urllib.unquote(request.request.cookies.get('user_name', ''))
   user_email = urllib.unquote(request.request.cookies.get('user_email', ''))
   user_hash = urllib.unquote(request.request.cookies.get('user_hash', ''))
-  if user_name and user_email and user_hash and checkUserHash(user_email,user_hash):
+  if user_name and user_email and user_hash and checkUserHash(user_email,user_name,user_hash):
       return user_email
 
   return None

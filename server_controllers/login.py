@@ -23,11 +23,20 @@ class Login(webapp2.RequestHandler):
         elif result.user:
           # Hooray, we have the user!
           result.user.update()
-          self.response.set_cookie('user_name', urllib.quote(result.user.name))
-          self.response.set_cookie('user_email', urllib.quote(result.user.email))
-          self.response.set_cookie('user_hash', urllib.quote(utils.userHash(result.user.email)))
-          self.response.delete_cookie('error')
-          self.redirect('/login/fb2')
+          email = result.user.email
+          name = result.user.name
+          if len(email)==0:
+            self.response.set_cookie('error', urllib.quote("no valid email set"))
+            self.response.delete_cookie('user_name')
+            self.response.delete_cookie('user_email')
+            self.response.delete_cookie('user_hash')
+            self.redirect('/')
+          else:
+            self.response.set_cookie('user_name', urllib.quote(name))
+            self.response.set_cookie('user_email', urllib.quote(email))
+            self.response.set_cookie('user_hash', urllib.quote(utils.userHash(email,name)))
+            self.response.delete_cookie('error')
+            self.redirect('/login/fb2')
 
     elif provider_name == "fb2":
       models.check_user_in_db(self)
