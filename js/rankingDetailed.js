@@ -89,6 +89,10 @@ app.controller( "rankingDetailedController", function ($scope,$http,$filter,$loc
       for(var qi in data[user]) {
         user_data = data[user][qi];
         user_data["player"] = user;
+        
+        user_data["highlight_class"] = "";
+        if(user_data.current) user_data["highlight_class"] = "highlighted-row";
+
         user_data["high"] = format_num(user_data["high"],$filter);
         user_data["low"] = format_num(user_data["low"],$filter);
         $scope.user_data[qi].push(user_data);

@@ -55,6 +55,8 @@ class Rankings(webapp2.RequestHandler):
       points_by_ue = score_quiz(quiz,quiz_id,detailed=True)
       data_by_user = {}
       for ue,score in points_by_ue.items():
+        for elem in score: 
+          elem["current"] = ue == current_user_email;
         data_by_user[user_email_map[ue]] = score
 
       # sort the quizzes by date
