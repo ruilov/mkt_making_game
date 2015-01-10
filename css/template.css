@@ -77,6 +77,16 @@ body {
 
 .ng-table tbody tr:nth-child(odd) {
   background: #eeeeee;
+  text-align: center;
+}
+
+.ng-table tbody tr:nth-child(even) {
+  background: #ffffff;
+  text-align: center;
+}
+
+.highlighted-row {
+  background: #fae8b7;
 }
 
 .ng-table tr *:nth-child(1) {

@@ -33,8 +33,9 @@ def checkUserHash(email,name,hash):
 def get_user_name(request):
     user = users.get_current_user()
     if user: 
-      return user.nickname()
+      return user.nickname()  # this is for the google style login
       
+    # this is for the facebook style login
     user_name = urllib.unquote(request.request.cookies.get('user_name', ''))
     user_email = urllib.unquote(request.request.cookies.get('user_email', ''))
     user_hash = urllib.unquote(request.request.cookies.get('user_hash', ''))
@@ -46,8 +47,9 @@ def get_user_name(request):
 def get_user_email(request):
   user = users.get_current_user()
   if user: 
-    return user.email()
+    return user.email()   # this is for the google style login
     
+  # this is for the facebook style login
   user_name = urllib.unquote(request.request.cookies.get('user_name', ''))
   user_email = urllib.unquote(request.request.cookies.get('user_email', ''))
   user_hash = urllib.unquote(request.request.cookies.get('user_hash', ''))

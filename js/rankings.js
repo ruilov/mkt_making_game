@@ -18,7 +18,9 @@ app.controller( "rankingsController", function ($scope,$http,$filter,ngTablePara
 
     // get the data for each user
     for(var user in data.rank_by_user) {
-      elem = {"player": user};
+      elem = {"player": user, "highlight_class": ""};
+      if(data.rank_by_user[user].current) elem.highlight_class = "highlighted-row";
+
       for(var i in $scope.columns) {
         col = $scope.columns[i];
         if(col.field=="player") continue;
@@ -32,7 +34,7 @@ app.controller( "rankingsController", function ($scope,$http,$filter,ngTablePara
     for(var i in $scope.table_data) {
       total = 0;
       for(var col in $scope.table_data[i]) {
-        if(col=="player") continue;
+        if(col=="player" || col=="highlight_class") continue;
         if($scope.table_data[i][col]) total += $scope.table_data[i][col];
       };
       $scope.table_data[i].total = total;

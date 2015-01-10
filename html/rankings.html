@@ -33,7 +33,7 @@
 
   <tbody>
     <tr ng-repeat="user in $data">
-      <td class="text-center" ng-repeat="column in columns" ng-show="column.visible" sortable="column.field">
+      <td class="{{user.highlight_class}}" ng-repeat="column in columns" ng-show="column.visible" sortable="column.field">
         {{user[column.field]}}
       </td>
     </tr>

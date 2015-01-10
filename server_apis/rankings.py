@@ -3,9 +3,6 @@ from django.utils import simplejson
 from google.appengine.ext import ndb
 from server_controllers import models,utils
 
-# this API is for listing quizzes. 
-# The post function can delete quizzes, activate them, or deactivate them
-
 class Rankings(webapp2.RequestHandler):
   def get(self,qs):
     if not utils.is_logged(self):
@@ -13,7 +10,8 @@ class Rankings(webapp2.RequestHandler):
       return
       
     quiz_id = self.request.get("id")
-    
+    current_user_email = utils.get_user_email(self)
+
     if len(quiz_id)==0:
       # this is used for the main ranking page where all the quizzes are retrieved
       user_email_map = {}
@@ -37,6 +35,7 @@ class Rankings(webapp2.RequestHandler):
 
       for user in users_query:
         if len(rank_by_user[user.name])==0: del rank_by_user[user.name]
+        else: rank_by_user[user.name]["current"] = user.email == current_user_email
 
       # sort the quizzes by date
       quiz_dates.sort(key=lambda elem: elem["releaseDate"])
