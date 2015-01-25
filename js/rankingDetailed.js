@@ -37,7 +37,7 @@ app.controller( "rankingDetailedController", function ($scope,$http,$filter,$loc
       }
     }, {
       counts: [], // hide page counts control
-      total: 10,  // value less than count hide pagination
+      total: 0,  // value less than count hide pagination
       getData: function($defer, params) {
         // use build-in angular filter
         var orderedData = $scope.user_data[$scope.qnum-1];
