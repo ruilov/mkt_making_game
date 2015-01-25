@@ -1,5 +1,5 @@
 // this is the controler for the template of all the HTML pages
-var templateApp = angular.module( "template", ['ngRoute','index','quizzes','quiz','quizEditor','rankings','rankingDetailed','home'] );
+var templateApp = angular.module( "template", ['ngRoute','index','quizzes','quiz','quizEditor','rankings','rankingDetailed','home','suggestions'] );
 
 templateApp.config(['$routeProvider',
   function($routeProvider) {
@@ -51,6 +51,10 @@ templateApp.config(['$routeProvider',
       }).
       when('/not_allowed', {
         templateUrl: 'not_allowed.html',
+      }).
+      when('/suggestions', {
+        templateUrl: 'suggestions.html',
+        controller: 'suggestionsController',
       }).
       otherwise({
         redirectTo: '/'

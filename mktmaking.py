@@ -12,6 +12,7 @@ application = webapp2.WSGIApplication([
   (r'/api/quizzes/(.*)',quizzes.Quizzes),
   (r'/api/quiz/(.*)',quiz.Quiz),
   (r'/api/quiz_editor/(.*)',quiz_editor.QuizEditor),
+  ('/api/suggestion/',suggestion.Suggestion),
   webapp2.Route(r'/login/<:.*>', login.Login, handler_method='any'),
   ('/logout/',logout.Logout),
   (r'/unsubscribe/(.*)',unsubscribe.Unsubscribe),

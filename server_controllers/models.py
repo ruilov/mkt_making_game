@@ -57,6 +57,11 @@ class QuestionRatings(ndb.Model):
   user_email = ndb.TextProperty(indexed=True)
   ratings = ndb.IntegerProperty(repeated=True)
 
+class Suggestion(ndb.Model):
+  user_email = ndb.TextProperty(indexed=True)
+  text = ndb.TextProperty()
+  time = ndb.DateTimeProperty()
+
 def check_user_in_db(request):
   user_name = utils.get_user_name(request)
   user_email = utils.get_user_email(request)
