@@ -47,8 +47,8 @@ class SendMail(webapp2.RequestHandler):
 
     template = JINJA_ENVIRONMENT.get_template("html/email.html")
     message = mail.EmailMessage()
-    message.sender = "mktmakinggame.com <mktmakinggame@gmail.com>"
-    message.subject = "New Quiz at The Market Making Game"
+    message.sender = "mktmakinggame@gmail.com"
+    message.subject = "The Market Making Game - new quiz available"
 
     for i in range(0,len(user_emails)):
       template_values = {
