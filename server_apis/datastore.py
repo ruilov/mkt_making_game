@@ -7,6 +7,9 @@ from server_controllers import models,utils
 
 class Datastore(webapp2.RequestHandler):
   def get(self):
+    if not utils.is_admin(self): 
+      utils.write_back(self,{"not allowed": 1})
+      return
 
     types = [
       {"tag": "users", "model": models.User},

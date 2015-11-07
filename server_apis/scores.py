@@ -7,6 +7,10 @@ from server_controllers import models,utils
 
 class Scores(webapp2.RequestHandler):
   def get(self,idStr):
+    if not utils.is_admin(self): 
+      utils.write_back(self,{"not allowed": 1})
+      return
+      
     quiz_id = self.request.get("id")
     quiz = models.getQuiz(quiz_id)
     quiz_dict = quiz.to_dict()
