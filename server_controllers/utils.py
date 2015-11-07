@@ -10,7 +10,7 @@ class MyEncoder(json.JSONEncoder):
     return json.JSONEncoder.default(self, obj)
 
 def admins():
-  return [ "test2@example.com", "ruilov@gmail.com", "carrben12@gmail.com" ];
+  return [ "mktmakinggame@gmail.com", "ruilov@gmail.com", "carrben12@gmail.com" ];
 
 def is_admin(request):
   user_email = get_user_email(request)
