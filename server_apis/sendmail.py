@@ -54,10 +54,12 @@ class SendMail(webapp2.RequestHandler):
       template_values = {
         "user": user_names[i],
         "user_hash": utils.unsubscribeHash(user_names[i]),
-        "quiz_url": the_quiz.url()
+        "quiz_url": the_quiz.url(),
+        "num_questions": len(the_quiz.questions)
       }
       message.html = template.render(template_values)
       message.to = user_emails[i]
+      message.to = "ruilov@gmail.com"
       message.send()
 
     utils.write_back(self,{"successful": 1})
