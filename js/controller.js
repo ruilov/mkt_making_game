@@ -299,7 +299,10 @@ quiz_editor_data = function(data,params) {
 
 // view for when we see the summary of all scores
 scores_data = function(data,ngTableParams) {
-  view = {"columns": [{title: "Player", field: "player", visible: true}]};
+  view = {"columns": [
+    {title: "", field: "idx", visible: true},
+    {title: "Player", field: "player", visible: true}
+  ]};
   
   // create one column for each quiz
   for(var qi in data.quizzes) {
@@ -330,7 +333,7 @@ scores_data = function(data,ngTableParams) {
   for(var i in view.table_data) {
     total = 0;
     for(var col in view.table_data[i]) {
-      if(col=="player" || col=="highlight_class") continue;
+      if(col=="player" || col=="highlight_class" || col=="idx") continue;
       if(view.table_data[i][col]) total += view.table_data[i][col];
     };
     view.table_data[i].total = total;
@@ -375,6 +378,9 @@ scores_data = function(data,ngTableParams) {
         });
       };
 
+      count = 0;
+      for(var ri in orderedData) orderedData[ri].idx = ++count;
+
       $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
     }
   });
@@ -395,6 +401,7 @@ scores_detailed_data = function(data,params,$filter,ngTableParams) {
   if(quiz==null || !("scores" in quiz)) return;
   
   view = { "columns": [
+    {title: "", field: "idx", visible: true},
     {title: "Player", field: "player", visible: true},
     {title: "Bid", field: "low", visible: true},
     {title: "Offer", field: "high", visible: true},
@@ -478,6 +485,9 @@ scores_detailed_data = function(data,params,$filter,ngTableParams) {
             return res;
           });
         };
+
+        count = 0;
+        for(var ri in orderedData) orderedData[ri].idx = ++count;
 
         $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
       }
