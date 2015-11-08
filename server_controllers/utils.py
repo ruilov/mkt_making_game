@@ -9,6 +9,10 @@ class MyEncoder(json.JSONEncoder):
       return obj.isoformat()
     return json.JSONEncoder.default(self, obj)
 
+# this needs to match the encoder above. That format string corresponds to the isoformat
+def date_from_str(dstr):
+  return datetime.datetime.strptime(dstr,"%Y-%m-%dT%H:%M:%S.%f")
+
 def admins():
   return [ "mktmakinggame@gmail.com", "ruilov@gmail.com", "carrben12@gmail.com" ];
 

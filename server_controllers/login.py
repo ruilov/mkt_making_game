@@ -1,5 +1,6 @@
-import webapp2,os,jinja2,urllib
-from server_controllers import models,utils
+import webapp2,os,jinja2,urllib,sys
+import utils
+import models.user_model
 
 from authomatic.adapters import Webapp2Adapter
 from auth_config import authomatic
@@ -39,9 +40,9 @@ class Login(webapp2.RequestHandler):
             self.redirect('/login/fb2')
 
     elif provider_name == "fb2":
-      models.check_user_in_db(self)
+      user_model.check_user_in_db(self)
       self.redirect('/')
 
     elif provider_name == "gmail":
-      models.check_user_in_db(self)
+      models.user_model.check_user_in_db(self)
       self.redirect('/')

@@ -1,6 +1,6 @@
 import webapp2,urllib
 from string import Template
-from server_controllers import models,utils
+import utils
 
 class Unsubscribe(webapp2.RequestHandler):
   def get(self,qs):

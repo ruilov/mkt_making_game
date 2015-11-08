@@ -4,7 +4,7 @@
     <form class="form-horizontal" role="form">
       <table class="table">
         <tbody>
-          <tr ng-repeat="question in quiz.questions">
+          <tr ng-repeat="question in views.quiz_editor.questions">
             <td>                
               <div class="form-group">
                 <label class="col-sm-2 control-label">Question:</label>
@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="col-md-1">
-                  <button class="btn btn-danger" ng-click="remove_question(question)">Delete</button>
+                  <button class="btn btn-danger" ng-click="editor_remove_question(question)">Delete</button>
                 </div>             
               </div>
             </td>
@@ -39,8 +39,8 @@
 
     <form role="form">
       <div align="right">
-        <button class="btn btn-primary" ng-click="add_question('','','',true)">Add</button>
-        <a href="/#/quizzes" class="btn btn-warning" ng-click="saveQuiz()">Save</a>
+        <button class="btn btn-primary" ng-click="editor_add_question('','','',true)">Add</button>
+        <a href="/#/admin/" class="btn btn-warning" ng-click="editor_save_quiz()">Save</a>
       </div>
     </form>
 

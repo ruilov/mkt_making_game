@@ -2,7 +2,8 @@ import webapp2,urllib,os,jinja2
 from django.utils import simplejson
 from google.appengine.ext import ndb
 from google.appengine.api import mail
-from server_controllers import utils,models
+from server_controllers import utils
+from models.quiz_model import Quiz
 
 JINJA_ENVIRONMENT = jinja2.Environment(
   loader=jinja2.FileSystemLoader("./"),
@@ -12,7 +13,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
   autoescape=True
 )
 
-class SendMail(webapp2.RequestHandler):  
+class Sendmail(webapp2.RequestHandler):  
   def post(self):
     if not utils.is_admin(self): 
       utils.write_back(self,{"not allowed": 1})
@@ -25,7 +26,7 @@ class SendMail(webapp2.RequestHandler):
         return
 
     # get the active quiz
-    query = models.Quiz.query().fetch()
+    query = Quiz.query().fetch()
     the_quiz = None
     for quiz in query:
       if quiz.status != "active": continue

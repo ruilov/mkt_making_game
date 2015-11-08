@@ -1,0 +1,26 @@
+<br>
+<div class="container">
+  <a href="{{views.admin.nextURL}}" class="btn btn-primary">Create</a>
+  <br><br><br>
+  <table class="table">
+    <tbody>
+      <tr ng-repeat="quiz in views.admin.quizzes">
+        <td><a href="{{quiz.editorUrl}}">Quiz {{quiz.id}}</a></td>
+        <td><a href="{{quiz.url}}">View</a></td>
+        <td>{{quiz.status}}</td>
+        <td ng-switch on="quiz.status">
+          <button ng-switch-when="editor" class="btn btn-warning" ng-click="admin_quiz_change_status(quiz,'active')">Active</button>
+          <button ng-switch-when="active" class="btn btn-primary" ng-click="admin_quiz_change_status(quiz,'old')">Old</button>
+          <button ng-switch-when="old" class="btn btn-primary" ng-click="admin_quiz_change_status(quiz,'editor')">Editor</button>
+        </td>
+        <td><button class="btn btn-danger" ng-click="admin_quiz_delete(quiz)">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  Use this buttom to send an email notification to all users.<br>
+  Only testing version that goes to yourself available for now<br>
+  <td><button class="btn btn-danger" ng-click="sendmail()">Send email</button></td>
+  {{email_answer}}
+  <br><br>
+</div>

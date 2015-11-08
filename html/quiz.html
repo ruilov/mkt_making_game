@@ -4,17 +4,17 @@
       <div class="site-title">
         <div ng-switch="state">
           <div ng-switch-when="filled">
-            <a href="/#/rankings"><h2><b><u>{{quiz.title}}</u></b></h2></a>
+            <a href="/#/rankings"><h2><b><u>{{views.quiz.title}}</u></b></h2></a>
           </div>
           <div ng-switch-default>
-            <h2><b>{{quiz.title}}</b></h2>
+            <h2><b>{{views.quiz.title}}</b></h2>
           </div>
         </div>
       </div>
 
       <form name="quiz_form" class="form-inline">
         
-        <div class="post" ng-repeat="question in quiz.questions">
+        <div class="post" ng-repeat="question in views.quiz.questions">
           <div class="row">
             <div class="col-md-7 question">
               <h4>{{question.text}}</h4>
@@ -25,7 +25,7 @@
               </div>
             </div>
 
-            <div ng-switch="state">
+            <div ng-switch="views.quiz.state">
               <!-- USER HAS ALREADY FILLED OUT THE QUIZ -->
               <div ng-switch-when="filled">
                 <div class="bid form-group col-sm-1" align="center">
@@ -40,15 +40,15 @@
 
                 <div class="form-group col-sm-1" align="center">
                   <p><b>Answer</b></p>
-                  <div ng-switch="question.status">
-                    <div class="right-answer" ng-switch-when="No trade">{{question.answer}}</div>
-                    <div class="wrong-answer" ng-switch-default>{{question.answer}}</div>
+                  <div ng-switch="question.correct">
+                    <div class="right-answer" ng-switch-when="yes">{{question.answer_str}}</div>
+                    <div class="wrong-answer" ng-switch-default>{{question.answer_str}}</div>
                   </div>
                 </div>
 
                 <div class="rating" class="form-group col-md-1" align="center">
                   <p><b>Rate the questions</b></p>
-                  <div star-rating question-num="$index" rating-value="question.rating" max="5" on-rating-selected="rateQuestion($index,rating)"></div>
+                  <div star-rating question-num="$index" rating-value="question.rating" max="5" on-rating-selected="quiz_rate_question($index,rating)"></div>
                 </div>
               </div>
 
@@ -69,10 +69,10 @@
           </div>
         </div>
 
-        <div ng-switch="state">
+        <div ng-switch="views.quiz.state">
           <div ng-switch-when="to_fill" align="right" class="post">
             <div class="submit-container">
-              <a href={{quiz.url}} class="btn btn-primary" ng-disabled="quiz_form.$invalid" ng-click="submit()"><div class="submit">Submit</div></a>
+              <a href={{views.quiz.url}} class="btn btn-primary" ng-disabled="quiz_form.$invalid" ng-click="quiz_submit()"><div class="submit">Submit</div></a>
             </div>
           </div>
           <div ng-switch-default></div>

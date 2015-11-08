@@ -1,20 +1,18 @@
 import webapp2
-from server_controllers import *
 from server_apis import *
+from server_controllers import *
 
 application = webapp2.WSGIApplication([
-  ('/api/datastore/',datastore.Datastore),
-  ('/api/send_mail/',sendmail.SendMail),
-  ('/api/is_logged/',is_logged.IsLogged),
-  (r'/api/rate_question/(.*)',question_rating.QuestionRating),
-  (r'/api/rankings/(.*)',rankings.Rankings),
-  (r'/api/scores/(.*)',scores.Scores),
-  (r'/api/quizzes/(.*)',quizzes.Quizzes),
-  (r'/api/quiz/(.*)',quiz.Quiz),
-  (r'/api/quiz_editor/(.*)',quiz_editor.QuizEditor),
+  ('/api/lookup/',lookup.Lookup),
+  (r'/api/quiz_status_update/(.*)',quiz_status_update.QuizStatusUpdate),
+  ('/api/save_quiz_editor/',save_quiz_editor.SaveQuizEditor),
+  ('/api/quiz_submit/',quiz_submit.QuizSubmit),
+  ('/api/rate_question/',rate_question.RateQuestion),
   ('/api/suggestion/',suggestion.Suggestion),
+  ('/api/sendmail/',sendmail.Sendmail),
+  (r'/api/datastore_ops/(.*)',datastore_ops.DatastoreOps),
   webapp2.Route(r'/login/<:.*>', login.Login, handler_method='any'),
   ('/logout/',logout.Logout),
   (r'/unsubscribe/(.*)',unsubscribe.Unsubscribe),
-  (r'/(.*)', template.TemplatePage),
+  (r'/(.*)', html_server.HTMLServer),
 ], debug=True)

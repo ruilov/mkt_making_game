@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="template">
+<html ng-app="controller">
   <head>
     <title>Mkt Making Game</title>
     
@@ -15,19 +15,10 @@
     <script src="/js/ui-bootstrap-tpls-0.11.2.min.js"></script>
     <script src="/js/ng-table.min.js"></script>
 
-    <script src="/js/utils.js"></script>
-    <script src="/js/quizzes.js"></script>
-    <script src="/js/quiz.js"></script>
-    <script src="/js/rankings.js"></script>
-    <script src="/js/rankingDetailed.js"></script>
-    <script src="/js/quiz_editor.js"></script>
-    <script src="/js/home.js"></script>
-    <script src="/js/index.js"></script>
-    <script src="/js/template.js"></script>
-    <script src="/js/suggestions.js"></script>
+    <script src="/js/controller.js"></script>
   </head>
 
-  <body ng-controller="templateController">
+  <body ng-controller="theController">
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <ul class="nav navbar-nav">
@@ -38,19 +29,19 @@
         <li class="dropdown">
           <a data-toggle="dropdown" class="dropdown-toggle" href="#">Old Quizzes <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li ng-repeat="quiz in old_quizzes">
+            <li ng-repeat="quiz in views.template.old_quizzes">
               <a href={{quiz.url}}><b>{{quiz.date}}</b></a>
             </li>
           </ul>
         </li>
 
-        <li><a href="/#/rankings">Scores</a></li>
+        <li><a href="/#/scores/">Scores</a></li>
 
-        <li><a href="/#/suggestions">Suggestions</a></li>
+        <li><a href="/#/suggestions/">Suggestions</a></li>
         {% endif %}
 
         {% if is_admin %}
-          <li><a href="/#/quizzes">Admin</a></li>
+          <li><a href="/#/admin/">Admin</a></li>
         {% endif %}
       </ul>
 

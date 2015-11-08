@@ -1,0 +1,43 @@
+<div class="btn-group" role="toolbar">
+  <span ng-repeat="link in views.scores_detailed.qlinks">
+    <button type="button" ng-click="views.scores_detailed.changeQ(link.qnum)" class={{link.clas}}>
+        {{link.qnum}}
+    </button>
+  </span>
+</div>
+
+<br><br>
+<h4><b>Q{{views.scores_detailed.qnum}}</b>: {{views.scores_detailed.question.text}}</h4>
+<h4><b>Answer:</b> {{views.scores_detailed.question.answerStr}}</h4>
+<br>
+  
+<table ng-table="views.scores_detailed.tableParams" show-filter="true" class="table">
+  <thead>
+    <tr>
+      <th ng-repeat="column in views.scores_detailed.columns" ng-show="column.visible"
+          class="text-center sortable" ng-class="{
+            'sort-asc': views.scores_detailed.tableParams.isSortBy(column.field, 'asc'),
+            'sort-desc': views.scores_detailed.tableParams.isSortBy(column.field, 'desc')
+          }"
+          ng-click="views.scores_detailed.tableParams.sorting(column.field, views.scores_detailed.tableParams.isSortBy(column.field, 'desc') ? 'asc' : 'desc')">
+
+        {{column.title}}
+        <span class="dropup">
+          <span class="caret" ng-show="views.scores_detailed.tableParams.isSortBy(column.field, 'asc')"></span>
+        </span>
+        <span class="caret" ng-show="views.scores_detailed.tableParams.isSortBy(column.field, 'desc')"></span>
+        <span ng-show="!views.scores_detailed.tableParams.isSortBy(column.field, 'desc') && !views.scores_detailed.tableParams.isSortBy(column.field, 'asc')">
+          &nbsp;&nbsp;
+        </span>
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr ng-repeat="user in $data">
+      <td class="{{user.highlight_class}}" ng-repeat="column in views.scores_detailed.columns" ng-show="column.visible" sortable="column.field">
+        {{user[column.field]}}
+      </td>
+    </tr>
+  </tbody>
+</table>
