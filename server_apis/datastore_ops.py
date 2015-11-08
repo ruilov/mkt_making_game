@@ -21,7 +21,6 @@ class DatastoreOps(webapp2.RequestHandler):
         datastore[elem["tag"]].append(as_dict)
 
     utils.write_back(self,datastore)
-<<<<<<< HEAD
   
   def post(self,idStr):
     json = simplejson.loads(self.request.body)
@@ -62,8 +61,6 @@ class DatastoreOps(webapp2.RequestHandler):
       for rating_dict in json["ratings"]:
         rating = QuestionRatings(user_email=rating_dict["user_email"],quiz_id=rating_dict["quiz_id"],ratings=rating_dict["ratings"])
         rating.put()
-=======
->>>>>>> 2c55d2db4b82814ebd1e29b07416a85dcb7f516e
 
 def modelList():
   modelList = [
