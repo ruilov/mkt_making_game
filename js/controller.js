@@ -432,8 +432,7 @@ scores_detailed_data = function(data,params,$filter,ngTableParams) {
 
     // it's a mystery to me why this is needed. Otherwise the data table doesn't updste. Weird.
     // tried tableParams.reloadData(), $scope.apply(), no cigar...
-    // It's working now, but I'll leave it here to add to the mystery
-    // if(view.tableParams) view.tableParams.sorting("score", 'asc');
+    if(view.tableParams) view.tableParams.sorting("score", 'asc');
 
     view.tableParams = new ngTableParams({
       page: 1,                                                  // show first page
