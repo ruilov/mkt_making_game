@@ -412,6 +412,7 @@ scores_detailed_data = function(data,params,$filter,ngTableParams) {
           "high": format_num(guess.high,$filter),
           "score": guess.score
       };
+      if(ui==data.user_id) row.highlight_class = "highlighted-row";
       q_scores.push(row);
     };
     view.score_by_q.push(q_scores);
