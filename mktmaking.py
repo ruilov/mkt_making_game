@@ -6,6 +6,7 @@ application = webapp2.WSGIApplication([
   ('/api/datastore/',datastore.Datastore),
   ('/api/send_mail/',sendmail.SendMail),
   ('/api/is_logged/',is_logged.IsLogged),
+  (r'/api/datastore_ops/(.*)',datastore_ops.DatastoreOps),
   (r'/api/rate_question/(.*)',question_rating.QuestionRating),
   (r'/api/rankings/(.*)',rankings.Rankings),
   (r'/api/scores/(.*)',scores.Scores),
