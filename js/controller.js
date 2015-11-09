@@ -243,7 +243,7 @@ quiz_data = function(data,params,$filter) {
       };
     } else {
       quiz.state = "to_fill";
-      if(quiz.status=="old") quiz.title = "Practice on an old quiz";
+      if(quiz.status=="old") quiz.title = "Practice on an old quiz (will not count towards your score)";
       else quiz.title = "Make some markets";
       for(var ni in quiz.questions) {
         question = quiz.questions[ni];
