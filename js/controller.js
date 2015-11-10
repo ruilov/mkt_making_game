@@ -380,6 +380,14 @@ scores_data = function(data,ngTableParams) {
 
       count = 0;
       for(var ri in orderedData) orderedData[ri].idx = ++count;
+      for(var ri in orderedData) {
+        if((orderedData[ri].highlight_class || "") == "highlighted-row") {
+          row = orderedData[ri];
+          orderedData.splice(ri,1);
+          orderedData.splice(0,0,row);
+          break;
+        };
+      };
 
       $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
     }
@@ -488,6 +496,14 @@ scores_detailed_data = function(data,params,$filter,ngTableParams) {
 
         count = 0;
         for(var ri in orderedData) orderedData[ri].idx = ++count;
+        for(var ri in orderedData) {
+          if((orderedData[ri].highlight_class || "") == "highlighted-row") {
+            row = orderedData[ri];
+            orderedData.splice(ri,1);
+            orderedData.splice(0,0,row);
+            break;
+          };
+        };
 
         $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
       }
