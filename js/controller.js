@@ -1,4 +1,6 @@
 /*
+  - This is the only controller used throughout. It's not much code (hopefully stays that way) so one place is fine
+
   - the $scope keeps 4 pieces of state
     1) path: the route of the current page
     2) url_params: the query string of the current page
@@ -50,7 +52,7 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
     var responsePromise = $http.get("/api/lookup/");
     responsePromise.success(function(data, status, headers, config) {
       $scope.cache = data;
-      console.log(data);
+      // console.log(data);
       if(!data.logged) {
         $location.path("/login/");
       } else {
@@ -71,7 +73,7 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
       if($scope.cache.quizzes[i]==quiz) {
         qi = i;
         if(!confirm("Do you really want to " + new_status + " this quiz?")) return;
-        var req = $http.post("/api/quiz_status_update/",{"new_status": new_status, "id": quiz.id});
+        var req = $http.post("/api/quiz_status_update/",{new_status: new_status, id: quiz.id});
         req.success(function(data, status, headers, config) {
           $scope.cache.quizzes[qi].status = new_status;
           // rebuild the template as old jobs might have changed
@@ -89,7 +91,7 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
       if($scope.cache.quizzes[i]==quiz) {
         qi = i;
         if(!confirm("Do you really want to delete this quiz?")) return;
-        var req = $http.post("/api/quiz_status_update/",{"new_status": "delete", "id": quiz.id});
+        var req = $http.post("/api/quiz_status_update/",{new_status: "delete", id: quiz.id});
         req.success(function(data, status, headers, config) {
           $scope.cache.quizzes.splice(qi,1);
           // rebuild the template as old jobs might have changed
@@ -139,7 +141,7 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
   $scope.quiz_rate_question = function(questionNum,rating) {
     $scope.views.quiz.questions[questionNum].rating = rating;
     var req = $http.post("/api/rate_question/",
-      {"quiz_id": $scope.views.quiz.id, "qIdx": questionNum, "rating": rating}
+      {quiz_id: $scope.views.quiz.id, qIdx: questionNum, rating: rating}
     );
   };
 
@@ -182,7 +184,7 @@ view_data = function(data,path,params,$filter,ngTableParams) {
 
 // template is basically the nagivation bar
 template_data = function(data) {
-  view = {"old_quizzes": []};
+  view = {old_quizzes: []};
   for(var qi in data.quizzes) {
     var quiz = data.quizzes[qi];
     if(quiz.status!="old" && !("fillout" in quiz)) continue;
@@ -201,7 +203,7 @@ template_data = function(data) {
 
 // home is the landing page
 home_data = function(data) {
-  view = {"has_active_quiz": false};
+  view = {has_active_quiz: false};
   for(var qi in data.quizzes) {
     var quiz = data.quizzes[qi];
     if(quiz.status=="active") {
@@ -279,7 +281,7 @@ admin_data = function(data) {
 
 quiz_editor_data = function(data,params) {
   quiz_id = params.id;
-  view = {"id": quiz_id, "status": "editor", "questions": []};
+  view = {id: quiz_id, status: "editor", questions: []};
   for(var qi in data.quizzes) {
     var quiz = data.quizzes[qi];
     if(quiz.id!=quiz_id) continue;
@@ -287,7 +289,7 @@ quiz_editor_data = function(data,params) {
     view.status = quiz.status;
     for(var ni in quiz.questions) {
       var q = quiz.questions[ni];
-      view.questions.push({"text": q.text, "answer": q.answer, "source": q.source});
+      view.questions.push({text: q.text, answer: q.answer, source: q.source});
     }
     return view;
   };
@@ -299,7 +301,7 @@ quiz_editor_data = function(data,params) {
 
 // view for when we see the summary of all scores
 scores_data = function(data,ngTableParams) {
-  view = {"columns": [
+  view = {columns: [
     {title: "", field: "idx", visible: true},
     {title: "Player", field: "player", visible: true}
   ]};
@@ -315,7 +317,7 @@ scores_data = function(data,ngTableParams) {
   // create the rows
   view.table_data = [];
   for(var ui in data.user_names) {
-    row = {"player": data.user_names[ui]};
+    row = {player: data.user_names[ui]};
     if(ui==data.user_id) row.highlight_class = "highlighted-row";
     for(var qi in data.quizzes) {
       quiz = data.quizzes[qi];
@@ -408,7 +410,7 @@ scores_detailed_data = function(data,params,$filter,ngTableParams) {
   };
   if(quiz==null || !("scores" in quiz)) return;
   
-  view = { "columns": [
+  view = { columns: [
     {title: "", field: "idx", visible: true},
     {title: "Player", field: "player", visible: true},
     {title: "Bid", field: "low", visible: true},
@@ -422,10 +424,10 @@ scores_detailed_data = function(data,params,$filter,ngTableParams) {
     for(var ui in quiz.scores) {
       guess = quiz.scores[ui][ni];
       row = {
-          "player": data.user_names[ui],
-          "low": format_num(guess.low,$filter),
-          "high": format_num(guess.high,$filter),
-          "score": guess.score
+          player: data.user_names[ui],
+          low: format_num(guess.low,$filter),
+          high: format_num(guess.high,$filter),
+          score: guess.score
       };
       if(ui==data.user_id) row.highlight_class = "highlighted-row";
       q_scores.push(row);
@@ -526,7 +528,7 @@ quiz_editor_url = function(quiz_id) {
 };
 
 empty_question = function() {
-  return {"text": "", "answer": "", "source": ""};
+  return {text: "", answer: "", source: ""};
 }
 
 format_num = function(num,filter) {
