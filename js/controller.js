@@ -9,7 +9,7 @@
 
   - user input that modifies the backend data can be handled in two ways:
     a) blow away the cache and do a new lookup with $scope.do_lookup
-    b) modify the cache directly and rebuild views as required. More fragile but avoids a server request
+    b) send to the backend and also modify the cache directly+rebuild views as required. More fragile but avoids a server request
 
   - general organization:
     - functions that respond to user input are available on the $scope, and defined inside the controller
@@ -127,10 +127,10 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
   $scope.quiz_submit = function() {
     var req = $http.post("/api/quiz_submit/",$scope.views.quiz);
     req.success(function() {
-      // when the user submits a quiz too much stuff changes. Old jobs in the navibard.
+      // when the user submits a quiz too much stuff changes. Old jobs in the navibar.
       // User now has access to the answers of this quiz, as well as scores
       // might as well do a new lookup
-      // note that quiz fillouts have keys which make them synchrnous, so we know
+      // note that quiz fillouts have keys which make them strongly consistent in the DB, so we know
       // that when we do the look, the fillout will be there
       $scope.do_lookup();
     });

@@ -8,7 +8,7 @@
         <br>
         <div ng-switch="views.home.has_active_quiz">
           <div align="center" ng-switch-when="false">
-            <h3><b>The next quiz will be available on Friday. See <a href="/#/rankings">scores</a> in the meantime.</b></h3>
+            <h3><b>The next quiz will be available on Friday. See <a href="/#/scores/">scores</a> in the meantime.</b></h3>
           </div>
           <div align="center" ng-switch-when="true">
             <h2><b>CLICK <a href="{{views.home.active_quiz.url}}">HERE</a> TO TAKE A QUIZ</b></h2>
