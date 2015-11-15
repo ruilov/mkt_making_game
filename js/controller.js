@@ -11,7 +11,7 @@
 
   - user input that modifies the backend data can be handled in two ways:
     a) the backend returns new data, which replaces the cache completely with lookup_cb
-    b) send to the backend and also modify the cache directly+rebuild views as required. More fragile but avoids a server request
+    b) send to the backend and also modify the cache directly+rebuild views as required. More fragile but avoids the server having to re-query a whole lookup
 
   - general organization:
     - functions that respond to user input are available on the $scope, and defined inside the controller
