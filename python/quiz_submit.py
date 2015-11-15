@@ -15,11 +15,11 @@ class QuizSubmit(webapp2.RequestHandler):
 
     # if the user has already filled this out, don't allow refilling
     # there's no way to make this happen through the UI, but a direct API call could do this
-    fillout_query = Fillout.query(Fillout.user_email == user.email,Fillout.quiz_id == quiz_id).fetch()
+    fillout_query = Fillout.query(Fillout.username == user.name,Fillout.quiz_id == quiz_id).fetch()
     if len(fillout_query)>0: return
 
     quiz = getQuiz(quiz_id)
-    fillout = Fillout(parent=fillout_key(user.email,quiz_id),user_email=user.email,quiz_id=quiz_id)
+    fillout = Fillout(parent=fillout_key(user.name,quiz_id),username=user.name,quiz_id=quiz_id)
     lows = []
     highs = []
     for i in range(0,len(quiz.questions)):

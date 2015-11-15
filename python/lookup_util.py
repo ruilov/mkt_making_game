@@ -14,23 +14,19 @@ def do_lookup(request,user=None):
   ans["user_name"] = user.name
   ans["user_email"] = user.email
   ans["is_admin"] = user.is_admin()
-  ans["user_id"] = user.unique_id
 
   # get all the users and their usernames
-  all_users = User.query().fetch()
-  ans["user_names"] = {}
-  
-  user_by_email = {user.email: user} 
+  all_users = User.query().fetch()  
+  user_by_name = {user.name: user} 
   for useri in all_users:
-    user_by_email[useri.email] = useri
-    ans["user_names"][useri.unique_id] = useri.name
+    user_by_name[useri.name] = useri
 
   # get all the fillouts. This is not strongly consistent. We only need to do that for the current user
   fillout_query = Fillout.query().fetch()
   fillouts = {}
   for fillout in fillout_query:
     if fillout.quiz_id not in fillouts: fillouts[fillout.quiz_id] = {}
-    fillouts[fillout.quiz_id][user_by_email[fillout.user_email].unique_id] = fillout.to_dict()
+    fillouts[fillout.quiz_id][fillout.username] = fillout.to_dict()
 
   # information about quizzes
   query = Quiz.query().fetch()
@@ -43,13 +39,13 @@ def do_lookup(request,user=None):
 
     # get the fillouts for this quiz
     this_fillouts = fillouts.get(quiz_id,{})
-    fillout_user_query = Fillout.query(ancestor=fillout_key(user.email,quiz_id)).fetch()
+    fillout_user_query = Fillout.query(ancestor=fillout_key(user.name,quiz_id)).fetch()
     if len(fillout_user_query)>0:
       fillout = fillout_user_query[0].to_dict()
-      this_fillouts[user.unique_id] = fillout
+      this_fillouts[user.name] = fillout
       quiz_dict["fillout"] = fillout
 
-    if user.unique_id in this_fillouts or quiz_dict["status"]=="old":
+    if user.name in this_fillouts or quiz_dict["status"]=="old":
       quiz_dict["scores"] = score_quiz(quiz,this_fillouts)
     else: # the user hasn't filled this quiz yet, and shouldn't be able to see the answers
       for question in quiz_dict["questions"]:
@@ -57,7 +53,7 @@ def do_lookup(request,user=None):
         del question["source"]
 
     # question ratings
-    ratingQuery = QuestionRatings.query(QuestionRatings.quiz_id==quiz_id,QuestionRatings.user_email==ans["user_email"]).fetch()
+    ratingQuery = QuestionRatings.query(QuestionRatings.quiz_id==quiz_id,QuestionRatings.username==ans["user_name"]).fetch()
     if len(ratingQuery)>0:
       ratings = ratingQuery[0].ratings
       for idx,rating in enumerate(ratings):

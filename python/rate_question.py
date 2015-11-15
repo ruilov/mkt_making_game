@@ -14,9 +14,9 @@ class RateQuestion(webapp2.RequestHandler):
     quiz_id = json["quiz_id"]
     quiz = getQuiz(quiz_id)
     
-    query = QuestionRatings.query(QuestionRatings.user_email==user.email,QuestionRatings.quiz_id==quiz_id).fetch()
+    query = QuestionRatings.query(QuestionRatings.username==user.name,QuestionRatings.quiz_id==quiz_id).fetch()
     if len(query)==0:
-      rating = QuestionRatings(user_email=user.email,quiz_id=quiz_id,ratings=[])
+      rating = QuestionRatings(username=user.name,quiz_id=quiz_id,ratings=[])
       for i in range(0,len(quiz.questions)):
         rating.ratings.append(-1)
     else:

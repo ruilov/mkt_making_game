@@ -18,8 +18,8 @@ class SignIn(webapp2.RequestHandler):
         utils.write_back(self,{"incorrect": 1})
         return
 
-      self.response.set_cookie('id', urllib.quote(str(user.unique_id)))
-      self.response.set_cookie('hash', urllib.quote(cookieHash(user.unique_id)))
+      self.response.set_cookie('username', urllib.quote(user.name))
+      self.response.set_cookie('hash', urllib.quote(cookieHash(user.name)))
       
       ans = lookup_util.do_lookup(self,user)
       utils.write_back(self,ans)

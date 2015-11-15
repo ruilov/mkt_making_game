@@ -23,12 +23,6 @@ class Quiz(ndb.Model):
     if full: url = "http://mktmakinggame.com" + url
     return url
 
-  def hasFilled(self,request):
-    user_email = utils.get_user_email(request)
-    if not user_email: return False
-    fillout_query = Fillout.query(Fillout.user_email == user_email, Fillout.quiz_id == self.getID())
-    return len(fillout_query.fetch()) > 0
-
 def getQuiz(quiz_id):
   query = Quiz.query(ancestor=__quiz_key(quiz_id))
   response = query.fetch(1)

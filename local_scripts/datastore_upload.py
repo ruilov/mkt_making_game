@@ -1,7 +1,7 @@
 import urllib2,json,requests,datetime
 
-# server = 'http://localhost:8080'
-server = 'http://mktmakinggame.com'
+server = 'http://localhost:8080'
+# server = 'http://mktmakinggame.com'
 
 api = server + '/api/datastore_ops/'
 http_headers = {'content-type': 'application/json'}

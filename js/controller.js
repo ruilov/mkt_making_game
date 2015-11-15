@@ -209,6 +209,7 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
   };
 
   $scope.reset_submit = function(reset) {
+    $scope.signin.error = "";
     $scope.signin.message = "An email was sent with a link to reset your password";
     var req = $http.post("/api/reset/",reset);
   };
@@ -369,17 +370,25 @@ scores_data = function(data,ngTableParams) {
     view.columns.push({title: title, link: true, field: quiz_id, visible: true});
   };
 
+  // grab all users
+  all_users = {}
+  for(var qi in data.quizzes) {
+    quiz = data.quizzes[qi];
+    if(!("scores" in quiz)) continue;
+    for(var user in quiz.scores) all_users[user]=1;
+  };
+
   // create the rows
   view.table_data = [];
-  for(var ui in data.user_names) {
-    row = {player: data.user_names[ui]};
-    if(ui==data.user_id) row.highlight_class = "highlighted-row";
+  for(var user in all_users) {
+    row = {player: user};
+    if(user==data.user_name) row.highlight_class = "highlighted-row";
     for(var qi in data.quizzes) {
       quiz = data.quizzes[qi];
-      if(!("scores" in quiz) || !(ui in quiz.scores)) continue;
+      if(!("scores" in quiz) || !(user in quiz.scores)) continue;
       
       total_score = 0
-      for(var ni in quiz.scores[ui]) total_score += quiz.scores[ui][ni].score;
+      for(var ni in quiz.scores[user]) total_score += quiz.scores[user][ni].score;
       row[quiz.id] = total_score;
     };
     view.table_data.push(row);
@@ -476,15 +485,15 @@ scores_detailed_data = function(data,params,$filter,ngTableParams) {
   view.score_by_q = [];
   for(var ni in quiz.questions) {
     q_scores = [];
-    for(var ui in quiz.scores) {
-      guess = quiz.scores[ui][ni];
+    for(var user in quiz.scores) {
+      guess = quiz.scores[user][ni];
       row = {
-          player: data.user_names[ui],
+          player: user,
           low: format_num(guess.low,$filter),
           high: format_num(guess.high,$filter),
           score: guess.score
       };
-      if(ui==data.user_id) row.highlight_class = "highlighted-row";
+      if(user==data.user_name) row.highlight_class = "highlighted-row";
       q_scores.push(row);
     };
     view.score_by_q.push(q_scores);

@@ -28,7 +28,7 @@ class DatastoreOps(webapp2.RequestHandler):
 
     if "users" in json:
       for user_dict in json["users"]:
-        ndb_user = User(unique_id=user_dict["unique_id"],email=user_dict["email"],name=user_dict["name"],subscribed=user_dict["subscribed"])
+        ndb_user = User(name=user_dict["name"],email=user_dict["email"],subscribed=user_dict["subscribed"])
         if ndb_user.email=="ruilov@gmail.com":
           ndb_user.password = ndb_user.password_hash("ruilov12")
         ndb_user.put()
@@ -51,8 +51,8 @@ class DatastoreOps(webapp2.RequestHandler):
 
     if "fillouts" in json:
       for fillout_dict in json["fillouts"]:
-        fillout = Fillout(parent=fillout_key(fillout_dict["user_email"],fillout_dict["quiz_id"]),
-            user_email=fillout_dict["user_email"],quiz_id=fillout_dict["quiz_id"])
+        fillout = Fillout(parent=fillout_key(fillout_dict["username"],fillout_dict["quiz_id"]),
+            username=fillout_dict["username"],quiz_id=fillout_dict["quiz_id"])
 
         fillout.ranked = fillout_dict["ranked"]
         fillout.guesses_low = [float(x) for x in fillout_dict["guesses_low"]]
@@ -61,7 +61,7 @@ class DatastoreOps(webapp2.RequestHandler):
 
     if "ratings" in json:
       for rating_dict in json["ratings"]:
-        rating = QuestionRatings(user_email=rating_dict["user_email"],quiz_id=rating_dict["quiz_id"],ratings=rating_dict["ratings"])
+        rating = QuestionRatings(username=rating_dict["username"],quiz_id=rating_dict["quiz_id"],ratings=rating_dict["ratings"])
         rating.put()
 
 def modelList():
