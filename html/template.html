@@ -81,6 +81,7 @@
                 <div style="margin-top:35px" class="form-group">
                   <div class="col-sm-12 controls">
                     <a ng-disabled="signInForm.$invalid" href="" class="btn btn-primary" ng-click="signin_submit(signin)">Login</a>
+                    <input ng-disabled="signInForm.$invalid" type="submit" style="position: absolute; left: -9999px"/ ng-click="signin_submit(signin)">
                   </div>
                 </div>
 
@@ -143,6 +144,7 @@
                 <div style="margin-top:35px" class="form-group">
                   <div class="col-sm-12 controls">
                     <a ng-disabled="signUpForm.$invalid" href="" class="btn btn-primary" ng-click="signup_submit(signup)">Submit</a>
+                    <input ng-disabled="signUpForm.$invalid" type="submit" style="position: absolute; left: -9999px"/ ng-click="signup_submit(signin)">
                   </div>
                 </div>
 
