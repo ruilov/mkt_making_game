@@ -6,6 +6,7 @@ application = webapp2.WSGIApplication([
   ('/api/signup/',signup.SignUp),
   ('/api/signin/',signin.SignIn),
   ('/api/signout/',signout.SignOut),
+  ('/api/reset/',reset.Reset),
   (r'/api/quiz_status_update/(.*)',quiz_status_update.QuizStatusUpdate),
   ('/api/save_quiz_editor/',save_quiz_editor.SaveQuizEditor),
   ('/api/quiz_submit/',quiz_submit.QuizSubmit),

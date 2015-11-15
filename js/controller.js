@@ -171,6 +171,7 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
 
   $scope.signup = {username: "", email: "", password: "", username_error: "", email_error: ""};
   $scope.signin = {username: "", password: "", error: ""};
+  $scope.signin = {email: "", message: ""};
 
   $scope.signup_submit = function(signup) {
     $scope.signup.username_error = "";
@@ -194,6 +195,11 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
       };
       $scope.lookup_cb(data);
     });
+  };
+
+  $scope.reset_submit = function(reset) {
+    $scope.reset.message = "An email was sent with a link to reset your password";
+    var req = $http.post("/api/reset/",reset);
   };
 });
 
