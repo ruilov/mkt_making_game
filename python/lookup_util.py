@@ -14,32 +14,23 @@ def do_lookup(request,user=None):
   ans["user_name"] = user.name
   ans["user_email"] = user.email
   ans["is_admin"] = user.is_admin()
+  ans["user_id"] = user.unique_id
 
   # get all the users and their usernames
   all_users = User.query().fetch()
   ans["user_names"] = {}
-  # user_info keeps track of a made up unique id for each userso that we don't have to index
-  # by user emails, which I want to avoid returning on the answer
-  user_info = {} 
-  count = 0
+  
+  user_by_email = {user.email: user} 
   for useri in all_users:
-    user_info[useri.email] = {"id": count, "name": useri.name}
-    ans["user_names"][count] = useri.name
-    count += 1
-
-  # this might happen when the user has just signed up and the query above is weakly consistent
-  if user.email not in user_info:
-    user_info[user.email] = {"id": count, "name": user.name}
-    ans["user_names"][count] = user.name
-
-  ans["user_id"] = user_info[ans["user_email"]]["id"]
+    user_by_email[useri.email] = useri
+    ans["user_names"][useri.unique_id] = useri.name
 
   # get all the fillouts. This is not strongly consistent. We only need to do that for the current user
   fillout_query = Fillout.query().fetch()
   fillouts = {}
   for fillout in fillout_query:
     if fillout.quiz_id not in fillouts: fillouts[fillout.quiz_id] = {}
-    fillouts[fillout.quiz_id][user_info[fillout.user_email]["id"]] = fillout.to_dict()
+    fillouts[fillout.quiz_id][user_by_email[fillout.user_email].unique_id] = fillout.to_dict()
 
   # information about quizzes
   query = Quiz.query().fetch()
@@ -52,13 +43,13 @@ def do_lookup(request,user=None):
 
     # get the fillouts for this quiz
     this_fillouts = fillouts.get(quiz_id,{})
-    fillout_user_query = Fillout.query(ancestor=fillout_key(ans["user_email"],quiz_id)).fetch()
+    fillout_user_query = Fillout.query(ancestor=fillout_key(user.email,quiz_id)).fetch()
     if len(fillout_user_query)>0:
       fillout = fillout_user_query[0].to_dict()
-      this_fillouts[ans["user_id"]] = fillout
+      this_fillouts[user.unique_id] = fillout
       quiz_dict["fillout"] = fillout
 
-    if ans["user_id"] in this_fillouts or quiz_dict["status"]=="old":
+    if user.unique_id in this_fillouts or quiz_dict["status"]=="old":
       quiz_dict["scores"] = score_quiz(quiz,this_fillouts)
     else: # the user hasn't filled this quiz yet, and shouldn't be able to see the answers
       for question in quiz_dict["questions"]:
