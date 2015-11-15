@@ -1,15 +1,16 @@
 import webapp2, datetime
 from django.utils import simplejson
-from google.appengine.ext import ndb
 from server_controllers import utils
 from models.quiz_model import getQuiz
+from models.user_model import getUser
 
 # this API is for listing quizzes. 
 # The post function can delete quizzes, activate them, or deactivate them
 
 class QuizStatusUpdate(webapp2.RequestHandler):
   def post(self,qs):
-    if not utils.is_admin(self):
+    user = getUser(self)
+    if not user or not user.is_admin():
       utils.write_back(self,{"not_allowed": 1})
       return
 

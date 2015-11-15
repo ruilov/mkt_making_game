@@ -4,6 +4,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import mail
 from server_controllers import utils
 from models.quiz_model import Quiz
+from models.user_model import getUser
 
 JINJA_ENVIRONMENT = jinja2.Environment(
   loader=jinja2.FileSystemLoader("./"),
@@ -15,8 +16,9 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class Sendmail(webapp2.RequestHandler):  
   def post(self):
-    if not utils.is_admin(self): 
-      utils.write_back(self,{"not allowed": 1})
+    user = getUser(self)
+    if not user or not user.is_admin():
+      utils.write_back(self,{"not_allowed": 1})
       return
 
     user_emails = []

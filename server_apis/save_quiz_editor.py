@@ -2,13 +2,15 @@ import webapp2
 from django.utils import simplejson
 from server_controllers import utils
 from models.quiz_model import getQuiz,Question
+from models.user_model import getUser
 
 class SaveQuizEditor(webapp2.RequestHandler):
   def post(self):
-    if not utils.is_admin(self):
+    user = getUser(self)
+    if not user or not user.is_admin():
       utils.write_back(self,{"not_allowed": 1})
       return
-    
+
     json = simplejson.loads(self.request.body)
     quiz_id = json["id"]
     quiz = getQuiz(quiz_id)

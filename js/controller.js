@@ -10,7 +10,7 @@
       - one view per path (eg 'quiz'), NOT one view per url (eg 'quiz/?id=200')
 
   - user input that modifies the backend data can be handled in two ways:
-    a) blow away the cache and do a new lookup with $scope.do_lookup
+    a) the backend returns new data, which replaces the cache completely with lookup_cb
     b) send to the backend and also modify the cache directly+rebuild views as required. More fragile but avoids a server request
 
   - general organization:
@@ -40,6 +40,7 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
 
   // whenever the URL changes this gets called
   $scope.$on('$locationChangeStart', function(event,next) {
+    // console.log('in locationChangeStart' + next);
     $scope.path = $location.path().replace(/\//g,"");
     $scope.url_params = $location.search();
     // if we have the cache of data already then build the view. If this is not the first url the user loads
@@ -51,17 +52,25 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
     $scope.cache = null;
     var responsePromise = $http.get("/api/lookup/");
     responsePromise.success(function(data, status, headers, config) {
-      $scope.cache = data;
-      // console.log(data);
-      if(!data.logged) {
-        $location.path("/login/");
-      } else {
-        view_rebuild($scope,$filter,ngTableParams,"template");
-        if($scope.path) view_rebuild($scope,$filter,ngTableParams);
-        // some of the authentication stuff sends the user to '/'. That means home as long as the user is logged in
-        if($location.path()=='/') $location.path("/home/");
-      };
+      $scope.lookup_cb(data);
     });
+  };
+
+  $scope.lookup_cb = function(data) {
+    $scope.cache = data;
+    // console.log(data);
+    view_rebuild($scope,$filter,ngTableParams,"template");
+
+    if(!data || !data.logged || data.logged=="no") {
+      $location.path("/login/");
+    } else {
+      if($scope.path) view_rebuild($scope,$filter,ngTableParams);
+      if($location.path()=='/' || $location.path()=='/login/') {
+        $location.path("/home/");
+        $('#signInModal').modal('hide'); 
+        $('#signUpModal').modal('hide');
+      };
+    };
   };
 
   $scope.do_lookup();
@@ -128,13 +137,13 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
   // the command where the user submits answers to a quiz
   $scope.quiz_submit = function() {
     var req = $http.post("/api/quiz_submit/",$scope.views.quiz);
-    req.success(function() {
+    req.success(function(data, status, headers, config) {
       // when the user submits a quiz too much stuff changes. Old jobs in the navibar.
       // User now has access to the answers of this quiz, as well as scores
       // might as well do a new lookup
       // note that quiz fillouts have keys which make them strongly consistent in the DB, so we know
       // that when we do the look, the fillout will be there
-      $scope.do_lookup();
+      $scope.lookup_cb(data);
     });
   };
 
@@ -157,6 +166,33 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
         $scope.email_answer = k;
         return;
       };
+    });
+  };
+
+  $scope.signup = {username: "", email: "", password: "", username_error: "", email_error: ""};
+  $scope.signin = {username: "", password: "", error: ""};
+
+  $scope.signup_submit = function(signup) {
+    $scope.signup.username_error = "";
+    $scope.signup.email_error = "";
+
+    var req = $http.post("/api/signup/",signup);
+    req.success(function(data, status, headers, config) {
+      if(!data || "username exists" in data) $scope.signup.username_error = "this username is taken";
+      if("email exists" in data) $scope.signup.email_error = "this email address is already registered";
+      $scope.lookup_cb(data);
+    });
+  };
+
+  $scope.signin_submit = function(signin) {
+    $scope.signin.error = "";
+    var req = $http.post("/api/signin/",signin);
+    req.success(function(data, status, headers, config) {
+      if(!data || "incorrect" in data) {
+        $scope.signin.error = "either the username or password is incorrect";
+        return;
+      };
+      $scope.lookup_cb(data);
     });
   };
 });
@@ -184,7 +220,9 @@ view_data = function(data,path,params,$filter,ngTableParams) {
 
 // template is basically the nagivation bar
 template_data = function(data) {
-  view = {old_quizzes: []};
+  if(!data) return {};
+
+  view = {logged: data.logged, is_admin: data.is_admin, old_quizzes: []};
   for(var qi in data.quizzes) {
     var quiz = data.quizzes[qi];
     if(quiz.status!="old" && !("fillout" in quiz)) continue;

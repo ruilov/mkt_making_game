@@ -1,33 +1,46 @@
+import hashlib,urllib
 from google.appengine.ext import ndb
 from server_controllers import utils
 
 class User(ndb.Model):
-  email = ndb.TextProperty(indexed=True)
+  unique_id = ndb.IntegerProperty(indexed=True)
+  email = ndb.TextProperty()
   name = ndb.TextProperty()
+  password = ndb.TextProperty()
   subscribed = ndb.BooleanProperty()
 
-def get_db_user(request):
-  user_email = utils.get_user_email(request)
-  if not user_email: raise Exception("not logged")
-  query = User.query(User.email==user_email).fetch()
-  if len(query)==0: raise Exception("user not found")
-  return query[0]
+  def password_hash(self,plainPassword):
+    return hashlib.sha224(self.email+self.name+plainPassword+"asdf!!@!asf12").hexdigest()
 
-def check_user_in_db(request):
-  user_name = utils.get_user_name(request)
-  user_email = utils.get_user_email(request)
-  if not user_name or not user_email:
-    raise Exception("creating empty user!")
+  def checkPassword(self,plainPassword):
+    return self.password == self.password_hash(plainPassword)
 
-  query = User.query(User.email==user_email).fetch()
-  if(len(query)==0):
-    ndb_user = User(email=user_email,name=user_name,subscribed=True)
-    ndb_user.put()
-  elif utils.get_user_provider(request)=="facebook":
-    old_user = query[0]
-    if old_user.name != utils.get_user_name(request):
-      old_user.name = utils.get_user_name(request)
-      old_user.put()
+  def is_admin(self):
+    return self.email in admins()
+
+def cookieHash(unique_id):
+  return hashlib.sha224(str(unique_id)+"12312!@#asf").hexdigest()
+
+def checkCookieHash(unique_id,theHash):
+  return cookieHash(unique_id) == theHash
+
+def user_id(request):
+  user_id = urllib.unquote(request.request.cookies.get('id', ''))
+  if user_id == '': return None
+  user_id = int(user_id)
+  user_hash = urllib.unquote(request.request.cookies.get('hash', ''))
+  if not checkCookieHash(user_id,user_hash): return None
+  return user_id
+
+def getUser(request):
+  uid = user_id(request)
+  if not uid: return None
+  users = User.query(User.unique_id==uid).fetch()
+  if len(users)==0: return None
+  return users[0]
+    
+def admins():
+  return [ "mktmakinggame@gmail.com", "ruilov@gmail.com", "carrben12@gmail.com" ];
 
 def fillout_key(user_email,quiz_id):
   return ndb.Key("fillout_key",user_email+quiz_id)

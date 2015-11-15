@@ -24,6 +24,22 @@ body {
     color: #9482B6;
 }
 
+/* sign in / sign up dialogs */
+.panel-info {
+  background: #eeeeee;
+}
+
+.panel-info .panel-heading {
+  background: #443266;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* otherwise the quiz invalid element with red borders kicks in */
+.panel-body input.ng-invalid {
+  border: 1px solid #ccc;
+}
+
 /* this is for the logout button on the navbar */
 #last-menu-item {
     margin-right: 30px;

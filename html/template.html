@@ -8,8 +8,8 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/template.css" rel="stylesheet">
     
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-route.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/ui-bootstrap-tpls-0.11.2.min.js"></script>
@@ -21,12 +21,9 @@
   <body ng-controller="theController">
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
-      <ul class="nav navbar-nav">
-
-        {% if user_name %}
-        <li><a href="/#/home">Home</a></li>
-
-        <li class="dropdown">
+      <ul class="nav navbar-nav">      
+        <li ng-show="views.template.logged=='yes'"><a href="/#/home/">Home</a></li>
+        <li ng-show="views.template.logged=='yes'" class="dropdown">
           <a data-toggle="dropdown" class="dropdown-toggle" href="#">Old Quizzes <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li ng-repeat="quiz in views.template.old_quizzes">
@@ -34,24 +31,128 @@
             </li>
           </ul>
         </li>
-
-        <li><a href="/#/scores/">Scores</a></li>
-
-        <li><a href="/#/suggestions/">Suggestions</a></li>
-        {% endif %}
-
-        {% if is_admin %}
-          <li><a href="/#/admin/">Admin</a></li>
-        {% endif %}
+        <li ng-show="views.template.logged=='yes'"><a href="/#/scores/">Scores</a></li>
+        <li ng-show="views.template.logged=='yes'"><a href="/#/suggestions/">Suggestions</a></li>
+        <li ng-show="views.template.is_admin"><a href="/#/admin/">Admin</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li id="last-menu-item">
-          {% if user_name %}<a href=((logout_url))>Logout</a>{% endif %}
+        <li ng-show="views.template.logged=='yes'" id="last-menu-item">
+          <a href="/api/signout/">Sign out</a>
         </li>
+        
+        <li ng-show="views.template.logged=='no'"><a href="" data-toggle="modal" data-target="#signInModal">Sign In</a></li>
+        <li ng-show="views.template.logged=='no'" id="last-menu-item"><a href="" data-toggle="modal" data-target="#signUpModal">Sign Up</a></li>
       </ul>
     </nav>
 
     <div ng-view></div>
+
+
+    <div class="modal fade" id="signInModal">
+      <div class="container">    
+        <div style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+          
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <div class="panel-title">Sign In</div>
+              <div style="float:right; font-size: 80%; position: relative; top:-10px">
+                <a href="#">Forgot password?</a>
+              </div>
+            </div>
+
+            <div style="padding-top:30px" class="panel-body" >
+              <form name="signInForm" class="form-horizontal" role="form">
+                
+                <div style="margin-bottom: 0px" class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                  <input ng-model="signin.username" type="text" class="form-control" placeholder="username or email" required>
+                </div>
+                            
+                <div style="margin-top: 25px" class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                  <input ng-model="signin.password" type="password" class="form-control" placeholder="password" required>
+                </div>
+
+                <div ng-show="signin.error.length>0">
+                  <font color="red">{{signin.error}}</font>
+                </div>
+
+                <div style="margin-top:35px" class="form-group">
+                  <div class="col-sm-12 controls">
+                    <a ng-disabled="signInForm.$invalid" href="" class="btn btn-primary" ng-click="signin_submit(signin)">Login</a>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-12 control">
+                    <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
+                      Don't have an account! 
+                      <a href="" onClick="$('#signInModal').modal('toggle'); $('#signUpModal').modal('toggle')">Sign Up Here</a>
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="signUpModal">
+      <div class="container">    
+        <div style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+          
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <div class="panel-title">Sign Up</div>
+              <div style="float:right; font-size: 80%; position: relative; top:-10px">
+                <a href="" onClick="$('#signUpModal').modal('toggle'); $('#signInModal').modal('toggle')">Sign In</a>
+              </div>
+            </div>
+
+            <div style="padding-top:30px" class="panel-body" >
+              <div style="display:none" class="alert alert-danger col-sm-12"></div>
+              <form name="signUpForm" class="form-horizontal" role="form">
+                
+                <div style="margin-bottom: 0px" class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                  <input type="text" ng-model="signup.username" class="form-control" placeholder="username">
+                </div>
+
+                <div ng-show="signup.username_error.length>0">
+                  <font color="red">{{signup.username_error}}</font>
+                </div>
+
+                <div style="margin-top: 25px" class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                  <input type="email" ng-model="signup.email" class="form-control" placeholder="email" required>
+                </div>
+
+                <div ng-show="signup.email_error.length>0">
+                  <font color="red">{{signup.email_error}}</font>
+                </div>  
+
+                <div style="margin-top: 25px" class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                  <input type="password" ng-model="signup.password" class="form-control" placeholder="password" required>
+                </div>
+
+                <div style="margin-top:35px" class="form-group">
+                  <div class="col-sm-12 controls">
+                    <a ng-disabled="signUpForm.$invalid" href="" class="btn btn-primary" ng-click="signup_submit(signup)">Submit</a>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>

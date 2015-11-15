@@ -23,6 +23,7 @@ handlers:
 
 - url: .*
   script: mktmaking.application
+  secure: always
 
 libraries:
 - name: webapp2

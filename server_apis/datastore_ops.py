@@ -28,7 +28,9 @@ class DatastoreOps(webapp2.RequestHandler):
 
     if "users" in json:
       for user_dict in json["users"]:
-        ndb_user = User(email=user_dict["email"],name=user_dict["name"],subscribed=user_dict["subscribed"])
+        ndb_user = User(unique_id=user_dict["unique_id"],email=user_dict["email"],name=user_dict["name"],subscribed=user_dict["subscribed"])
+        if ndb_user.email=="ruilov@gmail.com":
+          ndb_user.password = ndb_user.password_hash("ruilov12")
         ndb_user.put()
 
     if "quizzes" in json:
