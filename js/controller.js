@@ -38,7 +38,7 @@ controllerApp.config(['$routeProvider',function($routeProvider) {
 
 controllerApp.controller( "theController", function ($scope,$http,$location,$routeParams,$filter,ngTableParams) {
   $scope.views = {};
-  $scope.signup = {username: "", email: "", password: "", resetHash: "", username_error: "", email_error: ""};
+  $scope.signup = {username: "", email: "", password: "", resetHash: "", displayTitle: "Sign up", username_error: "", email_error: ""};
   $scope.signin = {username: "", password: "", error: "", message: ""};
 
   // whenever the URL changes this gets called
@@ -85,6 +85,7 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
     $scope.signup.email = qs.email;
     $scope.signup.username = qs.username;
     $scope.signup.resetHash = qs.hash;
+    $scope.signup.displayTitle = "Reset password";
     $('#signUpModal').modal('show');
   };
 
