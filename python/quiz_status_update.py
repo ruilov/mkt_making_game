@@ -7,7 +7,7 @@ from user_model import getUser
 # The post function can delete quizzes, activate them, or deactivate them
 
 class QuizStatusUpdate(webapp2.RequestHandler):
-  def post(self,qs):
+  def post(self):
     user = getUser(self)
     if not user or not user.is_admin():
       utils.write_back(self,{"not_allowed": 1})

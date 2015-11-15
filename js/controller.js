@@ -25,6 +25,7 @@ controllerApp.config(['$routeProvider',function($routeProvider) {
   $routeProvider.
     when('/', { templateUrl: 'loading.html' }).
     when('/login/', { templateUrl: 'login.html'}).
+    when('/reset/', { templateUrl: 'login.html'}).
     when('/home/', {templateUrl: 'home.html'}).
     when('/quiz/', {templateUrl: 'quiz.html'}).
     when('/quiz_editor/', {templateUrl: 'quiz_editor.html'}).
@@ -37,6 +38,8 @@ controllerApp.config(['$routeProvider',function($routeProvider) {
 
 controllerApp.controller( "theController", function ($scope,$http,$location,$routeParams,$filter,ngTableParams) {
   $scope.views = {};
+  $scope.signup = {username: "", email: "", password: "", resetHash: "", username_error: "", email_error: ""};
+  $scope.signin = {username: "", password: "", error: "", message: ""};
 
   // whenever the URL changes this gets called
   $scope.$on('$locationChangeStart', function(event,next) {
@@ -62,18 +65,28 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
     view_rebuild($scope,$filter,ngTableParams,"template");
 
     if(!data || !data.logged || data.logged=="no") {
-      $location.path("/login/");
+      if($location.path()!="/reset/") $location.path("/login/");
     } else {
       if($scope.path) view_rebuild($scope,$filter,ngTableParams);
-      if($location.path()=='/' || $location.path()=='/login/') {
+      if($location.path()=='/' || $location.path()=='/login/' || $location.path()=="/reset/") {
+        $location.search('');
         $location.path("/home/");
-        $('#signInModal').modal('hide'); 
+        $('#signInModal').modal('hide');
         $('#signUpModal').modal('hide');
+        $('#resetModal').modal('hide');
       };
     };
   };
 
-  $scope.do_lookup();
+  if($location.path()!="/reset/")
+    $scope.do_lookup();
+  else {
+    var qs = $location.search();
+    $scope.signup.email = qs.email;
+    $scope.signup.username = qs.username;
+    $scope.signup.resetHash = qs.hash;
+    $('#signUpModal').modal('show');
+  };
 
   // the scope functions below are the callbacks that respond to form-like user input
   $scope.admin_quiz_change_status = function(quiz,new_status) {
@@ -169,10 +182,6 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
     });
   };
 
-  $scope.signup = {username: "", email: "", password: "", username_error: "", email_error: ""};
-  $scope.signin = {username: "", password: "", error: ""};
-  $scope.signin = {email: "", message: ""};
-
   $scope.signup_submit = function(signup) {
     $scope.signup.username_error = "";
     $scope.signup.email_error = "";
@@ -181,6 +190,7 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
     req.success(function(data, status, headers, config) {
       if(!data || "username exists" in data) $scope.signup.username_error = "this username is taken";
       if("email exists" in data) $scope.signup.email_error = "this email address is already registered";
+      if("invalid hash" in data) $scope.signup.username_error = "password reset link invalid. Links are only valid for a day.";
       $scope.lookup_cb(data);
     });
   };
@@ -198,7 +208,7 @@ controllerApp.controller( "theController", function ($scope,$http,$location,$rou
   };
 
   $scope.reset_submit = function(reset) {
-    $scope.reset.message = "An email was sent with a link to reset your password";
+    $scope.signin.message = "An email was sent with a link to reset your password";
     var req = $http.post("/api/reset/",reset);
   };
 });

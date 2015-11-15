@@ -17,5 +17,19 @@ def write_back(req,dicti):
   jsonStr = simplejson.dumps(dicti, cls = MyEncoder)
   req.response.out.write(jsonStr)
 
-def unsubscribeHash(username):
-  return hashlib.sha224("fsadfdsafdasd" + username).hexdigest()
+def unsubscribeHash(useremail):
+  return hashlib.sha224("@!wr!@#1fsadfdsafdasd" + useremail).hexdigest()
+
+def resetHash(useremail,yesterday=False):
+  date = datetime.date.today()
+  if yesterday: date = datetime.date.fromordinal(date.toordinal()-1)
+  return hashlib.sha224(str(date)+"#@$wfdsa24wr34" + useremail).hexdigest()
+
+def checkResetHash(useremail,hashs):
+  hash1 = resetHash(useremail)
+  hash2 = resetHash(useremail,True)
+  return hashs == hash1 or hashs == hash2
+
+def resetLink(useremail,username):
+  return "https://mktmakinggame.com/#/reset/?email="+urllib.quote(useremail)+"&username="+urllib.quote(username)+"&hash="+resetHash(useremail)
+

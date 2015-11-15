@@ -64,8 +64,8 @@
             <div style="padding-top:30px" class="panel-body" >
               <form name="signInForm" class="form-horizontal" role="form">
                 
-                <div ng-show="reset.message.length>0">
-                  <font color="red">{{reset.message}}</font>
+                <div ng-show="signin.message.length>0">
+                  <font color="red">{{signin.message}}</font>
                 </div> 
 
                 <div style="margin-bottom: 0px" class="input-group">
@@ -177,13 +177,13 @@
                 
                 <div style="margin-bottom: 0px" class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                  <input ng-model="reset.email" type="text" class="form-control" placeholder="email" required>
+                  <input ng-model="signin.username" type="text" class="form-control" placeholder="email" required>
                 </div>
 
                 <div style="margin-top:35px" class="form-group">
                   <div class="col-sm-12 controls">
-                    <a ng-disabled="resetForm.$invalid" href="" class="btn btn-primary" ng-click="reset_submit(reset)" onClick="$('#resetModal').modal('hide'); $('#signInModal').modal('show')">Reset</a>
-                    <input ng-disabled="resetForm.$invalid" type="submit" style="position: absolute; left: -9999px"/ ng-click="reset_submit(reset)" onClick="$('#resetModal').modal('hide'); $('#signInModal').modal('show')">
+                    <a ng-disabled="resetForm.$invalid" href="" class="btn btn-primary" ng-click="reset_submit(signin)" onClick="$('#resetModal').modal('hide'); $('#signInModal').modal('show')">Reset</a>
+                    <input ng-disabled="resetForm.$invalid" type="submit" style="position: absolute; left: -9999px"/ ng-click="reset_submit(signin)" onClick="$('#resetModal').modal('hide'); $('#signInModal').modal('show')">
                   </div>
                 </div>
 
