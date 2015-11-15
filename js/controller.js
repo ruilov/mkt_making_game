@@ -262,7 +262,7 @@ home_data = function(data) {
   view = {has_active_quiz: false};
   for(var qi in data.quizzes) {
     var quiz = data.quizzes[qi];
-    if(quiz.status=="active") {
+    if(quiz.status=="active" && !("scores" in quiz)) {
       view.has_active_quiz = "true";
       view.active_quiz = quiz;
       view.active_quiz.url = quiz_url(view.active_quiz.id);
