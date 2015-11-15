@@ -1,8 +1,7 @@
-import webapp2
+import webapp2,utils
 from django.utils import simplejson
-from server_controllers import utils
-from models.quiz_model import getQuiz,Question
-from models.user_model import getUser
+from quiz_model import getQuiz,Question
+from user_model import getUser
 
 class SaveQuizEditor(webapp2.RequestHandler):
   def post(self):

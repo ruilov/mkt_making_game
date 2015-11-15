@@ -1,6 +1,5 @@
-import hashlib,urllib
+import hashlib,urllib,utils
 from google.appengine.ext import ndb
-from server_controllers import utils
 
 class User(ndb.Model):
   unique_id = ndb.IntegerProperty(indexed=True)

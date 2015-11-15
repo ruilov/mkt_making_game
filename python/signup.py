@@ -1,9 +1,7 @@
-import webapp2
+import webapp2,lookup_util,utils
 from django.utils import simplejson
 from google.appengine.ext import ndb
-from server_controllers import utils
-from models.user_model import User,cookieHash
-import lookup_util
+from user_model import User,cookieHash
 
 class SignUp(webapp2.RequestHandler):
   def post(self):

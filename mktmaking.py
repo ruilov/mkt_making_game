@@ -1,6 +1,5 @@
 import webapp2
-from server_apis import *
-from server_controllers import *
+from python import *
 
 application = webapp2.WSGIApplication([
   ('/api/lookup/',lookup.Lookup),

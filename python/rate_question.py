@@ -1,8 +1,7 @@
-import webapp2
+import webapp2,utils
 from django.utils import simplejson
-from server_controllers import utils
-from models.user_model import QuestionRatings,getUser
-from models.quiz_model import getQuiz
+from user_model import QuestionRatings,getUser
+from quiz_model import getQuiz
 
 class RateQuestion(webapp2.RequestHandler):
   def post(self):

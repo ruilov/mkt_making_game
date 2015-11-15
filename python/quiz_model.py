@@ -1,5 +1,5 @@
 from google.appengine.ext import ndb
-from server_controllers import utils
+import utils
 from user_model import Fillout
 
 class Question(ndb.Model):

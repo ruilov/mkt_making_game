@@ -1,8 +1,7 @@
-import webapp2, datetime
+import webapp2, datetime, utils
 from django.utils import simplejson
-from server_controllers import utils
 from google.appengine.api import mail
-from models.user_model import UserSuggestion
+from user_model import UserSuggestion
 
 class Suggestion(webapp2.RequestHandler):  
   def post(self):

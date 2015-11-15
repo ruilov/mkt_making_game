@@ -1,10 +1,9 @@
-import webapp2,urllib,os,jinja2
+import webapp2,urllib,os,jinja2,utils
 from django.utils import simplejson
 from google.appengine.ext import ndb
 from google.appengine.api import mail
-from server_controllers import utils
-from models.quiz_model import Quiz
-from models.user_model import getUser
+from quiz_model import Quiz
+from user_model import getUser
 
 JINJA_ENVIRONMENT = jinja2.Environment(
   loader=jinja2.FileSystemLoader("./"),

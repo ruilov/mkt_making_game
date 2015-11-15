@@ -1,9 +1,7 @@
-import webapp2
+import webapp2,lookup_util,utils
 from django.utils import simplejson
-from server_controllers import utils
-from models.quiz_model import getQuiz
-from models.user_model import Fillout,fillout_key,getUser
-import lookup_util
+from quiz_model import getQuiz
+from user_model import Fillout,fillout_key,getUser
 
 class QuizSubmit(webapp2.RequestHandler):  
   def post(self):

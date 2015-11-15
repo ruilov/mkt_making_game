@@ -1,8 +1,7 @@
-import webapp2, datetime
+import webapp2, datetime,utils
 from django.utils import simplejson
-from server_controllers import utils
-from models.quiz_model import getQuiz
-from models.user_model import getUser
+from quiz_model import getQuiz
+from user_model import getUser
 
 # this API is for listing quizzes. 
 # The post function can delete quizzes, activate them, or deactivate them

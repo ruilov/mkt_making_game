@@ -1,7 +1,6 @@
-import datetime, math, hashlib
-from models.quiz_model import Quiz
-from models.user_model import Fillout,User,fillout_key,QuestionRatings,getUser
-from server_controllers import utils
+import datetime, math, hashlib, utils
+from quiz_model import Quiz
+from user_model import Fillout,User,fillout_key,QuestionRatings,getUser
 
 def do_lookup(request,user=None):
   ans = {"logged": "yes"}

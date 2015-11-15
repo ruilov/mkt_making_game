@@ -2,9 +2,9 @@ import webapp2,datetime
 from django.utils import simplejson
 from google.appengine.ext import ndb
 from google.appengine.api import users
-from models.user_model import User,Fillout,QuestionRatings,fillout_key
-from models.quiz_model import Quiz,Question,getQuiz
-from server_controllers import utils
+from user_model import User,Fillout,QuestionRatings,fillout_key
+from quiz_model import Quiz,Question,getQuiz
+import utils
 
 class DatastoreOps(webapp2.RequestHandler):
   def get(self,idStr):

@@ -1,6 +1,4 @@
-import webapp2
-from server_controllers import utils
-import lookup_util
+import webapp2,utils,lookup_util
 
 class Lookup(webapp2.RequestHandler):
   def get(self):
